@@ -1,4 +1,4 @@
-System.register(['@angular/core', '@angular/platform-browser', './app.component', './map.component'], function(exports_1, context_1) {
+System.register(['@angular/core', '@angular/platform-browser', './app.component', './map.component', './left-map-legend.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', '@angular/platform-browser', './app.component'
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, platform_browser_1, app_component_1, map_component_1;
+    var core_1, platform_browser_1, app_component_1, map_component_1, left_map_legend_component_1;
     var AppModule;
     return {
         setters:[
@@ -25,6 +25,9 @@ System.register(['@angular/core', '@angular/platform-browser', './app.component'
             },
             function (map_component_1_1) {
                 map_component_1 = map_component_1_1;
+            },
+            function (left_map_legend_component_1_1) {
+                left_map_legend_component_1 = left_map_legend_component_1_1;
             }],
         execute: function() {
             let AppModule = class AppModule {
@@ -34,7 +37,8 @@ System.register(['@angular/core', '@angular/platform-browser', './app.component'
                     imports: [platform_browser_1.BrowserModule],
                     declarations: [
                         app_component_1.AppComponent,
-                        map_component_1.MapComponent
+                        map_component_1.MapComponent,
+                        left_map_legend_component_1.LeftMapLegendComponent
                     ],
                     bootstrap: [app_component_1.AppComponent]
                 }), 

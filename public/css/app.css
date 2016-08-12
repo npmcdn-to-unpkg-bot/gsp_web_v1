@@ -5759,7 +5759,8 @@ html, body {
   left: 0px;
   bottom: 0px;
   width: 250px;
-  padding: 15px; }
+  padding: 15px;
+  font-size: 12px; }
 
 #header {
   position: absolute;

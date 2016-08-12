@@ -15,9 +15,7 @@ import { Component } from '@angular/core';
       </div>
       <div id="main-content">
         <my-map id="right-content"></my-map>
-        <div id="left-content">
-          
-        </div>
+        <left-map-legend id="left-content"></left-map-legend>
       </div>
     </div>
   `

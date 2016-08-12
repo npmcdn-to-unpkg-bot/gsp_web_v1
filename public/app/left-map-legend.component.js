@@ -11,42 +11,23 @@ System.register(['@angular/core'], function(exports_1, context_1) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1;
-    var AppComponent;
+    var LeftMapLegendComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             }],
         execute: function() {
-            let AppComponent = class AppComponent {
-                constructor() {
-                    this.title = 'Gmaps Street Parking';
-                }
+            let LeftMapLegendComponent = class LeftMapLegendComponent {
             };
-            AppComponent = __decorate([
+            LeftMapLegendComponent = __decorate([
                 core_1.Component({
-                    selector: 'my-app',
-                    template: `
-    <div class="container">
-      <div id="header">
-        <h1 class="title">{{title}}</h1>
-        <div>
-          <a routerLink="/map">Map</a> | 
-          <a routerLink="/legend">Full Legend</a> | 
-          <a href="/login">Login</a>
-          <router-outlet></router-outlet>
-        </div>
-      </div>
-      <div id="main-content">
-        <my-map id="right-content"></my-map>
-        <left-map-legend id="left-content"></left-map-legend>
-      </div>
-    </div>
-  `
+                    selector: 'left-map-legend',
+                    templateUrl: './app/left-map-legend.component.html'
                 }), 
                 __metadata('design:paramtypes', [])
-            ], AppComponent);
-            exports_1("AppComponent", AppComponent);
+            ], LeftMapLegendComponent);
+            exports_1("LeftMapLegendComponent", LeftMapLegendComponent);
         }
     }
 });
