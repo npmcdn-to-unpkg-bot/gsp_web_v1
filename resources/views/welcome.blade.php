@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <base href="/">
         <title>Laravel</title>
 
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="css/app.css" />
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?php echo env('MAPS_API_KEY'); ?>&libraries=geometry"></script>
 
         <style>
             html, body {
@@ -49,7 +52,6 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Laravel 5</div>
                 <my-app>Loading...</my-app>
             </div>
         </div>

@@ -11,31 +11,35 @@ System.register(['@angular/core'], function(exports_1, context_1) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1;
-    var AppComponent;
+    var MapComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             }],
         execute: function() {
-            let AppComponent = class AppComponent {
-                constructor() {
-                    this.title = 'Gmaps Street Parking';
+            let MapComponent = class MapComponent {
+                ngOnInit() {
+                    var mapOptions = {
+                        center: new google.maps.LatLng(40.762, -111.855),
+                        zoom: 16,
+                        draggableCursor: "crosshair",
+                        draggingCursor: "crosshair",
+                        scaleControl: true,
+                        disableDoubleClickZoom: true
+                    };
+                    var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+                    //this.getHeroes();
                 }
             };
-            AppComponent = __decorate([
+            MapComponent = __decorate([
                 core_1.Component({
-                    selector: 'my-app',
-                    template: `
-    <h1>{{title}}</h1>
-    <my-map></my-map>
-    <a routerLink="/map">Map</a>
-    <router-outlet></router-outlet>
-  `
+                    selector: 'my-map',
+                    template: '<div id="map-canvas"></div>'
                 }), 
                 __metadata('design:paramtypes', [])
-            ], AppComponent);
-            exports_1("AppComponent", AppComponent);
+            ], MapComponent);
+            exports_1("MapComponent", MapComponent);
         }
     }
 });
