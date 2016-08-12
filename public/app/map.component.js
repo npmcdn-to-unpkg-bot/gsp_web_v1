@@ -33,6 +33,7 @@ System.register(['@angular/core'], function(exports_1, context_1) {
                 }
             };
             MapComponent = __decorate([
+                // TODO:NW get types?? typings install google.maps --global
                 core_1.Component({
                     selector: 'my-map',
                     template: '<div id="map-canvas"></div>'

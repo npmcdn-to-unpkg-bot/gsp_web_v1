@@ -1,4 +1,57 @@
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
-#map-canvas{ width:400px; height: 400px;}
+$header-height: 80px;
+$right-content-left-pos: 250px;
+$content-horiz-padding: 15px;
+$left-content-width: $right-content-left-pos;
+
+html, body {
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    font-weight: 100;
+    font-family: 'Lato', sans-serif;
+}
+.container {
+    width: 100%;
+    height: 100%;
+}
+#main-content {
+    width: 100%;
+    height: 100%;
+}
+#right-content {
+    position: absolute;
+    top: $header-height;
+    left: $right-content-left-pos;
+    right: 0px;
+    bottom: 0px;
+    padding:$content-horiz-padding;
+}
+#left-content {
+    position: absolute;
+    top: $header-height;
+    left: 0px;
+    bottom: 0px;
+    width:$left-content-width;
+    padding:$content-horiz-padding;
+}
+#header{
+  position: absolute;    
+  top: 0px;
+  left: 0px;
+  right: 0px;    
+  height: $header-height;
+  width:100%;
+  text-align:center;
+}
+
+#map-canvas{
+    height:100%;
+    width:100%;
+}
+
+.title {
+    font-size: 25px;
+}
 
