@@ -16,20 +16,14 @@ export class SectionRendererService {
     for (var i=0; i < sectionsArray.length; i++) {
       var sectionPoints = google.maps.geometry.encoding.decodePath(sectionsArray[i].polyline);
       this.drawSection(sectionPoints, sectionsArray[i].street_side, this.getTypeColor(sectionsArray[i]));
-      //don't show info for things with no hours or notes
-      /*
+      //don't show info for things with no notes
       if(
-          sectionsArray[i].is_hours_restricted == 1
-          || 
-          (
             sectionsArray[i].notes != undefined &&
             sectionsArray[i].notes != null &&
             sectionsArray[i].notes != ""
-          )
         ){
-        //this.drawSectionInfoMarker(sectionsArray[i]);
+        this.drawSectionInfoMarker(sectionsArray[i]);
       }
-      */
       //alert(sectionsArray[i].id);
     }
   }
@@ -93,6 +87,68 @@ export class SectionRendererService {
     }
     formPoly.setMap(this.map);
     return formPoly; // for reference, to set null at a later point
+  }
+
+  drawSectionInfoMarker(section:MapSection){
+    var sectionPoints = google.maps.geometry.encoding.decodePath(section.polyline);
+    var shift = .0002; //world x/y units
+    var proj = this.map.getProjection();
+    //get the middle section of the polyline, round up to more beginning section
+    var midIndex = Math.floor(sectionPoints.length / 2);
+    var p1 = proj.fromLatLngToPoint(sectionPoints[midIndex]);
+    var p2 = proj.fromLatLngToPoint(sectionPoints[midIndex-1]);
+    //get the midpoint of the segment
+    var pfx = (p1.x+p2.x)/2;
+    var pfy = (p1.y+p2.y)/2;
+    //alert(pfx);alert(pfy);
+    //compute shift, always shift positive one way, or negative the other
+    var dx=0;
+    var dy=0;
+    //angle of the line segment in radians, y is opp in world coords, and using delta
+    var theta = Math.atan2(p2.y-p1.y, p2.x-p1.x);
+    if(section.street_side==0){
+      //nada
+    }
+    else{
+      // from the two points figure out the direction of the line. 
+      // streetSide = direction of y coord from origin, draw the marker on this side
+      // in maps positive y is down
+      var deltay = p1.x-p2.x;
+      var deltax = p1.y-p2.y;
+      dx = shift * Math.sin(theta) * section.street_side;
+      dy = shift * Math.cos(theta) * -1 * section.street_side; //y in maps goes the opposite way
+      //alert((theta* 180) / Math.PI);
+      //alert(streetSide);
+      //alert(Math.sin(theta));
+      //alert(dx);alert(dy);
+    }
+    //set the new point
+    var iconPoint = new google.maps.Point(pfx+dx,pfy+dy);
+    //draw an icon that far out from the midpoint
+    var pixelLatLng = proj.fromPointToLatLng(iconPoint);
+    var marker = new google.maps.Marker({
+        position: pixelLatLng,
+        map: this.map,
+        icon: '/images/i-icon.png',
+        title: 'a title'
+    });
+    var self = this;
+    google.maps.event.addListener(marker, 'click', function() {
+      self.showSectionInfo(section);
+    });
+  }
+
+  private showSectionInfo(section:MapSection){
+    alert(section.notes);
+    /*
+    $('#section-info').html(
+      'Id: ' + section.id + '<br />' +
+      'Hours: <br />' + this.getHoursDisplay(section.hours_data) + '<br />' +
+      'Notes: ' + section.notes + '<br />' + 
+      '<a href="#" onclick="$(\'#section-info\').hide();return false;">Close</a>'
+    );
+    $('#section-info').show();
+    */
   }
 
   /* TODO:NW figure out where to set constants, use an APP SETTINGS service */
