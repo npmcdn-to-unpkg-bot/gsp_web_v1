@@ -31,7 +31,7 @@ export class MapSectionService {
 
     return this.http.post(url, transformRequest(mapData), {headers: headers})
      .toPromise()
-     .then(response => response.json().sections as MapSection[])
+     .then(response => JSON.parse(response.json().sections) as MapSection[])
      .catch(this.handleError);
   }
 

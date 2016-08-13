@@ -1,4 +1,4 @@
-System.register(['@angular/core', './map-section.service'], function(exports_1, context_1) {
+System.register(['@angular/core', './map-section.service', './section-renderer.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', './map-section.service'], function(exports_1, 
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, map_section_service_1;
+    var core_1, map_section_service_1, section_renderer_service_1;
     var MapComponent;
     return {
         setters:[
@@ -19,11 +19,15 @@ System.register(['@angular/core', './map-section.service'], function(exports_1, 
             },
             function (map_section_service_1_1) {
                 map_section_service_1 = map_section_service_1_1;
+            },
+            function (section_renderer_service_1_1) {
+                section_renderer_service_1 = section_renderer_service_1_1;
             }],
         execute: function() {
             let MapComponent = class MapComponent {
-                constructor(mapSectionService) {
+                constructor(mapSectionService, sectionRendererService) {
                     this.mapSectionService = mapSectionService;
+                    this.sectionRendererService = sectionRendererService;
                 }
                 ngOnInit() {
                     var mapOptions = {
@@ -47,9 +51,11 @@ System.register(['@angular/core', './map-section.service'], function(exports_1, 
                         // (param1, param2, …, paramN) => expression AND no paren when one param eg sections
                         //this.mapSectionService.loadSectionsForMapView().then(sections => this.loadedSections = sections);
                         self.mapSectionService.loadSectionsForMap(mapData).then(sections => {
-                            var test = sections;
-                            debugger;
+                            //var test = sections;
+                            // debugger;
                             self.loadedSections = sections;
+                            self.sectionRendererService.init(map);
+                            self.sectionRendererService.renderSectionsForView(sections);
                         });
                     });
                 }
@@ -59,9 +65,9 @@ System.register(['@angular/core', './map-section.service'], function(exports_1, 
                 core_1.Component({
                     selector: 'my-map',
                     template: '<div id="map-canvas"></div>',
-                    providers: [map_section_service_1.MapSectionService],
+                    providers: [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService],
                 }), 
-                __metadata('design:paramtypes', [map_section_service_1.MapSectionService])
+                __metadata('design:paramtypes', [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService])
             ], MapComponent);
             exports_1("MapComponent", MapComponent);
         }

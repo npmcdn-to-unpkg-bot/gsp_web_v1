@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { MapSection } from './map-section';
 import { MapSectionService } from './map-section.service';
+import { SectionRendererService } from './section-renderer.service';
 
 declare var google: any; // TODO:NW get types?? typings install google.maps --global
 
 @Component({
   selector: 'my-map',
   template: '<div id="map-canvas"></div>',
-  providers: [ MapSectionService ],
+  providers: [ MapSectionService, SectionRendererService ],
 })
 
 export class MapComponent implements OnInit {
@@ -16,7 +17,7 @@ export class MapComponent implements OnInit {
   //providers: [MapSectionService];
   loadedSections:MapSection[];
 
-  constructor(private mapSectionService: MapSectionService) { }
+  constructor(private mapSectionService: MapSectionService, private sectionRendererService:SectionRendererService) { }
 
   ngOnInit() {
     var mapOptions = {
@@ -45,6 +46,8 @@ export class MapComponent implements OnInit {
         //var test = sections;
         // debugger;
         self.loadedSections = sections;
+        self.sectionRendererService.init(map);
+        self.sectionRendererService.renderSectionsForView(sections);
       });
     });
   }
