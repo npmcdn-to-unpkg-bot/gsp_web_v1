@@ -2,7 +2,7 @@
 <html>
     <head>
         <base href="/">
-        <title>Laravel</title>
+        <title>Gmaps Street Parking</title>
 
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" type="text/css" href="css/app.css" />
