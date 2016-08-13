@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import { MapSection } from './map-section';
 // import { SectionUpdateFormComponent } from './section-update-form.component';
 
 @Component({
@@ -11,6 +12,7 @@ export class ModalContainerComponent implements OnChanges
   @Input() myModalIsVisible: boolean;
   @Input() contentString: string = 'beginDummyData';
   @Input() contentType: string = 'simple_string';
+  @Input() selectedSection: MapSection;
 
   showModalContainer(title: string)
   {

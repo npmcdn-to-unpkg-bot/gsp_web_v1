@@ -1,8 +1,9 @@
-import { Component, NgZone, ChangeDetectorRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, ViewChild } from '@angular/core';
 import { ModalContainerComponent } from './modal-container.component';
 import { MapSection } from './map-section';
 import { MapSectionService } from './map-section.service';
 import { SectionRendererService } from './section-renderer.service';
+import { AppSettings } from './app-settings';
 
 declare var google: any; // TODO:NW get types?? typings install google.maps --global
 
@@ -11,7 +12,7 @@ declare var google: any; // TODO:NW get types?? typings install google.maps --gl
   // if a edit section form
   //template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="edit_section"></modal-container>',
   template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="simple_string" contentString="Section Notes Here"></modal-container>',
-  providers: [ MapSectionService, SectionRendererService ]
+  providers: [ MapSectionService, SectionRendererService, AppSettings ]
 })
 
 export class MapComponent implements OnInit {
@@ -21,7 +22,10 @@ export class MapComponent implements OnInit {
   @ViewChild(ModalContainerComponent)
   private modalComponent: ModalContainerComponent;
 
-  constructor(private mapSectionService: MapSectionService, private sectionRendererService:SectionRendererService, private zone:NgZone, private ref:ChangeDetectorRef) { }
+  constructor(private mapSectionService: MapSectionService, 
+      private sectionRendererService:SectionRendererService, 
+      private appSettings:AppSettings, 
+      private ref:ChangeDetectorRef) { }
 
   ngOnInit() {
     //this.myModalIsVisible=false;
@@ -63,8 +67,18 @@ export class MapComponent implements OnInit {
     let sectionsArray = this.loadedSections;
     for (let i=0; i < sectionsArray.length; i++) {
       let sectionPoints = google.maps.geometry.encoding.decodePath(sectionsArray[i].polyline);
-      let color = this.sectionRendererService.getTypeColor(sectionsArray[i]);
-      this.sectionRendererService.drawSection(sectionPoints, sectionsArray[i].street_side, color, this.map);
+      let color = this.appSettings.getTypeColor(sectionsArray[i]);
+      let newSection = this.sectionRendererService.drawSection(sectionPoints, sectionsArray[i].street_side, color, this.map);
+      
+      // onclick show modal with edit form (TODO:NW only if logged in as admin)
+      google.maps.event.addListener(newSection, 'click', function() {
+          self.modalComponent.myModalIsVisible=true;
+          self.modalComponent.contentType="edit_section";
+          self.modalComponent.selectedSection=sectionsArray[i];
+          self.ref.detectChanges();
+        });
+
+
       //don't show info for things with no notes
       if(
             sectionsArray[i].notes != undefined &&

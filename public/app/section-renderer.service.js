@@ -1,4 +1,4 @@
-System.register(['@angular/core'], function(exports_1, context_1) {
+System.register(['@angular/core', './app-settings'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,21 +10,20 @@ System.register(['@angular/core'], function(exports_1, context_1) {
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1;
+    var core_1, app_settings_1;
     var SectionRendererService;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
+            },
+            function (app_settings_1_1) {
+                app_settings_1 = app_settings_1_1;
             }],
         execute: function() {
             let SectionRendererService = class SectionRendererService {
-                constructor() {
-                    /* TODO:NW figure out where to set constants, use an APP SETTINGS service */
-                    this.PARKING_TYPE_FREE = 1;
-                    this.PARKING_TYPE_PAID = 2;
-                    this.PARKING_TYPE_NO_PARKING = 3;
-                    this.PARKING_TYPE_PERMIT = 4;
+                constructor(appSettings) {
+                    this.appSettings = appSettings;
                 }
                 drawSection(sectionPoints, streetSide, color, map) {
                     let formPoly;
@@ -84,6 +83,7 @@ System.register(['@angular/core'], function(exports_1, context_1) {
                         });
                     }
                     formPoly.setMap(map);
+                    return formPoly;
                 }
                 drawSectionInfoMarker(section, map) {
                     var sectionPoints = google.maps.geometry.encoding.decodePath(section.polyline);
@@ -126,27 +126,11 @@ System.register(['@angular/core'], function(exports_1, context_1) {
                     var self = this;
                     return marker;
                 }
-                getTypeColor(section) {
-                    if (section.main_parking_type_id == this.PARKING_TYPE_FREE && section.is_hours_restricted == 0 && !section.main_short_term_min)
-                        return '#00ff00';
-                    if (section.main_parking_type_id == this.PARKING_TYPE_NO_PARKING)
-                        return '#ff0000';
-                    if (section.main_parking_type_id == this.PARKING_TYPE_PAID && section.is_hours_restricted == 0)
-                        return '#ffff00';
-                    if (section.main_parking_type_id == this.PARKING_TYPE_PAID)
-                        return '#ffa500';
-                    if (section.main_parking_type_id == this.PARKING_TYPE_PERMIT)
-                        return '#993366';
-                    if (section.main_parking_type_id == this.PARKING_TYPE_FREE && section.is_hours_restricted)
-                        return '#0000ff';
-                    else
-                        return '#000000';
-                }
             };
             SectionRendererService = __decorate([
                 // TODO:NW get types?? typings install google.maps --global
                 core_1.Injectable(), 
-                __metadata('design:paramtypes', [])
+                __metadata('design:paramtypes', [app_settings_1.AppSettings])
             ], SectionRendererService);
             exports_1("SectionRendererService", SectionRendererService);
         }

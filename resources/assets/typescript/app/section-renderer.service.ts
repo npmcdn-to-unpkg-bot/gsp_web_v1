@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { MapSection } from './map-section';
+import { AppSettings } from './app-settings';
 
 declare var google: any; // TODO:NW get types?? typings install google.maps --global
 
 @Injectable()
+
 export class SectionRendererService {
+
+  constructor(private appSettings: AppSettings) { }
 
   infoMarkerClickHandler: Function;
 
-  public drawSection(sectionPoints:string, streetSide:number, color:string, map:any){
+  drawSection(sectionPoints:string, streetSide:number, color:string, map:any){
     let formPoly:any; 
     let svgPath:string = "";
     if(streetSide != 0){
@@ -66,6 +70,7 @@ export class SectionRendererService {
         });
     }
     formPoly.setMap(map);
+    return formPoly;
   }
 
   drawSectionInfoMarker(section:MapSection, map:any){
@@ -113,28 +118,5 @@ export class SectionRendererService {
     });
     var self = this;
     return marker;
-  }
-
-  /* TODO:NW figure out where to set constants, use an APP SETTINGS service */
-  PARKING_TYPE_FREE:number = 1;
-  PARKING_TYPE_PAID:number = 2;
-  PARKING_TYPE_NO_PARKING:number = 3;
-  PARKING_TYPE_PERMIT:number = 4;
-
-  public getTypeColor(section:MapSection){
-      if(section.main_parking_type_id == this.PARKING_TYPE_FREE && section.is_hours_restricted == 0 && !section.main_short_term_min)
-          return '#00ff00';
-      if(section.main_parking_type_id == this.PARKING_TYPE_NO_PARKING)
-          return '#ff0000';
-      if(section.main_parking_type_id == this.PARKING_TYPE_PAID && section.is_hours_restricted == 0)
-          return '#ffff00';
-      if(section.main_parking_type_id == this.PARKING_TYPE_PAID)
-          return '#ffa500';
-      if(section.main_parking_type_id == this.PARKING_TYPE_PERMIT)
-          return '#993366';
-      if(section.main_parking_type_id == this.PARKING_TYPE_FREE && section.is_hours_restricted)
-          return '#0000ff';
-      else
-          return '#000000';
   }
 }

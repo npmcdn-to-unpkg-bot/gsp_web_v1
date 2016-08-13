@@ -1,8 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { MapSection } from './map-section';
 
 @Component({
   selector: 'section-update-form',
-  template: '<div>Hello</div>'
+  templateUrl: './app/section-update-form.component.html'
 })
 
-export class SectionUpdateFormComponent { }
+export class SectionUpdateFormComponent { 
+   @Input() section: MapSection;
+
+}

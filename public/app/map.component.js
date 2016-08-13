@@ -1,4 +1,4 @@
-System.register(['@angular/core', './modal-container.component', './map-section.service', './section-renderer.service'], function(exports_1, context_1) {
+System.register(['@angular/core', './modal-container.component', './map-section.service', './section-renderer.service', './app-settings'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', './modal-container.component', './map-section.
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, modal_container_component_1, map_section_service_1, section_renderer_service_1;
+    var core_1, modal_container_component_1, map_section_service_1, section_renderer_service_1, app_settings_1;
     var MapComponent;
     return {
         setters:[
@@ -25,13 +25,16 @@ System.register(['@angular/core', './modal-container.component', './map-section.
             },
             function (section_renderer_service_1_1) {
                 section_renderer_service_1 = section_renderer_service_1_1;
+            },
+            function (app_settings_1_1) {
+                app_settings_1 = app_settings_1_1;
             }],
         execute: function() {
             let MapComponent = class MapComponent {
-                constructor(mapSectionService, sectionRendererService, zone, ref) {
+                constructor(mapSectionService, sectionRendererService, appSettings, ref) {
                     this.mapSectionService = mapSectionService;
                     this.sectionRendererService = sectionRendererService;
-                    this.zone = zone;
+                    this.appSettings = appSettings;
                     this.ref = ref;
                 }
                 ngOnInit() {
@@ -70,8 +73,15 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                     let sectionsArray = this.loadedSections;
                     for (let i = 0; i < sectionsArray.length; i++) {
                         let sectionPoints = google.maps.geometry.encoding.decodePath(sectionsArray[i].polyline);
-                        let color = this.sectionRendererService.getTypeColor(sectionsArray[i]);
-                        this.sectionRendererService.drawSection(sectionPoints, sectionsArray[i].street_side, color, this.map);
+                        let color = this.appSettings.getTypeColor(sectionsArray[i]);
+                        let newSection = this.sectionRendererService.drawSection(sectionPoints, sectionsArray[i].street_side, color, this.map);
+                        // onclick show modal with edit form (TODO:NW only if logged in as admin)
+                        google.maps.event.addListener(newSection, 'click', function () {
+                            self.modalComponent.myModalIsVisible = true;
+                            self.modalComponent.contentType = "edit_section";
+                            self.modalComponent.selectedSection = sectionsArray[i];
+                            self.ref.detectChanges();
+                        });
                         //don't show info for things with no notes
                         if (sectionsArray[i].notes != undefined &&
                             sectionsArray[i].notes != null &&
@@ -124,9 +134,9 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                     // if a edit section form
                     //template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="edit_section"></modal-container>',
                     template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="simple_string" contentString="Section Notes Here"></modal-container>',
-                    providers: [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService]
+                    providers: [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, app_settings_1.AppSettings]
                 }), 
-                __metadata('design:paramtypes', [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, core_1.NgZone, core_1.ChangeDetectorRef])
+                __metadata('design:paramtypes', [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, app_settings_1.AppSettings, core_1.ChangeDetectorRef])
             ], MapComponent);
             exports_1("MapComponent", MapComponent);
         }
