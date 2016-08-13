@@ -5,8 +5,9 @@
                 <button type="button" class="close" data-dismiss="modal" (click)="hideModalContainer()">&times;</button>
                 <h4 class="modal-title">{{title}}</h4>
             </div>
-            <div class="modal-body">
-                <p>Content Here</p>
+            <div class="modal-body" [ngSwitch]="contentType">
+                <template ngSwitchCase="edit_section"><section-update-form></section-update-form></template>
+                <template ngSwitchCase="simple_string">{{contentString}}</template>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" (click)="hideModalContainer()">Close</button>

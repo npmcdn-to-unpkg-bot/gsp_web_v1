@@ -84,6 +84,7 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                                 //debugger;
                                 */
                                 self.modalComponent.myModalIsVisible = true;
+                                self.modalComponent.contentString = sectionsArray[i].notes;
                                 /*
                                 // TODO:NW figure out why the zone has to be run like this for google events to show changes
                                 // and only appears the first time
@@ -120,7 +121,9 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                 // TODO:NW get types?? typings install google.maps --global
                 core_1.Component({
                     selector: 'my-map',
-                    template: '<div id="map-canvas"></div><modal-container title="Section Notes"></modal-container>',
+                    // if a edit section form
+                    //template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="edit_section"></modal-container>',
+                    template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="simple_string" contentString="Section Notes Here"></modal-container>',
                     providers: [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService]
                 }), 
                 __metadata('design:paramtypes', [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, core_1.NgZone, core_1.ChangeDetectorRef])

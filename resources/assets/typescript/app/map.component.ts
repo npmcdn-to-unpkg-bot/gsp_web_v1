@@ -8,7 +8,9 @@ declare var google: any; // TODO:NW get types?? typings install google.maps --gl
 
 @Component({
   selector: 'my-map',
-  template: '<div id="map-canvas"></div><modal-container title="Section Notes"></modal-container>',
+  // if a edit section form
+  //template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="edit_section"></modal-container>',
+  template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="simple_string" contentString="Section Notes Here"></modal-container>',
   providers: [ MapSectionService, SectionRendererService ]
 })
 
@@ -78,6 +80,7 @@ export class MapComponent implements OnInit {
           //debugger;
           */
           self.modalComponent.myModalIsVisible=true;
+          self.modalComponent.contentString=sectionsArray[i].notes;
           
           /*
           // TODO:NW figure out why the zone has to be run like this for google events to show changes

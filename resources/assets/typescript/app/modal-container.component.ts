@@ -1,12 +1,16 @@
 import { Component, Input, OnChanges, SimpleChange} from '@angular/core';
+// import { SectionUpdateFormComponent } from './section-update-form.component';
+
 @Component({
     selector: 'modal-container',
     templateUrl: './app/modal-container.component.html',
 })
 export class ModalContainerComponent implements OnChanges
 {
-  private title: string;
+  @Input() title: string;
   @Input() myModalIsVisible: boolean;
+  @Input() contentString: string = 'beginDummyData';
+  @Input() contentType: string = 'simple_string';
 
   showModalContainer(title: string)
   {

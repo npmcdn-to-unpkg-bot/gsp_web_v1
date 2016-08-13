@@ -18,7 +18,12 @@ System.register(['@angular/core'], function(exports_1, context_1) {
                 core_1 = core_1_1;
             }],
         execute: function() {
+            // import { SectionUpdateFormComponent } from './section-update-form.component';
             let ModalContainerComponent = class ModalContainerComponent {
+                constructor() {
+                    this.contentString = 'beginDummyData';
+                    this.contentType = 'simple_string';
+                }
                 showModalContainer(title) {
                     this.title = title;
                     this.myModalIsVisible = true;
@@ -46,8 +51,20 @@ System.register(['@angular/core'], function(exports_1, context_1) {
             };
             __decorate([
                 core_1.Input(), 
+                __metadata('design:type', String)
+            ], ModalContainerComponent.prototype, "title", void 0);
+            __decorate([
+                core_1.Input(), 
                 __metadata('design:type', Boolean)
             ], ModalContainerComponent.prototype, "myModalIsVisible", void 0);
+            __decorate([
+                core_1.Input(), 
+                __metadata('design:type', String)
+            ], ModalContainerComponent.prototype, "contentString", void 0);
+            __decorate([
+                core_1.Input(), 
+                __metadata('design:type', String)
+            ], ModalContainerComponent.prototype, "contentType", void 0);
             ModalContainerComponent = __decorate([
                 core_1.Component({
                     selector: 'modal-container',
