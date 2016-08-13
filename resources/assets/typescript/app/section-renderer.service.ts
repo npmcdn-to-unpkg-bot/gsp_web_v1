@@ -6,29 +6,9 @@ declare var google: any; // TODO:NW get types?? typings install google.maps --gl
 @Injectable()
 export class SectionRendererService {
 
-  // TODO:NW figure out how to inject google map object
-  // constructor(private map: any) { }
-  private map:any;
+  infoMarkerClickHandler: Function;
 
-  init(map: any) { this.map = map; }
-
-  renderSectionsForView(sectionsArray:MapSection[]){
-    for (var i=0; i < sectionsArray.length; i++) {
-      var sectionPoints = google.maps.geometry.encoding.decodePath(sectionsArray[i].polyline);
-      this.drawSection(sectionPoints, sectionsArray[i].street_side, this.getTypeColor(sectionsArray[i]));
-      //don't show info for things with no notes
-      if(
-            sectionsArray[i].notes != undefined &&
-            sectionsArray[i].notes != null &&
-            sectionsArray[i].notes != ""
-        ){
-        this.drawSectionInfoMarker(sectionsArray[i]);
-      }
-      //alert(sectionsArray[i].id);
-    }
-  }
-
-  private drawSection(sectionPoints:string, streetSide:number, color:string){
+  public drawSection(sectionPoints:string, streetSide:number, color:string, map:any){
     let formPoly:any; 
     let svgPath:string = "";
     if(streetSide != 0){
@@ -85,14 +65,13 @@ export class SectionRendererService {
             strokeWeight: 2
         });
     }
-    formPoly.setMap(this.map);
-    return formPoly; // for reference, to set null at a later point
+    formPoly.setMap(map);
   }
 
-  drawSectionInfoMarker(section:MapSection){
+  drawSectionInfoMarker(section:MapSection, map:any){
     var sectionPoints = google.maps.geometry.encoding.decodePath(section.polyline);
     var shift = .0002; //world x/y units
-    var proj = this.map.getProjection();
+    var proj = map.getProjection();
     //get the middle section of the polyline, round up to more beginning section
     var midIndex = Math.floor(sectionPoints.length / 2);
     var p1 = proj.fromLatLngToPoint(sectionPoints[midIndex]);
@@ -128,27 +107,12 @@ export class SectionRendererService {
     var pixelLatLng = proj.fromPointToLatLng(iconPoint);
     var marker = new google.maps.Marker({
         position: pixelLatLng,
-        map: this.map,
+        map: map,
         icon: '/images/i-icon.png',
         title: 'a title'
     });
     var self = this;
-    google.maps.event.addListener(marker, 'click', function() {
-      self.showSectionInfo(section);
-    });
-  }
-
-  private showSectionInfo(section:MapSection){
-    alert(section.notes);
-    /*
-    $('#section-info').html(
-      'Id: ' + section.id + '<br />' +
-      'Hours: <br />' + this.getHoursDisplay(section.hours_data) + '<br />' +
-      'Notes: ' + section.notes + '<br />' + 
-      '<a href="#" onclick="$(\'#section-info\').hide();return false;">Close</a>'
-    );
-    $('#section-info').show();
-    */
+    return marker;
   }
 
   /* TODO:NW figure out where to set constants, use an APP SETTINGS service */
@@ -157,7 +121,7 @@ export class SectionRendererService {
   PARKING_TYPE_NO_PARKING:number = 3;
   PARKING_TYPE_PERMIT:number = 4;
 
-  private getTypeColor(section:MapSection){
+  public getTypeColor(section:MapSection){
       if(section.main_parking_type_id == this.PARKING_TYPE_FREE && section.is_hours_restricted == 0 && !section.main_short_term_min)
           return '#00ff00';
       if(section.main_parking_type_id == this.PARKING_TYPE_NO_PARKING)

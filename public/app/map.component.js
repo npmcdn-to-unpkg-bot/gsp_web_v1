@@ -1,4 +1,4 @@
-System.register(['@angular/core', './map-section.service', './section-renderer.service'], function(exports_1, context_1) {
+System.register(['@angular/core', './modal-container.component', './map-section.service', './section-renderer.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,12 +10,15 @@ System.register(['@angular/core', './map-section.service', './section-renderer.s
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, map_section_service_1, section_renderer_service_1;
+    var core_1, modal_container_component_1, map_section_service_1, section_renderer_service_1;
     var MapComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
+            },
+            function (modal_container_component_1_1) {
+                modal_container_component_1 = modal_container_component_1_1;
             },
             function (map_section_service_1_1) {
                 map_section_service_1 = map_section_service_1_1;
@@ -25,11 +28,15 @@ System.register(['@angular/core', './map-section.service', './section-renderer.s
             }],
         execute: function() {
             let MapComponent = class MapComponent {
-                constructor(mapSectionService, sectionRendererService) {
+                constructor(mapSectionService, sectionRendererService, zone, ref) {
                     this.mapSectionService = mapSectionService;
                     this.sectionRendererService = sectionRendererService;
+                    this.zone = zone;
+                    this.ref = ref;
                 }
                 ngOnInit() {
+                    //this.myModalIsVisible=false;
+                    //debugger;
                     var mapOptions = {
                         center: new google.maps.LatLng(40.762, -111.855),
                         zoom: 16,
@@ -38,14 +45,14 @@ System.register(['@angular/core', './map-section.service', './section-renderer.s
                         scaleControl: true,
                         disableDoubleClickZoom: true
                     };
-                    var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+                    this.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
                     var self = this;
-                    google.maps.event.addListener(map, 'tilesloaded', function () {
+                    google.maps.event.addListener(this.map, 'tilesloaded', function () {
                         var mapData = {
-                            minLat: map.getBounds().getSouthWest().lat(),
-                            maxLat: map.getBounds().getNorthEast().lat(),
-                            minLng: map.getBounds().getSouthWest().lng(),
-                            maxLng: map.getBounds().getNorthEast().lng(),
+                            minLat: self.map.getBounds().getSouthWest().lat(),
+                            maxLat: self.map.getBounds().getNorthEast().lat(),
+                            minLng: self.map.getBounds().getSouthWest().lng(),
+                            maxLng: self.map.getBounds().getNorthEast().lng(),
                         };
                         // (param1, param2, …, paramN) => { statements }
                         // (param1, param2, …, paramN) => expression AND no paren when one param eg sections
@@ -54,20 +61,69 @@ System.register(['@angular/core', './map-section.service', './section-renderer.s
                             //var test = sections;
                             // debugger;
                             self.loadedSections = sections;
-                            self.sectionRendererService.init(map);
-                            self.sectionRendererService.renderSectionsForView(sections);
+                            self.renderSectionsForView();
                         });
                     });
                 }
+                renderSectionsForView() {
+                    let self = this;
+                    let sectionsArray = this.loadedSections;
+                    for (let i = 0; i < sectionsArray.length; i++) {
+                        let sectionPoints = google.maps.geometry.encoding.decodePath(sectionsArray[i].polyline);
+                        let color = this.sectionRendererService.getTypeColor(sectionsArray[i]);
+                        this.sectionRendererService.drawSection(sectionPoints, sectionsArray[i].street_side, color, this.map);
+                        //don't show info for things with no notes
+                        if (sectionsArray[i].notes != undefined &&
+                            sectionsArray[i].notes != null &&
+                            sectionsArray[i].notes != "") {
+                            let marker = this.sectionRendererService.drawSectionInfoMarker(sectionsArray[i], this.map);
+                            google.maps.event.addListener(marker, 'click', function () {
+                                /*
+                                self.showSectionInfo();
+                                self.myModalIsVisible = true;
+                                //debugger;
+                                */
+                                self.modalComponent.myModalIsVisible = true;
+                                /*
+                                // TODO:NW figure out why the zone has to be run like this for google events to show changes
+                                // and only appears the first time
+                                // either of the next two things worked
+                      
+                                self.zone.run(() => {
+                                  console.log('marker clicked');
+                                }); */
+                                self.ref.detectChanges();
+                            });
+                        }
+                    }
+                }
+                showSectionInfo() {
+                    // how to get self as scopt of this in section renderer?
+                    //this.myModalIsVisible = true;
+                    //debugger;
+                    /*
+                    $('#section-info').html(
+                      'Id: ' + section.id + '<br />' +
+                      'Hours: <br />' + this.getHoursDisplay(section.hours_data) + '<br />' +
+                      'Notes: ' + section.notes + '<br />' +
+                      '<a href="#" onclick="$(\'#section-info\').hide();return false;">Close</a>'
+                    );
+                    $('#section-info').show();
+                    */
+                }
             };
+            __decorate([
+                core_1.ViewChild(modal_container_component_1.ModalContainerComponent), 
+                __metadata('design:type', modal_container_component_1.ModalContainerComponent)
+            ], MapComponent.prototype, "modalComponent", void 0);
             MapComponent = __decorate([
                 // TODO:NW get types?? typings install google.maps --global
                 core_1.Component({
                     selector: 'my-map',
-                    template: '<div id="map-canvas"></div>',
-                    providers: [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService],
+                    template: '<div id="map-canvas"></div><modal-container title="Section Notes"></modal-container>',
+                    providers: [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService]
                 }), 
-                __metadata('design:paramtypes', [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService])
+                __metadata('design:paramtypes', [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, core_1.NgZone, core_1.ChangeDetectorRef])
             ], MapComponent);
             exports_1("MapComponent", MapComponent);
         }
