@@ -31,10 +31,9 @@ System.register(['@angular/core', './modal-container.component', './map-section.
             }],
         execute: function() {
             let MapComponent = class MapComponent {
-                constructor(mapSectionService, sectionRendererService, appSettings, ref) {
+                constructor(mapSectionService, sectionRendererService, ref) {
                     this.mapSectionService = mapSectionService;
                     this.sectionRendererService = sectionRendererService;
-                    this.appSettings = appSettings;
                     this.ref = ref;
                 }
                 ngOnInit() {
@@ -73,7 +72,7 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                     let sectionsArray = this.loadedSections;
                     for (let i = 0; i < sectionsArray.length; i++) {
                         let sectionPoints = google.maps.geometry.encoding.decodePath(sectionsArray[i].polyline);
-                        let color = this.appSettings.getTypeColor(sectionsArray[i]);
+                        let color = app_settings_1.AppSettings.getTypeColor(sectionsArray[i]);
                         let newSection = this.sectionRendererService.drawSection(sectionPoints, sectionsArray[i].street_side, color, this.map);
                         // onclick show modal with edit form (TODO:NW only if logged in as admin)
                         google.maps.event.addListener(newSection, 'click', function () {
@@ -134,9 +133,9 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                     // if a edit section form
                     //template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="edit_section"></modal-container>',
                     template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="simple_string" contentString="Section Notes Here"></modal-container>',
-                    providers: [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, app_settings_1.AppSettings]
+                    providers: [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService]
                 }), 
-                __metadata('design:paramtypes', [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, app_settings_1.AppSettings, core_1.ChangeDetectorRef])
+                __metadata('design:paramtypes', [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, core_1.ChangeDetectorRef])
             ], MapComponent);
             exports_1("MapComponent", MapComponent);
         }

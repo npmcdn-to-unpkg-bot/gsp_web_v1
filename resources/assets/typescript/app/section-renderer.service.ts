@@ -8,8 +8,6 @@ declare var google: any; // TODO:NW get types?? typings install google.maps --gl
 
 export class SectionRendererService {
 
-  constructor(private appSettings: AppSettings) { }
-
   infoMarkerClickHandler: Function;
 
   drawSection(sectionPoints:string, streetSide:number, color:string, map:any){

@@ -12,7 +12,7 @@ declare var google: any; // TODO:NW get types?? typings install google.maps --gl
   // if a edit section form
   //template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="edit_section"></modal-container>',
   template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="simple_string" contentString="Section Notes Here"></modal-container>',
-  providers: [ MapSectionService, SectionRendererService, AppSettings ]
+  providers: [ MapSectionService, SectionRendererService ]
 })
 
 export class MapComponent implements OnInit {
@@ -23,8 +23,7 @@ export class MapComponent implements OnInit {
   private modalComponent: ModalContainerComponent;
 
   constructor(private mapSectionService: MapSectionService, 
-      private sectionRendererService:SectionRendererService, 
-      private appSettings:AppSettings, 
+      private sectionRendererService:SectionRendererService,
       private ref:ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -67,7 +66,7 @@ export class MapComponent implements OnInit {
     let sectionsArray = this.loadedSections;
     for (let i=0; i < sectionsArray.length; i++) {
       let sectionPoints = google.maps.geometry.encoding.decodePath(sectionsArray[i].polyline);
-      let color = this.appSettings.getTypeColor(sectionsArray[i]);
+      let color = AppSettings.getTypeColor(sectionsArray[i]);
       let newSection = this.sectionRendererService.drawSection(sectionPoints, sectionsArray[i].street_side, color, this.map);
       
       // onclick show modal with edit form (TODO:NW only if logged in as admin)

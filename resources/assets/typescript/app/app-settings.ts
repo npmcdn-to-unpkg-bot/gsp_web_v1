@@ -8,17 +8,17 @@ export class AppSettings {
    public static PARKING_TYPE_NO_PARKING:number = 3;
    public static PARKING_TYPE_PERMIT:number = 4;
 
-   // TODO:NW get from server
-   public static get PARKING_TYPES(): Object[] { 
-     return [
-       {id:AppSettings.PARKING_TYPE_FREE, name:'Free'},
-       {id:AppSettings.PARKING_TYPE_PAID, name:'Paid'},
-       {id:AppSettings.PARKING_TYPE_NO_PARKING, name:'No parking'},
-       {id:AppSettings.PARKING_TYPE_PERMIT, name:'Permit required'}
-     ];
+   // TODO:NW get from server. Figure out why static properties cannot be referenced here
+   public static get PARKING_TYPES(): Object { 
+     let typeObj={};
+     typeObj[AppSettings.PARKING_TYPE_FREE] = {id:AppSettings.PARKING_TYPE_FREE, name:'Free'};
+     typeObj[AppSettings.PARKING_TYPE_PAID] = {id:AppSettings.PARKING_TYPE_PAID, name:'Paid'};
+     typeObj[AppSettings.PARKING_TYPE_NO_PARKING] = {id:AppSettings.PARKING_TYPE_NO_PARKING, name:'No parking'};
+     typeObj[AppSettings.PARKING_TYPE_PERMIT] = {id:AppSettings.PARKING_TYPE_PERMIT, name:'Permit required'};
+     return typeObj;
    }
 
-   public getTypeColor(section:MapSection){
+   public static getTypeColor(section:MapSection){
       if(section.main_parking_type_id == AppSettings.PARKING_TYPE_FREE && section.is_hours_restricted == 0 && !section.main_short_term_min)
           return '#00ff00';
       if(section.main_parking_type_id == AppSettings.PARKING_TYPE_NO_PARKING)

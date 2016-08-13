@@ -6,16 +6,16 @@ System.register([], function(exports_1, context_1) {
         setters:[],
         execute: function() {
             class AppSettings {
-                // TODO:NW get from server
+                // TODO:NW get from server. Figure out why static properties cannot be referenced here
                 static get PARKING_TYPES() {
-                    return [
-                        { id: AppSettings.PARKING_TYPE_FREE, name: 'Free' },
-                        { id: AppSettings.PARKING_TYPE_PAID, name: 'Paid' },
-                        { id: AppSettings.PARKING_TYPE_NO_PARKING, name: 'No parking' },
-                        { id: AppSettings.PARKING_TYPE_PERMIT, name: 'Permit required' }
-                    ];
+                    let typeObj = {};
+                    typeObj[AppSettings.PARKING_TYPE_FREE] = { id: AppSettings.PARKING_TYPE_FREE, name: 'Free' };
+                    typeObj[AppSettings.PARKING_TYPE_PAID] = { id: AppSettings.PARKING_TYPE_PAID, name: 'Paid' };
+                    typeObj[AppSettings.PARKING_TYPE_NO_PARKING] = { id: AppSettings.PARKING_TYPE_NO_PARKING, name: 'No parking' };
+                    typeObj[AppSettings.PARKING_TYPE_PERMIT] = { id: AppSettings.PARKING_TYPE_PERMIT, name: 'Permit required' };
+                    return typeObj;
                 }
-                getTypeColor(section) {
+                static getTypeColor(section) {
                     if (section.main_parking_type_id == AppSettings.PARKING_TYPE_FREE && section.is_hours_restricted == 0 && !section.main_short_term_min)
                         return '#00ff00';
                     if (section.main_parking_type_id == AppSettings.PARKING_TYPE_NO_PARKING)
