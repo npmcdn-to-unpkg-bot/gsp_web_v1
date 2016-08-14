@@ -10,6 +10,34 @@ use Response;
 
 class MapSectionController extends Controller
 {
+
+    private function getSnakeToCamel(){
+        $selected = [];
+        $atts = [
+         'streetSide',
+        'mainParkingTypeId',
+        'mainPph',
+        'mainShortTermMin',
+        'numSpots',
+        'isHoursRestricted',
+        'hoursPph',
+        'hoursData',
+        'notes',
+        'availabilityRating',
+        'startLat',
+        'startLng',
+        'endLat',
+        'endLng',
+        'polyline',
+        'submittedBy',
+        'approved',
+        'updatedAt'
+        ];
+        foreach($atts as $att){
+            $selected[] = ' '.snake_case($att) . ' AS ' .$att;
+        }
+        return implode(',', $selected);
+    }
     /**
      * Display all sections for a viewport
      *
@@ -22,8 +50,10 @@ class MapSectionController extends Controller
         $maxLat = $_POST['maxLat'];
         $maxLng = $_POST['maxLng'];
         //var_dump($_POST);exit();
+        //return $this->getSnakeToCamel();exit();
         // Fuck laravel not supporting named params in query methods, use a raw query
-        $sections = DB::select('SELECT * FROM map_section WHERE
+        $sections = DB::select('SELECT id,'.$this->getSnakeToCamel().' 
+            FROM map_section WHERE
             (
               -- 1
               (

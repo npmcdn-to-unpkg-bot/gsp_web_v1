@@ -64,6 +64,7 @@ return [
             'prefix' => '',
             'strict' => false,
             'engine' => null,
+            // NOTE:NW IMPORTANT for named param quiries re-using names
             'options' => [
                 PDO::ATTR_EMULATE_PREPARES => true,
             ],

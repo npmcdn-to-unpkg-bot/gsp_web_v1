@@ -14,23 +14,24 @@ class MapSection extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'street_side',
-        'main_parking_type_id',
-        'main_pph',
-        'main_short_term_min',
-        'num_spots',
-        'is_hours_restricted',
-        'hours_pph',
-        'hours_data',
+        'streetSide',
+        'mainParkingTypeId',
+        'mainPph',
+        'mainShortTermMin',
+        'numSpots',
+        'isHoursRestricted',
+        'hoursPph',
+        'hoursData',
         'notes',
-        'availability_rating',
-        'start_lat',
-        'start_lng',
-        'end_lat',
-        'end_lng',
+        'availabilityRating',
+        'startLat',
+        'startLng',
+        'endLat',
+        'endLng',
         'polyline',
-        'submitted_by',
-        'approved'
+        'submittedBy',
+        'approved',
+        'updatedAt'
     ];
 
     protected $guarded = [];
