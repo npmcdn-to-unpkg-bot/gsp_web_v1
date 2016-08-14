@@ -72,7 +72,8 @@ export class MapComponent implements OnInit {
       // onclick show modal with edit form (TODO:NW only if logged in as admin)
       google.maps.event.addListener(newSection, 'click', function() {
           self.modalComponent.myModalIsVisible=true;
-          self.modalComponent.contentType="edit_section";
+          self.modalComponent.componentName="section-update-form";
+          self.modalComponent.title="Update Section";
           self.modalComponent.selectedSection=sectionsArray[i];
           self.ref.detectChanges();
         });
@@ -93,7 +94,9 @@ export class MapComponent implements OnInit {
           //debugger;
           */
           self.modalComponent.myModalIsVisible=true;
-          self.modalComponent.contentString=sectionsArray[i].notes;
+          self.modalComponent.componentName="section-info";
+          self.modalComponent.title="Parking Info";
+          self.modalComponent.selectedSection=sectionsArray[i];
           
           /*
           // TODO:NW figure out why the zone has to be run like this for google events to show changes

@@ -8,6 +8,7 @@ import { MapComponent }  from './map.component';
 import { LeftMapLegendComponent } from './left-map-legend.component';
 import { ModalContainerComponent } from './modal-container.component';
 import { SectionUpdateFormComponent } from './section-update-form.component';
+import { SectionInfoComponent } from './section-info.component';
 
 @NgModule({
   imports:      [ BrowserModule, HttpModule, FormsModule ],
@@ -16,7 +17,8 @@ import { SectionUpdateFormComponent } from './section-update-form.component';
     MapComponent,
     LeftMapLegendComponent,
     ModalContainerComponent,
-    SectionUpdateFormComponent
+    SectionUpdateFormComponent,
+    SectionInfoComponent
   ],
   bootstrap:    [ AppComponent ]
 })

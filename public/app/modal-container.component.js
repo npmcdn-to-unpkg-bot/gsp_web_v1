@@ -23,33 +23,12 @@ System.register(['@angular/core', './map-section'], function(exports_1, context_
         execute: function() {
             // import { SectionUpdateFormComponent } from './section-update-form.component';
             let ModalContainerComponent = class ModalContainerComponent {
-                constructor() {
-                    this.contentString = 'beginDummyData';
-                    this.contentType = 'simple_string';
-                }
                 showModalContainer(title) {
                     this.title = title;
                     this.myModalIsVisible = true;
                 }
                 hideModalContainer() {
                     this.myModalIsVisible = false;
-                }
-                ngOnChanges(changes) {
-                    /*
-                    for (let propName in changes) {
-                      let changedProp = changes[propName];
-                      let from = JSON.stringify(changedProp.previousValue);
-                      let to =   JSON.stringify(changedProp.currentValue);
-                      this.myModalIsVisible=!this.myModalIsVisible;
-                      debugger;
-                      // log.push( `${propName} changed from ${from} to ${to}`);
-                    }
-                    */
-                }
-                // WTF, this is triggered on the value change in parent, but not ngOnChanges
-                ngDoCheck() {
-                    //this.myModalIsVisible=this.myModalIsVisible;
-                    //debugger;  
                 }
             };
             __decorate([
@@ -63,11 +42,7 @@ System.register(['@angular/core', './map-section'], function(exports_1, context_
             __decorate([
                 core_1.Input(), 
                 __metadata('design:type', String)
-            ], ModalContainerComponent.prototype, "contentString", void 0);
-            __decorate([
-                core_1.Input(), 
-                __metadata('design:type', String)
-            ], ModalContainerComponent.prototype, "contentType", void 0);
+            ], ModalContainerComponent.prototype, "componentName", void 0);
             __decorate([
                 core_1.Input(), 
                 __metadata('design:type', map_section_1.MapSection)

@@ -1,18 +1,17 @@
-<div>ID: {{model.id}}</div>
-<div>Notes: {{model.notes}}</div>
-<div>Parking Type: {{model.mainParkingTypeId | nameForPtypeId}}</div>
+
+<section-info [model]="model"></section-info>
 <div class="container">
   <div [hidden]="submitted">
     <form *ngIf="active" (ngSubmit)="onSubmit()" #sectionForm="ngForm">
       <div class="form-group">
-        <label for="parkingTypeId">Parking Type</label>
-        <select class="form-control" id="parkingTypeId"
+        <label for="mainParkingTypeId">Parking Type</label>
+        <select class="form-control" id="mainParkingTypeId"
                 required
-                [(ngModel)]="model.parkingTypeId" name="parkingTypeId" 
-                #parkingTypeId="ngModel" >
-          <option *ngFor="let id of ptIds" [value]="id">{{id}}</option>
+                [(ngModel)]="model.mainParkingTypeId" name="mainParkingTypeId" 
+                #mainParkingTypeId="ngModel" >
+          <option *ngFor="let type of pTypes" [value]="type.id">{{type.name}}</option>
         </select>
-        <div [hidden]="parkingTypeId.valid || parkingTypeId.pristine" 
+        <div [hidden]="mainParkingTypeId.valid || mainParkingTypeId.pristine" 
              class="alert alert-danger">
           Parking Type is required
         </div>

@@ -1,4 +1,4 @@
-System.register(['@angular/core', '@angular/platform-browser', '@angular/http', '@angular/forms', './app.component', './map.component', './left-map-legend.component', './modal-container.component', './section-update-form.component'], function(exports_1, context_1) {
+System.register(['@angular/core', '@angular/platform-browser', '@angular/http', '@angular/forms', './app.component', './map.component', './left-map-legend.component', './modal-container.component', './section-update-form.component', './section-info.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', '@angular/platform-browser', '@angular/http', 
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, platform_browser_1, http_1, forms_1, app_component_1, map_component_1, left_map_legend_component_1, modal_container_component_1, section_update_form_component_1;
+    var core_1, platform_browser_1, http_1, forms_1, app_component_1, map_component_1, left_map_legend_component_1, modal_container_component_1, section_update_form_component_1, section_info_component_1;
     var AppModule;
     return {
         setters:[
@@ -40,6 +40,9 @@ System.register(['@angular/core', '@angular/platform-browser', '@angular/http', 
             },
             function (section_update_form_component_1_1) {
                 section_update_form_component_1 = section_update_form_component_1_1;
+            },
+            function (section_info_component_1_1) {
+                section_info_component_1 = section_info_component_1_1;
             }],
         execute: function() {
             let AppModule = class AppModule {
@@ -52,7 +55,8 @@ System.register(['@angular/core', '@angular/platform-browser', '@angular/http', 
                         map_component_1.MapComponent,
                         left_map_legend_component_1.LeftMapLegendComponent,
                         modal_container_component_1.ModalContainerComponent,
-                        section_update_form_component_1.SectionUpdateFormComponent
+                        section_update_form_component_1.SectionUpdateFormComponent,
+                        section_info_component_1.SectionInfoComponent
                     ],
                     bootstrap: [app_component_1.AppComponent]
                 }), 
