@@ -7,7 +7,7 @@
             </div>
             <!-- using non sugar syntax with tempaltes. TODO:NW figure out how to just use dynamic component name -->
             <div class="modal-body" [ngSwitch]="contentType">
-                <template ngSwitchCase="edit_section"><section-update-form [section]="selectedSection"></section-update-form></template>
+                <template ngSwitchCase="edit_section"><section-update-form [model]="selectedSection"></section-update-form></template>
                 <template ngSwitchCase="simple_string">{{contentString}}</template>
             </div>
             <div class="modal-footer">

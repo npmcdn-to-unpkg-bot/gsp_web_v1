@@ -67,7 +67,7 @@ export class MapComponent implements OnInit {
     for (let i=0; i < sectionsArray.length; i++) {
       let sectionPoints = google.maps.geometry.encoding.decodePath(sectionsArray[i].polyline);
       let color = AppSettings.getTypeColor(sectionsArray[i]);
-      let newSection = this.sectionRendererService.drawSection(sectionPoints, sectionsArray[i].street_side, color, this.map);
+      let newSection = this.sectionRendererService.drawSection(sectionPoints, sectionsArray[i].streetSide, color, this.map);
       
       // onclick show modal with edit form (TODO:NW only if logged in as admin)
       google.maps.event.addListener(newSection, 'click', function() {

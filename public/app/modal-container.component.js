@@ -48,7 +48,7 @@ System.register(['@angular/core', './map-section'], function(exports_1, context_
                 }
                 // WTF, this is triggered on the value change in parent, but not ngOnChanges
                 ngDoCheck() {
-                    this.myModalIsVisible = this.myModalIsVisible;
+                    //this.myModalIsVisible=this.myModalIsVisible;
                     //debugger;  
                 }
             };
@@ -75,7 +75,7 @@ System.register(['@angular/core', './map-section'], function(exports_1, context_
             ModalContainerComponent = __decorate([
                 core_1.Component({
                     selector: 'modal-container',
-                    templateUrl: './app/modal-container.component.html',
+                    templateUrl: './app/templates/modal-container.component.html',
                 }), 
                 __metadata('design:paramtypes', [])
             ], ModalContainerComponent);

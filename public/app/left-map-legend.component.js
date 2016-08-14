@@ -23,7 +23,7 @@ System.register(['@angular/core'], function(exports_1, context_1) {
             LeftMapLegendComponent = __decorate([
                 core_1.Component({
                     selector: 'left-map-legend',
-                    templateUrl: './app/left-map-legend.component.html'
+                    templateUrl: './app/templates/left-map-legend.component.html'
                 }), 
                 __metadata('design:paramtypes', [])
             ], LeftMapLegendComponent);

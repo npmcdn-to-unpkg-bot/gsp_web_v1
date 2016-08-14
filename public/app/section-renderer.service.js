@@ -96,7 +96,7 @@ System.register(['@angular/core'], function(exports_1, context_1) {
                     var dy = 0;
                     //angle of the line segment in radians, y is opp in world coords, and using delta
                     var theta = Math.atan2(p2.y - p1.y, p2.x - p1.x);
-                    if (section.street_side == 0) {
+                    if (section.streetSide == 0) {
                     }
                     else {
                         // from the two points figure out the direction of the line. 
@@ -104,8 +104,8 @@ System.register(['@angular/core'], function(exports_1, context_1) {
                         // in maps positive y is down
                         var deltay = p1.x - p2.x;
                         var deltax = p1.y - p2.y;
-                        dx = shift * Math.sin(theta) * section.street_side;
-                        dy = shift * Math.cos(theta) * -1 * section.street_side; //y in maps goes the opposite way
+                        dx = shift * Math.sin(theta) * section.streetSide;
+                        dy = shift * Math.cos(theta) * -1 * section.streetSide; //y in maps goes the opposite way
                     }
                     //set the new point
                     var iconPoint = new google.maps.Point(pfx + dx, pfy + dy);

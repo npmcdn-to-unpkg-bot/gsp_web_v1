@@ -4,7 +4,7 @@ import { MapSection } from './map-section';
 
 @Component({
     selector: 'modal-container',
-    templateUrl: './app/modal-container.component.html',
+    templateUrl: './app/templates/modal-container.component.html',
 })
 export class ModalContainerComponent implements OnChanges
 {
@@ -41,7 +41,7 @@ export class ModalContainerComponent implements OnChanges
 
   // WTF, this is triggered on the value change in parent, but not ngOnChanges
   ngDoCheck() {
-    this.myModalIsVisible=this.myModalIsVisible;
+    //this.myModalIsVisible=this.myModalIsVisible;
     //debugger;  
   }
 }

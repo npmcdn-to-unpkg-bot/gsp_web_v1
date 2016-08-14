@@ -7,6 +7,9 @@ System.register([], function(exports_1, context_1) {
         setters:[],
         execute: function() {
             class MapSection {
+                constructor(id) {
+                    this.id = id;
+                }
             }
             exports_1("MapSection", MapSection);
         }

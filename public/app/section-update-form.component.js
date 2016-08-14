@@ -25,16 +25,33 @@ System.register(['@angular/core', './map-section', './name-for-p-type-id.pipe'],
             }],
         execute: function() {
             let SectionUpdateFormComponent = class SectionUpdateFormComponent {
+                constructor() {
+                    this.ptIds = [1, 2, 3, 4];
+                    this.times = [5, 10, 15, , 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360, 390, 420, 450, 480];
+                    //model = new MapSection(1); // set from parent on selection
+                    this.submitted = false;
+                    // Reset the form with a new hero AND restore 'pristine' class state
+                    // by toggling 'active' flag which causes the form
+                    // to be removed/re-added in a tick via NgIf
+                    // TODO: Workaround until NgForm has a reset method (#6822)
+                    this.active = true;
+                }
+                onSubmit() { this.submitted = true; }
+                newSection() {
+                    this.model = new map_section_1.MapSection(-1);
+                    this.active = false;
+                    setTimeout(() => this.active = true, 0);
+                }
             };
             __decorate([
                 core_1.Input(), 
                 __metadata('design:type', map_section_1.MapSection)
-            ], SectionUpdateFormComponent.prototype, "section", void 0);
+            ], SectionUpdateFormComponent.prototype, "model", void 0);
             SectionUpdateFormComponent = __decorate([
                 // import pipe here
                 core_1.Component({
                     selector: 'section-update-form',
-                    templateUrl: './app/section-update-form.component.html',
+                    templateUrl: './app/templates/section-update-form.component.html',
                     pipes: [name_for_p_type_id_pipe_1.NameForPtypeIdPipe]
                 }), 
                 __metadata('design:paramtypes', [])

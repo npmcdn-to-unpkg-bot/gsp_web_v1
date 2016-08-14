@@ -1,0 +1,55 @@
+<div>ID: {{model.id}}</div>
+<div>Notes: {{model.notes}}</div>
+<div>Parking Type: {{model.mainParkingTypeId | nameForPtypeId}}</div>
+<div class="container">
+  <div [hidden]="submitted">
+    <form *ngIf="active" (ngSubmit)="onSubmit()" #sectionForm="ngForm">
+      <div class="form-group">
+        <label for="parkingTypeId">Parking Type</label>
+        <select class="form-control" id="parkingTypeId"
+                required
+                [(ngModel)]="model.parkingTypeId" name="parkingTypeId" 
+                #parkingTypeId="ngModel" >
+          <option *ngFor="let id of ptIds" [value]="id">{{id}}</option>
+        </select>
+        <div [hidden]="parkingTypeId.valid || parkingTypeId.pristine" 
+             class="alert alert-danger">
+          Parking Type is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="notes">Notes</label>
+        <input type="text" class="form-control" id="notes"
+               [(ngModel)]="model.notes" name="notes" >
+      </div>
+      <div class="form-group">
+        <label for="power">Time Limited?</label>
+        <select class="form-control" id="mainShortTermMin"
+                required
+                [(ngModel)]="model.mainShortTermMin" name="mainShortTermMin" 
+                #mainShortTermMin="ngModel" >
+          <option *ngFor="let t of times" [value]="t">{{t}}</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-default" [disabled]="!sectionForm.form.valid">Submit</button>
+      <!--<button type="button" class="btn btn-default" (click)="newSection()">New Section</button>-->
+    </form>
+  </div>
+  <div [hidden]="!submitted">
+    <h2>You submitted the following:</h2>
+    <div class="row">
+      <div class="col-xs-3">Name</div>
+      <div class="col-xs-9  pull-left">{{ model.parking_type_id }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">Notes</div>
+      <div class="col-xs-9 pull-left">{{ model.notes }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">Time Limits</div>
+      <div class="col-xs-9 pull-left">{{ model.mainShortTermMin }}</div>
+    </div>
+    <br>
+    <button class="btn btn-default" (click)="submitted=false">Edit</button>
+  </div>
+</div>
