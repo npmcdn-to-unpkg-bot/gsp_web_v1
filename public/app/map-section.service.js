@@ -25,12 +25,14 @@ System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'
             let MapSectionService = class MapSectionService {
                 constructor(http) {
                     this.http = http;
-                    this.gspApiUrl = 'http://n8williams.com/gmap_st_parking/mapSection/loadSectionsForMap'; // URL to web api
+                    // TODO:NW env this somehow
+                    //private gspApiUrl = 'http://n8williams.com/gmap_st_parking/mapSection/loadSectionsForMap';  // URL to web api
+                    this.gspApiUrl = 'http://gsplocalv2/mapSection/loadSectionsForMap'; // URL to web api
                 }
                 loadSectionsForMap(mapData) {
                     //let url = `${this.heroesUrl}/${hero.id}`;
                     let url = `${this.gspApiUrl}`;
-                    // TODO:NW make api  in laravel with support fir json packaged data
+                    // TODO:NW make api  in laravel with support for json packaged data
                     //let headers = new Headers({'Content-Type': 'application/json'});
                     // temporary 
                     let headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
@@ -44,7 +46,7 @@ System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'
                     // return this.http.post(url, JSON.stringify(mapData), {headers: headers})
                     return this.http.post(url, transformRequest(mapData), { headers: headers })
                         .toPromise()
-                        .then(response => JSON.parse(response.json().sections))
+                        .then(response => response.json().sections)
                         .catch(this.handleError);
                 }
                 handleError(error) {

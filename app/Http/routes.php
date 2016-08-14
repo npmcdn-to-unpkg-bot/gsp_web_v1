@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('mapSection', 'MapSectionController');
+
+Route::post('mapSection/loadSectionsForMap', 'MapSectionController@loadSectionsForMap');

@@ -23,6 +23,8 @@ System.register(['@angular/core', './app-settings'], function(exports_1, context
         execute: function() {
             let NameForPtypeIdPipe = class NameForPtypeIdPipe {
                 transform(id) {
+                    if (!id)
+                        return '';
                     return app_settings_1.AppSettings.PARKING_TYPES[id].name;
                 }
             };
