@@ -1,4 +1,4 @@
-System.register(['@angular/core', './modal-container.component', './map-section.service', './section-renderer.service', './app-settings'], function(exports_1, context_1) {
+System.register(['@angular/core', './modal-container.component', './map-section.service', './section-renderer.service', './app-settings', './helpers/form-markers'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', './modal-container.component', './map-section.
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, modal_container_component_1, map_section_service_1, section_renderer_service_1, app_settings_1;
+    var core_1, modal_container_component_1, map_section_service_1, section_renderer_service_1, app_settings_1, form_markers_1;
     var MapComponent;
     return {
         setters:[
@@ -28,6 +28,9 @@ System.register(['@angular/core', './modal-container.component', './map-section.
             },
             function (app_settings_1_1) {
                 app_settings_1 = app_settings_1_1;
+            },
+            function (form_markers_1_1) {
+                form_markers_1 = form_markers_1_1;
             }],
         execute: function() {
             let MapComponent = class MapComponent {
@@ -37,8 +40,6 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                     this.ref = ref;
                 }
                 ngOnInit() {
-                    //this.myModalIsVisible=false;
-                    //debugger;
                     var mapOptions = {
                         center: new google.maps.LatLng(40.762, -111.855),
                         zoom: 16,
@@ -48,6 +49,7 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                         disableDoubleClickZoom: true
                     };
                     this.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+                    this.formMarkers = new form_markers_1.FormMarkers();
                     var self = this;
                     google.maps.event.addListener(this.map, 'tilesloaded', function () {
                         var mapData = {
@@ -56,15 +58,13 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                             minLng: self.map.getBounds().getSouthWest().lng(),
                             maxLng: self.map.getBounds().getNorthEast().lng(),
                         };
-                        // (param1, param2, …, paramN) => { statements }
-                        // (param1, param2, …, paramN) => expression AND no paren when one param eg sections
-                        //this.mapSectionService.loadSectionsForMapView().then(sections => this.loadedSections = sections);
                         self.mapSectionService.loadSectionsForMap(mapData).then(sections => {
-                            //var test = sections;
-                            // debugger;
                             self.loadedSections = sections;
                             self.renderSectionsForView();
                         });
+                    });
+                    google.maps.event.addListener(this.map, 'dblclick', function (event) {
+                        self.newPolyline = self.formMarkers.placeSectionMarker(event.latLng, self.map);
                     });
                 }
                 renderSectionsForView() {
@@ -110,20 +110,6 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                         }
                     }
                 }
-                showSectionInfo() {
-                    // how to get self as scopt of this in section renderer?
-                    //this.myModalIsVisible = true;
-                    //debugger;
-                    /*
-                    $('#section-info').html(
-                      'Id: ' + section.id + '<br />' +
-                      'Hours: <br />' + this.getHoursDisplay(section.hours_data) + '<br />' +
-                      'Notes: ' + section.notes + '<br />' +
-                      '<a href="#" onclick="$(\'#section-info\').hide();return false;">Close</a>'
-                    );
-                    $('#section-info').show();
-                    */
-                }
             };
             __decorate([
                 core_1.ViewChild(modal_container_component_1.ModalContainerComponent), 
@@ -133,9 +119,7 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                 // TODO:NW get types?? typings install google.maps --global
                 core_1.Component({
                     selector: 'my-map',
-                    // if a edit section form
-                    //template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="edit_section"></modal-container>',
-                    template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="simple_string" contentString="Section Notes Here"></modal-container>',
+                    template: '<div id="map-canvas"></div><modal-container></modal-container>',
                     providers: [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService]
                 }), 
                 __metadata('design:paramtypes', [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, core_1.ChangeDetectorRef])

@@ -27,10 +27,11 @@ System.register(['@angular/core', './map-section', './app-settings'], function(e
             //import { NameForPtypeIdPipe } from './name-for-p-type-id.pipe'; // import pipe here
             let SectionUpdateFormComponent = class SectionUpdateFormComponent {
                 constructor() {
+                    this.pTimes = [];
                     this.pTypes = [];
-                    this.times = [5, 10, 15, , 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360, 390, 420, 450, 480];
                     //model = new MapSection(1); // set from parent on selection
                     this.submitted = false;
+                    this.newPolyline = false;
                     // Reset the form with a new hero AND restore 'pristine' class state
                     // by toggling 'active' flag which causes the form
                     // to be removed/re-added in a tick via NgIf
@@ -42,9 +43,31 @@ System.register(['@angular/core', './map-section', './app-settings'], function(e
                     for (var ptId in ptDef) {
                         this.pTypes.push(ptDef[ptId]);
                     }
-                    // make sure string representations of numbers are converted ??
-                    // var test = Number(this.model.mainParkingTypeId);
-                    // this.model.mainParkingTypeId = Number(this.model.mainParkingTypeId);
+                    let times = [0, 5, 10, 15, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360, 390, 420, 450, 480];
+                    for (let t of times) {
+                        let timeString = this.labelForTime(t);
+                        this.pTimes.push({ time: t, label: timeString });
+                    }
+                }
+                labelForTime(t) {
+                    if (t == 0) {
+                        return '';
+                    }
+                    else if (t == 5) {
+                        return '5 min';
+                    }
+                    else if (t == 10) {
+                        return '10 min';
+                    }
+                    else if (t == 15) {
+                        return '15 min';
+                    }
+                    else if (t == 30) {
+                        return '30 min';
+                    }
+                    else {
+                        return t / 60 + ' hrs';
+                    }
                 }
                 onSubmit() { this.submitted = true; }
                 newSection() {

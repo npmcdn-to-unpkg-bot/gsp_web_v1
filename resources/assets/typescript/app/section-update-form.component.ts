@@ -13,22 +13,41 @@ import { AppSettings } from './app-settings';
 export class SectionUpdateFormComponent implements OnInit { 
   @Input() model: MapSection;
 
-  
+  pTimes = [];
   pTypes = [];
-  times = [5,10,15,,30,60,90,120,150,180,210,240,270,300,330,360,390,420,450,480];
+  
 
   //model = new MapSection(1); // set from parent on selection
   submitted = false;
+  newPolyline = false;
   
   ngOnInit(){
     let ptDef = AppSettings.PARKING_TYPES;
     for(var ptId in ptDef) {
       this.pTypes.push(ptDef[ptId]);
-      // console.log(ptId + ':' + ptDef[ptId].id + ':' + ptDef[ptId].name);
     }
-    // make sure string representations of numbers are converted ??
-    // var test = Number(this.model.mainParkingTypeId);
-    // this.model.mainParkingTypeId = Number(this.model.mainParkingTypeId);
+
+    let times = [0,5,10,15,30,60,90,120,150,180,210,240,270,300,330,360,390,420,450,480];
+    for(let t of times){
+      let timeString = this.labelForTime(t);
+      this.pTimes.push({time:t, label:timeString});
+    }
+  }
+
+  labelForTime(t: number):string{
+    if(t == 0){
+      return '';
+    } else if(t==5){
+      return '5 min';
+    } else if(t==10){
+      return '10 min';
+    } else if(t==15){
+      return '15 min';
+    } else if(t==30){
+      return '30 min';
+    } else {
+      return t/60 + ' hrs';
+    }
   }
 
   onSubmit() { this.submitted = true; }

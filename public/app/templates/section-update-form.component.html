@@ -3,9 +3,9 @@
 <div class="container">
   <div [hidden]="submitted">
     <form *ngIf="active" (ngSubmit)="onSubmit()" #sectionForm="ngForm">
-      <div class="form-group">
+      <div>
         <label for="mainParkingTypeId">Parking Type</label>
-        <select class="form-control" id="mainParkingTypeId"
+        <select id="mainParkingTypeId"
                 required
                 [(ngModel)]="model.mainParkingTypeId" name="mainParkingTypeId" 
                 #mainParkingTypeId="ngModel" >
@@ -15,38 +15,33 @@
              class="alert alert-danger">
           Parking Type is required
         </div>
+        <label for="power">Time Limited?</label>
+        <select id="mainShortTermMin"
+                required
+                [(ngModel)]="model.mainShortTermMin" name="mainShortTermMin" 
+                #mainShortTermMin="ngModel" >
+          <option *ngFor="let t of pTimes" [value]="t.time">{{t.label}}</option>
+        </select>
+        <span>New line from map?</span>
+        <input type="checkbox" id="newPolyline"
+               [(ngModel)]="newPolyline" name="newPolyline">
       </div>
       <div class="form-group">
         <label for="notes">Notes</label>
         <input type="text" class="form-control" id="notes"
                [(ngModel)]="model.notes" name="notes" >
       </div>
-      <div class="form-group">
-        <label for="power">Time Limited?</label>
-        <select class="form-control" id="mainShortTermMin"
-                required
-                [(ngModel)]="model.mainShortTermMin" name="mainShortTermMin" 
-                #mainShortTermMin="ngModel" >
-          <option *ngFor="let t of times" [value]="t">{{t}}</option>
-        </select>
-      </div>
       <button type="submit" class="btn btn-default" [disabled]="!sectionForm.form.valid">Submit</button>
+      <button type="submit" class="btn btn-default">New Map Line</button>
       <!--<button type="button" class="btn btn-default" (click)="newSection()">New Section</button>-->
     </form>
   </div>
   <div [hidden]="!submitted">
-    <h2>You submitted the following:</h2>
+    <br>
+    <p><strong>Form submitted:</strong></p>
     <div class="row">
-      <div class="col-xs-3">Name</div>
-      <div class="col-xs-9  pull-left">{{ model.parking_type_id }}</div>
-    </div>
-    <div class="row">
-      <div class="col-xs-3">Notes</div>
-      <div class="col-xs-9 pull-left">{{ model.notes }}</div>
-    </div>
-    <div class="row">
-      <div class="col-xs-3">Time Limits</div>
-      <div class="col-xs-9 pull-left">{{ model.mainShortTermMin }}</div>
+      <div class="col-xs-3">Saving ...</div>
+      <div class="col-xs-9  pull-left">Server Response:</div>
     </div>
     <br>
     <button class="btn btn-default" (click)="submitted=false">Edit</button>

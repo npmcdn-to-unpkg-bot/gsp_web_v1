@@ -4,31 +4,31 @@ import { MapSection } from './map-section';
 import { MapSectionService } from './map-section.service';
 import { SectionRendererService } from './section-renderer.service';
 import { AppSettings } from './app-settings';
+import { FormMarkers } from './helpers/form-markers';
 
 declare var google: any; // TODO:NW get types?? typings install google.maps --global
 
 @Component({
   selector: 'my-map',
-  // if a edit section form
-  //template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="edit_section"></modal-container>',
-  template: '<div id="map-canvas"></div><modal-container title="Section Notes" contentType="simple_string" contentString="Section Notes Here"></modal-container>',
+  template: '<div id="map-canvas"></div><modal-container></modal-container>',
   providers: [ MapSectionService, SectionRendererService ]
 })
 
 export class MapComponent implements OnInit {
+
   loadedSections:MapSection[];
   myModalIsVisible:boolean;
   map:any;
   @ViewChild(ModalContainerComponent)
-  private modalComponent: ModalContainerComponent;
+  modalComponent: ModalContainerComponent;
+  formMarkers:FormMarkers;
+  newPolyline;
 
   constructor(private mapSectionService: MapSectionService, 
       private sectionRendererService:SectionRendererService,
       private ref:ChangeDetectorRef) { }
 
   ngOnInit() {
-    //this.myModalIsVisible=false;
-    //debugger;
     var mapOptions = {
       center: new google.maps.LatLng(40.762, -111.855),
       zoom: 16,
@@ -38,6 +38,7 @@ export class MapComponent implements OnInit {
       disableDoubleClickZoom:true
     };
     this.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+    this.formMarkers = new FormMarkers();
     var self = this;
 
     google.maps.event.addListener(this.map, 'tilesloaded', function() {
@@ -47,16 +48,15 @@ export class MapComponent implements OnInit {
         minLng: self.map.getBounds().getSouthWest().lng(),
         maxLng: self.map.getBounds().getNorthEast().lng(),
       };
-      // (param1, param2, …, paramN) => { statements }
-      // (param1, param2, …, paramN) => expression AND no paren when one param eg sections
       
-      //this.mapSectionService.loadSectionsForMapView().then(sections => this.loadedSections = sections);
       self.mapSectionService.loadSectionsForMap(mapData).then(sections => {
-        //var test = sections;
-        // debugger;
         self.loadedSections = sections;
         self.renderSectionsForView();
       });
+    });
+
+    google.maps.event.addListener(this.map, 'dblclick', function (event) {
+      self.newPolyline = self.formMarkers.placeSectionMarker(event.latLng, self.map);
     });
 
   }
@@ -114,19 +114,5 @@ export class MapComponent implements OnInit {
       //alert(sectionsArray[i].id);
     }
   }
-
-  showSectionInfo(){
-    // how to get self as scopt of this in section renderer?
-    //this.myModalIsVisible = true;
-    //debugger;
-    /*
-    $('#section-info').html(
-      'Id: ' + section.id + '<br />' +
-      'Hours: <br />' + this.getHoursDisplay(section.hours_data) + '<br />' +
-      'Notes: ' + section.notes + '<br />' + 
-      '<a href="#" onclick="$(\'#section-info\').hide();return false;">Close</a>'
-    );
-    $('#section-info').show();
-    */
-  }
+  
 }
