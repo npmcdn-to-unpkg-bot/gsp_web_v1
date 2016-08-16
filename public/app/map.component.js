@@ -75,7 +75,7 @@ System.register(['@angular/core', './modal-container.component', './map-section'
                         });
                     });
                     google.maps.event.addListener(this.map, 'dblclick', function (event) {
-                        self.newPolyline = self.formMarkers.placeSectionMarker(event.latLng, self.map);
+                        self.newPolyline = self.formMarkers.placeSectionMarker(event.latLng, self.map, self);
                     });
                 }
                 renderSectionsForView() {

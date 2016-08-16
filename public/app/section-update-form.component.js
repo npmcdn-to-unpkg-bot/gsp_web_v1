@@ -1,4 +1,4 @@
-System.register(['@angular/core', './map-section', './app-settings'], function(exports_1, context_1) {
+System.register(['@angular/core', './map-section', './app-settings', './map-section.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', './map-section', './app-settings'], function(e
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, map_section_1, app_settings_1;
+    var core_1, map_section_1, app_settings_1, map_section_service_1;
     var SectionUpdateFormComponent;
     return {
         setters:[
@@ -22,22 +22,31 @@ System.register(['@angular/core', './map-section', './app-settings'], function(e
             },
             function (app_settings_1_1) {
                 app_settings_1 = app_settings_1_1;
+            },
+            function (map_section_service_1_1) {
+                map_section_service_1 = map_section_service_1_1;
             }],
         execute: function() {
             //import { NameForPtypeIdPipe } from './name-for-p-type-id.pipe'; // import pipe here
             let SectionUpdateFormComponent = class SectionUpdateFormComponent {
-                constructor() {
+                constructor(mapSectionService) {
+                    this.mapSectionService = mapSectionService;
                     this.pTimes = [];
                     this.pTypes = [];
+                    this.ssTypes = [];
                     //model = new MapSection(1); // set from parent on selection
                     this.submitted = false;
-                    this.newPolyline = false;
                     // Reset the form with a new hero AND restore 'pristine' class state
                     // by toggling 'active' flag which causes the form
                     // to be removed/re-added in a tick via NgIf
                     // TODO: Workaround until NgForm has a reset method (#6822)
                     this.active = true;
                 }
+                // don't set model.newPolyline here, onInit is called after the form model has already been set
+                // @see formMarkers.showFormLink()
+                // TODO:NW understand how to avoid the problem: if model for this form is set by something else
+                // then when this is rendered (after the data model has been set) the ngOnInit will overwrite
+                // Use constructor instead of ngOnInit? Use event queue? 
                 ngOnInit() {
                     let ptDef = app_settings_1.AppSettings.PARKING_TYPES;
                     for (var ptId in ptDef) {
@@ -48,6 +57,11 @@ System.register(['@angular/core', './map-section', './app-settings'], function(e
                         let timeString = this.labelForTime(t);
                         this.pTimes.push({ time: t, label: timeString });
                     }
+                    this.ssTypes = [
+                        { value: 0, label: 'No side/applies to both sides' },
+                        { value: -1, label: 'To the left from start pt' },
+                        { value: 1, label: 'To the right from start pt' }
+                    ];
                 }
                 labelForTime(t) {
                     if (t == 0) {
@@ -69,8 +83,19 @@ System.register(['@angular/core', './map-section', './app-settings'], function(e
                         return t / 60 + ' hrs';
                     }
                 }
-                onSubmit() { this.submitted = true; }
-                newSection() {
+                toggleNewPolyline() {
+                    this.model.newPolyline = !this.model.newPolyline;
+                    debugger;
+                }
+                onSubmit() {
+                    this.submitted = true;
+                    this.mapSectionService.saveMapSection(this.model).then(function (response) {
+                        var test = response;
+                        debugger;
+                        // alert('hi');
+                    });
+                }
+                showNewSection() {
                     this.model = new map_section_1.MapSection(-1);
                     this.active = false;
                     setTimeout(() => this.active = true, 0);
@@ -83,9 +108,10 @@ System.register(['@angular/core', './map-section', './app-settings'], function(e
             SectionUpdateFormComponent = __decorate([
                 core_1.Component({
                     selector: 'section-update-form',
-                    templateUrl: './app/templates/section-update-form.component.html'
+                    templateUrl: './app/templates/section-update-form.component.html',
+                    providers: [map_section_service_1.MapSectionService]
                 }), 
-                __metadata('design:paramtypes', [])
+                __metadata('design:paramtypes', [map_section_service_1.MapSectionService])
             ], SectionUpdateFormComponent);
             exports_1("SectionUpdateFormComponent", SectionUpdateFormComponent);
         }

@@ -8,14 +8,14 @@ export class MapSectionService {
 
   // TODO:NW env this somehow
   //private gspApiUrl = 'http://n8williams.com/gmap_st_parking/mapSection/loadSectionsForMap';  // URL to web api
-  private gspApiUrl = 'http://gsplocalv2/mapSection/loadSectionsForMap';  // URL to web api
+  private gspApiUrl = 'http://gsplocalv2/mapSection';  // URL to web api
 
   constructor(private http: Http) { }
 
   loadSectionsForMap(mapData: Object){
 
     //let url = `${this.heroesUrl}/${hero.id}`;
-    let url = `${this.gspApiUrl}`;
+    let url = this.gspApiUrl + '/loadSectionsForMap';
     // TODO:NW make api  in laravel with support for json packaged data
     //let headers = new Headers({'Content-Type': 'application/json'});
     
@@ -33,8 +33,22 @@ export class MapSectionService {
 
     return this.http.post(url, transformRequest(mapData), {headers: headers})
      .toPromise()
-     .then(response => response.json().sections as MapSection[])
+     .then(response => response.json().sections)
      .catch(this.handleError);
+  }
+
+  saveMapSection(section:MapSection){
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let body = JSON.stringify(section);
+    return this.http.put(this.gspApiUrl + '/' + section.id, body, headers)
+     .toPromise()
+     .then(response => response.json().section)
+     //.then(function(response){ debugger; })
+     .catch(this.handleError);
+  }
+
+  deleteMapSection(sectionId:number){
+    return this.http.delete(this.gspApiUrl + '/destroy/' + sectionId);
   }
 
   private handleError(error: any) {

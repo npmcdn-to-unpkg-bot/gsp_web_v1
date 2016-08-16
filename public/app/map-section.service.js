@@ -27,11 +27,11 @@ System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'
                     this.http = http;
                     // TODO:NW env this somehow
                     //private gspApiUrl = 'http://n8williams.com/gmap_st_parking/mapSection/loadSectionsForMap';  // URL to web api
-                    this.gspApiUrl = 'http://gsplocalv2/mapSection/loadSectionsForMap'; // URL to web api
+                    this.gspApiUrl = 'http://gsplocalv2/mapSection'; // URL to web api
                 }
                 loadSectionsForMap(mapData) {
                     //let url = `${this.heroesUrl}/${hero.id}`;
-                    let url = `${this.gspApiUrl}`;
+                    let url = this.gspApiUrl + '/loadSectionsForMap';
                     // TODO:NW make api  in laravel with support for json packaged data
                     //let headers = new Headers({'Content-Type': 'application/json'});
                     // temporary 
@@ -48,6 +48,17 @@ System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'
                         .toPromise()
                         .then(response => response.json().sections)
                         .catch(this.handleError);
+                }
+                saveMapSection(section) {
+                    let headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+                    let body = JSON.stringify(section);
+                    return this.http.put(this.gspApiUrl + '/' + section.id, body, headers)
+                        .toPromise()
+                        .then(response => response.json().section)
+                        .catch(this.handleError);
+                }
+                deleteMapSection(sectionId) {
+                    return this.http.delete(this.gspApiUrl + '/destroy/' + sectionId);
                 }
                 handleError(error) {
                     console.error('An error occurred', error);

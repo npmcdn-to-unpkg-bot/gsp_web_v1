@@ -22,9 +22,19 @@
                 #mainShortTermMin="ngModel" >
           <option *ngFor="let t of pTimes" [value]="t.time">{{t.label}}</option>
         </select>
+      </div>
+      <div class="form-group">
         <span>New line from map?</span>
-        <input type="checkbox" id="newPolyline"
-               [(ngModel)]="newPolyline" name="newPolyline">
+        <input #newPl type="checkbox" id="newPolyline"
+              [(ngModel)]="model.newPolyline" name="newPolyline"
+              (change)="toggleNewPolyline()">
+        <span>New line street side: </span>
+        <select id="streetSide"
+                required
+                [(ngModel)]="model.streetSide" name="streetSide" 
+                #streetSide="ngModel" >
+          <option *ngFor="let t of ssTypes" [value]="t.value">{{t.label}}</option>
+        </select>
       </div>
       <div class="form-group">
         <label for="notes">Notes</label>

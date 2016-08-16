@@ -1,26 +1,35 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MapSection } from './map-section';
 import { AppSettings } from './app-settings';
+import { MapSectionService } from './map-section.service';
 
 //import { NameForPtypeIdPipe } from './name-for-p-type-id.pipe'; // import pipe here
 
 @Component({
   selector: 'section-update-form',
-  templateUrl: './app/templates/section-update-form.component.html'
+  templateUrl: './app/templates/section-update-form.component.html',
+  providers: [ MapSectionService ]
   //pipes : [ NameForPtypeIdPipe ]
 })
 
 export class SectionUpdateFormComponent implements OnInit { 
+
+  constructor(private mapSectionService:MapSectionService){ }
+
   @Input() model: MapSection;
 
   pTimes = [];
   pTypes = [];
-  
+  ssTypes = [];
 
   //model = new MapSection(1); // set from parent on selection
   submitted = false;
-  newPolyline = false;
   
+  // don't set model.newPolyline here, onInit is called after the form model has already been set
+  // @see formMarkers.showFormLink()
+  // TODO:NW understand how to avoid the problem: if model for this form is set by something else
+  // then when this is rendered (after the data model has been set) the ngOnInit will overwrite
+  // Use constructor instead of ngOnInit? Use event queue? 
   ngOnInit(){
     let ptDef = AppSettings.PARKING_TYPES;
     for(var ptId in ptDef) {
@@ -32,6 +41,11 @@ export class SectionUpdateFormComponent implements OnInit {
       let timeString = this.labelForTime(t);
       this.pTimes.push({time:t, label:timeString});
     }
+    this.ssTypes=[
+      {value:0, label:'No side/applies to both sides'},
+      {value:-1, label:'To the left from start pt'},
+      {value:1, label:'To the right from start pt'}
+    ];
   }
 
   labelForTime(t: number):string{
@@ -50,7 +64,18 @@ export class SectionUpdateFormComponent implements OnInit {
     }
   }
 
-  onSubmit() { this.submitted = true; }
+  toggleNewPolyline(){
+    this.model.newPolyline = !this.model.newPolyline;
+    debugger;
+  }
+
+  onSubmit() { 
+    this.submitted = true; 
+    this.mapSectionService.saveMapSection(this.model).then(function(response){
+       // for now we don't need the new id or anything from the response
+    });
+
+  }
 
    // Reset the form with a new hero AND restore 'pristine' class state
   // by toggling 'active' flag which causes the form
@@ -58,7 +83,7 @@ export class SectionUpdateFormComponent implements OnInit {
   // TODO: Workaround until NgForm has a reset method (#6822)
   active = true;
 
-  newSection() {
+  showNewSection() {
     this.model = new MapSection(-1);
     this.active = false;
     setTimeout(() => this.active = true, 0);

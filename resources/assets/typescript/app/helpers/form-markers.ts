@@ -1,4 +1,5 @@
-//import { MapSection } from './map-section';
+import { MapComponent } from '../map.component';
+import { MapSection } from '../map-section';
 
 declare var google: any; // TODO:NW get types?? typings install google.maps --global
 
@@ -48,22 +49,31 @@ export class FormMarkers
     this.streetSide=ss;
   }
 
-  showFormLink(m2){
-    /*
+  showFormLink(map, mapComponent){
     var ll = new google.maps.LatLng(this.mark2.position.lat(), this.mark2.position.lng());
     var fm = this;
     if(this.markerWithLabel != undefined){
       //if already exists, clear it
       this.markerWithLabel.setMap(null);
     }
-    this.markerWithLabel = new MarkerWithLabel({
+    this.markerWithLabel = new google.maps.Marker({
       position: ll,
       map: map,
-      title: 'hi',
-      labelClass: "marker-label-v1", // the CSS class for the label
-      labelContent : 'Click to Select Street Direction'
+      title: 'edit',
+      icon: '/images/add-icon.png',
+      // TODO:NW find or make a lib to do marker with label
+      // labelClass: "marker-label-v1", // the CSS class for the label
+      // labelContent : 'Click to edit section'
     });
     google.maps.event.addListener(this.markerWithLabel, "click", function(){
+      mapComponent.modalComponent.myModalIsVisible=true;
+      mapComponent.modalComponent.componentName="section-update-form";
+      mapComponent.modalComponent.title="New Section";
+      let selectedSection = new MapSection(-1);
+      selectedSection.newPolyline=true;
+      mapComponent.modalComponent.selectedSection=selectedSection;
+      mapComponent.ref.detectChanges();
+      /*
       fm.streetSide = fm.streetSide + 1;
       if(fm.streetSide > 1)
           fm.streetSide = -1;
@@ -71,10 +81,10 @@ export class FormMarkers
       if(fm.streetSide != 0)
           lblText = 'Click to toggle street direction: Covering one side of the selected section';
       fm.drawStreetSide();
-      $('.marker-label-v1').html(lblText);
+      */
+      //document.getElementById('.marker-label-v1').innerHTML(this.markerWithLabel.labelContent);
     });
     this.mark2.setMap(null);//replace second marker with link
-    */
   }
 
   drawSelection(pathPoints, map){
@@ -128,13 +138,17 @@ export class FormMarkers
     });
   }
 
-  placeSectionMarker(latLng, map){
+  placeSectionMarker(latLng, map, mapComponent:MapComponent){
     if(!this.getMarker1()){
       this.setMarker1(new google.maps.Marker({
         position: latLng,
         map: map,
         title: 'Start Point!'
       }));
+      if(this.markerWithLabel){
+        this.markerWithLabel.setMap(null);
+        this.markerWithLabel = undefined;
+      }
     }
     else if(!this.getMarker2()){
       this.setMarker2(new google.maps.Marker({
@@ -143,7 +157,7 @@ export class FormMarkers
         title: 'End Point!'
       }));
       this.drawBlockSelection(map);
-      //this.showFormLink();
+      this.showFormLink(map, mapComponent);
     }
     else{
         this.clearMarkers();

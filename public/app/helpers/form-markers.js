@@ -1,10 +1,13 @@
-//import { MapSection } from './map-section';
-System.register([], function(exports_1, context_1) {
+System.register(['../map-section'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
+    var map_section_1;
     var FormMarkers;
     return {
-        setters:[],
+        setters:[
+            function (map_section_1_1) {
+                map_section_1 = map_section_1_1;
+            }],
         execute: function() {
             class FormMarkers {
                 constructor() {
@@ -37,33 +40,39 @@ System.register([], function(exports_1, context_1) {
                         this.streetSide = ss;
                     };
                 }
-                showFormLink(m2) {
-                    /*
+                showFormLink(map, mapComponent) {
                     var ll = new google.maps.LatLng(this.mark2.position.lat(), this.mark2.position.lng());
                     var fm = this;
-                    if(this.markerWithLabel != undefined){
-                      //if already exists, clear it
-                      this.markerWithLabel.setMap(null);
+                    if (this.markerWithLabel != undefined) {
+                        //if already exists, clear it
+                        this.markerWithLabel.setMap(null);
                     }
-                    this.markerWithLabel = new MarkerWithLabel({
-                      position: ll,
-                      map: map,
-                      title: 'hi',
-                      labelClass: "marker-label-v1", // the CSS class for the label
-                      labelContent : 'Click to Select Street Direction'
+                    this.markerWithLabel = new google.maps.Marker({
+                        position: ll,
+                        map: map,
+                        title: 'edit',
+                        icon: '/images/add-icon.png',
                     });
-                    google.maps.event.addListener(this.markerWithLabel, "click", function(){
-                      fm.streetSide = fm.streetSide + 1;
-                      if(fm.streetSide > 1)
-                          fm.streetSide = -1;
-                      var lblText = 'Click to toggle street direction: Cover all the selected section';
-                      if(fm.streetSide != 0)
-                          lblText = 'Click to toggle street direction: Covering one side of the selected section';
-                      fm.drawStreetSide();
-                      $('.marker-label-v1').html(lblText);
+                    google.maps.event.addListener(this.markerWithLabel, "click", function () {
+                        mapComponent.modalComponent.myModalIsVisible = true;
+                        mapComponent.modalComponent.componentName = "section-update-form";
+                        mapComponent.modalComponent.title = "New Section";
+                        let selectedSection = new map_section_1.MapSection(-1);
+                        selectedSection.newPolyline = true;
+                        mapComponent.modalComponent.selectedSection = selectedSection;
+                        mapComponent.ref.detectChanges();
+                        /*
+                        fm.streetSide = fm.streetSide + 1;
+                        if(fm.streetSide > 1)
+                            fm.streetSide = -1;
+                        var lblText = 'Click to toggle street direction: Cover all the selected section';
+                        if(fm.streetSide != 0)
+                            lblText = 'Click to toggle street direction: Covering one side of the selected section';
+                        fm.drawStreetSide();
+                        */
+                        //document.getElementById('.marker-label-v1').innerHTML(this.markerWithLabel.labelContent);
                     });
-                    this.mark2.setMap(null);//replace second marker with link
-                    */
+                    this.mark2.setMap(null); //replace second marker with link
                 }
                 drawSelection(pathPoints, map) {
                     if (this.selectionPolyline != undefined)
@@ -112,13 +121,17 @@ System.register([], function(exports_1, context_1) {
                         }
                     });
                 }
-                placeSectionMarker(latLng, map) {
+                placeSectionMarker(latLng, map, mapComponent) {
                     if (!this.getMarker1()) {
                         this.setMarker1(new google.maps.Marker({
                             position: latLng,
                             map: map,
                             title: 'Start Point!'
                         }));
+                        if (this.markerWithLabel) {
+                            this.markerWithLabel.setMap(null);
+                            this.markerWithLabel = undefined;
+                        }
                     }
                     else if (!this.getMarker2()) {
                         this.setMarker2(new google.maps.Marker({
@@ -127,6 +140,7 @@ System.register([], function(exports_1, context_1) {
                             title: 'End Point!'
                         }));
                         this.drawBlockSelection(map);
+                        this.showFormLink(map, mapComponent);
                     }
                     else {
                         this.clearMarkers();

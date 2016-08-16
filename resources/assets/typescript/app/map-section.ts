@@ -15,7 +15,10 @@ export class MapSection {
   mainPph:number;
   notes: string;
   hoursData: string;
+
+  // client side generated variables
   hoursHtml:string;
+  newPolyline:boolean;
 
   updateHoursHtml():void{
      let hf = new HoursFormatter();
