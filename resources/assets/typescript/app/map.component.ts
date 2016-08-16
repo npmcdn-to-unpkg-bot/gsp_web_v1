@@ -51,6 +51,14 @@ export class MapComponent implements OnInit {
       
       self.mapSectionService.loadSectionsForMap(mapData).then(sections => {
         self.loadedSections = sections;
+        // TODO:NW figure out a consistent way to get response arrays as typed arrays in js
+        self.loadedSections=self.loadedSections.map(function(obj){
+          let ms:MapSection = new MapSection(obj.id);
+          for (var key in obj) {
+            ms[key] = obj[key];
+          }
+          return ms;
+        });
         self.renderSectionsForView();
       });
     });
@@ -78,12 +86,13 @@ export class MapComponent implements OnInit {
           self.ref.detectChanges();
         });
 
-
-      //don't show info for things with no notes
-      if(
+      //don't show info for things with no notes or hours
+      if(sectionsArray[i].isHoursRestricted == 1 || 
+          (
             sectionsArray[i].notes != undefined &&
             sectionsArray[i].notes != null &&
             sectionsArray[i].notes != ""
+          )
         ){
         let marker = this.sectionRendererService.drawSectionInfoMarker(sectionsArray[i], this.map);
         
@@ -97,6 +106,8 @@ export class MapComponent implements OnInit {
           self.modalComponent.componentName="section-info";
           self.modalComponent.title="Parking Info";
           self.modalComponent.selectedSection=sectionsArray[i];
+          // TODO:NW how to set a complex set of data or display on change
+          self.modalComponent.selectedSection.updateHoursHtml();
           
           /*
           // TODO:NW figure out why the zone has to be run like this for google events to show changes

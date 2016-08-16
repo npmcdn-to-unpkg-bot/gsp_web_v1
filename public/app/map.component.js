@@ -1,4 +1,4 @@
-System.register(['@angular/core', './modal-container.component', './map-section.service', './section-renderer.service', './app-settings', './helpers/form-markers'], function(exports_1, context_1) {
+System.register(['@angular/core', './modal-container.component', './map-section', './map-section.service', './section-renderer.service', './app-settings', './helpers/form-markers'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', './modal-container.component', './map-section.
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, modal_container_component_1, map_section_service_1, section_renderer_service_1, app_settings_1, form_markers_1;
+    var core_1, modal_container_component_1, map_section_1, map_section_service_1, section_renderer_service_1, app_settings_1, form_markers_1;
     var MapComponent;
     return {
         setters:[
@@ -19,6 +19,9 @@ System.register(['@angular/core', './modal-container.component', './map-section.
             },
             function (modal_container_component_1_1) {
                 modal_container_component_1 = modal_container_component_1_1;
+            },
+            function (map_section_1_1) {
+                map_section_1 = map_section_1_1;
             },
             function (map_section_service_1_1) {
                 map_section_service_1 = map_section_service_1_1;
@@ -60,6 +63,14 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                         };
                         self.mapSectionService.loadSectionsForMap(mapData).then(sections => {
                             self.loadedSections = sections;
+                            // TODO:NW figure out a consistent way to get response arrays as typed arrays in js
+                            self.loadedSections = self.loadedSections.map(function (obj) {
+                                let ms = new map_section_1.MapSection(obj.id);
+                                for (var key in obj) {
+                                    ms[key] = obj[key];
+                                }
+                                return ms;
+                            });
                             self.renderSectionsForView();
                         });
                     });
@@ -82,10 +93,11 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                             self.modalComponent.selectedSection = sectionsArray[i];
                             self.ref.detectChanges();
                         });
-                        //don't show info for things with no notes
-                        if (sectionsArray[i].notes != undefined &&
-                            sectionsArray[i].notes != null &&
-                            sectionsArray[i].notes != "") {
+                        //don't show info for things with no notes or hours
+                        if (sectionsArray[i].isHoursRestricted == 1 ||
+                            (sectionsArray[i].notes != undefined &&
+                                sectionsArray[i].notes != null &&
+                                sectionsArray[i].notes != "")) {
                             let marker = this.sectionRendererService.drawSectionInfoMarker(sectionsArray[i], this.map);
                             google.maps.event.addListener(marker, 'click', function () {
                                 /*
@@ -97,6 +109,8 @@ System.register(['@angular/core', './modal-container.component', './map-section.
                                 self.modalComponent.componentName = "section-info";
                                 self.modalComponent.title = "Parking Info";
                                 self.modalComponent.selectedSection = sectionsArray[i];
+                                // TODO:NW how to set a complex set of data or display on change
+                                self.modalComponent.selectedSection.updateHoursHtml();
                                 /*
                                 // TODO:NW figure out why the zone has to be run like this for google events to show changes
                                 // and only appears the first time

@@ -25,11 +25,18 @@ System.register(['@angular/core', './map-section', './name-for-p-type-id.pipe'],
             }],
         execute: function() {
             let SectionInfoComponent = class SectionInfoComponent {
+                constructor() {
+                    this.hoursHtml = 'None';
+                }
             };
             __decorate([
                 core_1.Input(), 
                 __metadata('design:type', map_section_1.MapSection)
             ], SectionInfoComponent.prototype, "model", void 0);
+            __decorate([
+                core_1.Input(), 
+                __metadata('design:type', String)
+            ], SectionInfoComponent.prototype, "hoursHtml", void 0);
             SectionInfoComponent = __decorate([
                 // import pipe here
                 core_1.Component({

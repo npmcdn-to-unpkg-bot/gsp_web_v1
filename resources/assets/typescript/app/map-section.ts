@@ -1,4 +1,4 @@
-// import { AppSettings } from './app-settings';
+import { HoursFormatter } from './helpers/hours-formatter';
 
 export class MapSection {
   
@@ -6,13 +6,20 @@ export class MapSection {
     public id: number
   ) {  }
 
+  hoursPph:number;
   polyline: string;
   mainParkingTypeId: number;
   streetSide: number;
   isHoursRestricted: number; // TODO:NW convert to boolean?
   mainShortTermMin: number;
+  mainPph:number;
   notes: string;
+  hoursData: string;
+  hoursHtml:string;
 
-  // public static getNameForTypeId(id:number){return AppSettings.PARKING_TYPES[id].name}
+  updateHoursHtml():void{
+     let hf = new HoursFormatter();
+     this.hoursHtml = hf.hoursTable(this);
+  }
 
 }

@@ -1,3 +1,11 @@
-<div>ID: {{model.id}}</div>
-<div>Notes: {{model.notes}}</div>
-<div>Parking Type: {{model.mainParkingTypeId | nameForPtypeId}}</div>
+<div class="row">
+  <div class="col-xs-3">
+    <div>ID: {{model.id}}</div>
+    <div>Parking Type: {{model.mainParkingTypeId | nameForPtypeId}}</div>
+    <p>Hour Restrictions: Yes/No</p>
+  </div>
+  <div class="col-xs-9 pull-left">
+    <div [innerHTML]="model.hoursHtml" id="hours-table-container"></div>
+  </div>
+</div>
+<div><p>Notes: {{model.notes}}</p></div>

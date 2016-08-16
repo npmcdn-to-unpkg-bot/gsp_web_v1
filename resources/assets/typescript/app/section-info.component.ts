@@ -10,4 +10,5 @@ import { NameForPtypeIdPipe } from './name-for-p-type-id.pipe'; // import pipe h
 
 export class SectionInfoComponent { 
   @Input() model: MapSection;
+  @Input() hoursHtml: string = 'None';
 }
