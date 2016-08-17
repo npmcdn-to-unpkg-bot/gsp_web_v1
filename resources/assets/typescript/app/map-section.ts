@@ -8,6 +8,10 @@ export class MapSection {
 
   hoursPph:number;
   polyline: string;
+  startLat:number;
+  endLat:number;
+  startLng:number;
+  endLng:number;
   mainParkingTypeId: number;
   streetSide: number;
   isHoursRestricted: number; // TODO:NW convert to boolean?
