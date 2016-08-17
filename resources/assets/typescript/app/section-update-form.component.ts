@@ -82,6 +82,8 @@ export class SectionUpdateFormComponent implements OnInit {
       this.model.polyline = this.formMarkerService.getEncodedSection();
       this.model.startLat = this.formMarkerService.mark1.position.lat();
       this.model.startLng = this.formMarkerService.mark1.position.lng();
+      this.model.endLat = this.formMarkerService.mark2.position.lat();
+      this.model.endLng = this.formMarkerService.mark2.position.lng();
     }
     this.mapSectionService.saveMapSection(this.model).then(function(response){
        // for now we don't need the new id or anything from the response
