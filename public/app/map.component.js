@@ -37,10 +37,11 @@ System.register(['@angular/core', './modal-container.component', './map-section'
             }],
         execute: function() {
             let MapComponent = class MapComponent {
-                constructor(mapSectionService, sectionRendererService, ref) {
+                constructor(mapSectionService, sectionRendererService, ref, formMarkersService) {
                     this.mapSectionService = mapSectionService;
                     this.sectionRendererService = sectionRendererService;
                     this.ref = ref;
+                    this.formMarkersService = formMarkersService;
                 }
                 ngOnInit() {
                     var mapOptions = {
@@ -52,7 +53,6 @@ System.register(['@angular/core', './modal-container.component', './map-section'
                         disableDoubleClickZoom: true
                     };
                     this.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-                    this.formMarkers = new form_markers_1.FormMarkers();
                     var self = this;
                     google.maps.event.addListener(this.map, 'tilesloaded', function () {
                         var mapData = {
@@ -75,7 +75,7 @@ System.register(['@angular/core', './modal-container.component', './map-section'
                         });
                     });
                     google.maps.event.addListener(this.map, 'dblclick', function (event) {
-                        self.newPolyline = self.formMarkers.placeSectionMarker(event.latLng, self.map, self);
+                        self.formMarkersService.placeSectionMarker(event.latLng, self.map, self);
                     });
                 }
                 renderSectionsForView() {
@@ -99,6 +99,7 @@ System.register(['@angular/core', './modal-container.component', './map-section'
                                 sectionsArray[i].notes != null &&
                                 sectionsArray[i].notes != "")) {
                             let marker = this.sectionRendererService.drawSectionInfoMarker(sectionsArray[i], this.map);
+                            // TODO:NW watchout if no marker rendered b/c of something off
                             google.maps.event.addListener(marker, 'click', function () {
                                 /*
                                 self.showSectionInfo();
@@ -134,9 +135,9 @@ System.register(['@angular/core', './modal-container.component', './map-section'
                 core_1.Component({
                     selector: 'my-map',
                     template: '<div id="map-canvas"></div><modal-container></modal-container>',
-                    providers: [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService]
+                    providers: [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, form_markers_1.FormMarkers]
                 }), 
-                __metadata('design:paramtypes', [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, core_1.ChangeDetectorRef])
+                __metadata('design:paramtypes', [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, core_1.ChangeDetectorRef, form_markers_1.FormMarkers])
             ], MapComponent);
             exports_1("MapComponent", MapComponent);
         }

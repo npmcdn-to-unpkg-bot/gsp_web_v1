@@ -2,19 +2,25 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MapSection } from './map-section';
 import { AppSettings } from './app-settings';
 import { MapSectionService } from './map-section.service';
+// shared service with parent view for component interactions
+import { FormMarkers } from './helpers/form-markers';
 
 //import { NameForPtypeIdPipe } from './name-for-p-type-id.pipe'; // import pipe here
 
 @Component({
   selector: 'section-update-form',
   templateUrl: './app/templates/section-update-form.component.html',
-  providers: [ MapSectionService ]
+  // TODO:NW figure out how you DO NOT 'inject' the FormMarkersService to share data
+  providers: [ MapSectionService] 
   //pipes : [ NameForPtypeIdPipe ]
 })
 
 export class SectionUpdateFormComponent implements OnInit { 
 
-  constructor(private mapSectionService:MapSectionService){ }
+  constructor(
+    private mapSectionService:MapSectionService,
+    private formMarkerService:FormMarkers
+  ){}
 
   @Input() model: MapSection;
 
@@ -71,6 +77,12 @@ export class SectionUpdateFormComponent implements OnInit {
 
   onSubmit() { 
     this.submitted = true; 
+    if(this.model.newPolyline == true){
+      // TODO:NW document or make code clear that using encoding/decoding to string version for db
+      this.model.polyline = this.formMarkerService.getEncodedSection();
+      this.model.startLat = this.formMarkerService.mark1.position.lat();
+      this.model.startLng = this.formMarkerService.mark1.position.lng();
+    }
     this.mapSectionService.saveMapSection(this.model).then(function(response){
        // for now we don't need the new id or anything from the response
     });

@@ -53,6 +53,7 @@ export class MapSectionService {
 
   private handleError(error: any) {
     console.error('An error occurred', error);
+    // debugger;
     return Promise.reject(error.message || error);
   }
 }

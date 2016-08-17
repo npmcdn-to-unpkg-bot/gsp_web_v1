@@ -81,6 +81,10 @@ System.register(['@angular/core'], function(exports_1, context_1) {
                 }
                 drawSectionInfoMarker(section, map) {
                     var sectionPoints = google.maps.geometry.encoding.decodePath(section.polyline);
+                    if (!sectionPoints || sectionPoints.length == 0) {
+                        console.log('Bogus polyline for sectio with id:' + section.id);
+                        return;
+                    }
                     var shift = .0002; //world x/y units
                     var proj = map.getProjection();
                     //get the middle section of the polyline, round up to more beginning section

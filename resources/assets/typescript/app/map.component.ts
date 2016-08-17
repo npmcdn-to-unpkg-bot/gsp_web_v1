@@ -11,7 +11,7 @@ declare var google: any; // TODO:NW get types?? typings install google.maps --gl
 @Component({
   selector: 'my-map',
   template: '<div id="map-canvas"></div><modal-container></modal-container>',
-  providers: [ MapSectionService, SectionRendererService ]
+  providers: [ MapSectionService, SectionRendererService, FormMarkers ]
 })
 
 export class MapComponent implements OnInit {
@@ -21,12 +21,12 @@ export class MapComponent implements OnInit {
   map:any;
   @ViewChild(ModalContainerComponent)
   modalComponent: ModalContainerComponent;
-  formMarkers:FormMarkers;
-  newPolyline;
 
   constructor(private mapSectionService: MapSectionService, 
-      private sectionRendererService:SectionRendererService,
-      private ref:ChangeDetectorRef) { }
+    private sectionRendererService:SectionRendererService,
+    private ref:ChangeDetectorRef,
+    private formMarkersService: FormMarkers
+  ) { }
 
   ngOnInit() {
     var mapOptions = {
@@ -38,7 +38,6 @@ export class MapComponent implements OnInit {
       disableDoubleClickZoom:true
     };
     this.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-    this.formMarkers = new FormMarkers();
     var self = this;
 
     google.maps.event.addListener(this.map, 'tilesloaded', function() {
@@ -64,7 +63,7 @@ export class MapComponent implements OnInit {
     });
 
     google.maps.event.addListener(this.map, 'dblclick', function (event) {
-      self.newPolyline = self.formMarkers.placeSectionMarker(event.latLng, self.map, self);
+      self.formMarkersService.placeSectionMarker(event.latLng, self.map, self);
     });
 
   }
@@ -95,7 +94,7 @@ export class MapComponent implements OnInit {
           )
         ){
         let marker = this.sectionRendererService.drawSectionInfoMarker(sectionsArray[i], this.map);
-        
+        // TODO:NW watchout if no marker rendered b/c of something off
         google.maps.event.addListener(marker, 'click', function() {
           /*
           self.showSectionInfo();

@@ -28,6 +28,8 @@ System.register(['../app-settings', '../section-hours'], function(exports_1, con
                     this.defaultDay.off_short_term_min = null;
                 }
                 hoursTable(section) {
+                    if (!section.hoursData)
+                        return '';
                     let html = `
     <table style="width:400px;">
         <tbody>

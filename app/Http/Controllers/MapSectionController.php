@@ -180,8 +180,8 @@ class MapSectionController extends Controller
        
         foreach ($section as $key => $value) {
             // client side atts, ignore
-            if($key != 'newPolyline' && $key != 'hoursHtml'){
-                $ms->$key = $value;
+            if($key != 'newPolyline' && $key != 'hoursHtml' && $key != 'id'){
+                $ms[snake_case($key)] = $value;
             }
         }
         $ms->save();

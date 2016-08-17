@@ -12,32 +12,11 @@ System.register(['../map-section'], function(exports_1, context_1) {
             class FormMarkers {
                 constructor() {
                     this.streetSide = 0;
-                    this.setMarker1 = function (m1) {
-                        this.mark1 = m1;
-                    };
-                    this.getMarker1 = function () {
-                        return this.mark1;
-                    };
-                    this.setMarker2 = function (m2) {
-                        this.mark2 = m2;
-                    };
-                    this.getMarker2 = function () {
-                        return this.mark2;
-                    };
-                    this.getSectionPoints = function () {
-                        return this.sectionPoints;
-                    };
                     this.getEncodedSection = function () {
                         return google.maps.geometry.encoding.encodePath(this.sectionPoints);
                     };
                     this.getSelectionPolyline = function () {
                         return this.selectionPolyline;
-                    };
-                    this.getStreetSide = function () {
-                        return this.streetSide;
-                    };
-                    this.setStreetSide = function (ss) {
-                        this.streetSide = ss;
                     };
                 }
                 showFormLink(map, mapComponent) {
@@ -122,23 +101,23 @@ System.register(['../map-section'], function(exports_1, context_1) {
                     });
                 }
                 placeSectionMarker(latLng, map, mapComponent) {
-                    if (!this.getMarker1()) {
-                        this.setMarker1(new google.maps.Marker({
+                    if (!this.mark1) {
+                        this.mark1 = new google.maps.Marker({
                             position: latLng,
                             map: map,
                             title: 'Start Point!'
-                        }));
+                        });
                         if (this.markerWithLabel) {
                             this.markerWithLabel.setMap(null);
                             this.markerWithLabel = undefined;
                         }
                     }
-                    else if (!this.getMarker2()) {
-                        this.setMarker2(new google.maps.Marker({
+                    else if (!this.mark2) {
+                        this.mark2 = new google.maps.Marker({
                             position: latLng,
                             map: map,
                             title: 'End Point!'
-                        }));
+                        });
                         this.drawBlockSelection(map);
                         this.showFormLink(map, mapComponent);
                     }
@@ -146,11 +125,11 @@ System.register(['../map-section'], function(exports_1, context_1) {
                         this.clearMarkers();
                         this.clearSelection();
                         //select the first point
-                        this.setMarker1(new google.maps.Marker({
+                        this.mark1 = new google.maps.Marker({
                             position: latLng,
                             map: map,
                             title: 'Start Point!'
-                        }));
+                        });
                     }
                 }
             }

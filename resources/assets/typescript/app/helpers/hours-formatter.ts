@@ -26,6 +26,7 @@ export class HoursFormatter
   }
 
   hoursTable(section:MapSection):string{
+    if(!section.hoursData) return '';
     let html=`
     <table style="width:400px;">
         <tbody>

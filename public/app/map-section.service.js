@@ -62,6 +62,7 @@ System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'
                 }
                 handleError(error) {
                     console.error('An error occurred', error);
+                    // debugger;
                     return Promise.reject(error.message || error);
                 }
             };

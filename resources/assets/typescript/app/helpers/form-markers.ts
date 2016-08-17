@@ -13,40 +13,12 @@ export class FormMarkers
   selectionPolyline;
   streetSide:number = 0;
 
-  setMarker1 = function(m1){
-    this.mark1=m1;
-  }
-
-  getMarker1 = function(){
-    return this.mark1;
-  }
-
-  setMarker2 = function(m2){
-    this.mark2=m2;
-  }
-
-  getMarker2 = function(){
-    return this.mark2;
-  }
-
-  getSectionPoints = function (){
-      return this.sectionPoints;
-  }
-
   getEncodedSection = function (){
       return google.maps.geometry.encoding.encodePath(this.sectionPoints);
   }
 
   getSelectionPolyline = function (){
       return this.selectionPolyline;
-  }
-
-  getStreetSide = function(){
-    return this.streetSide;
-  }
-
-  setStreetSide = function(ss){
-    this.streetSide=ss;
   }
 
   showFormLink(map, mapComponent){
@@ -139,23 +111,23 @@ export class FormMarkers
   }
 
   placeSectionMarker(latLng, map, mapComponent:MapComponent){
-    if(!this.getMarker1()){
-      this.setMarker1(new google.maps.Marker({
+    if(!this.mark1){
+      this.mark1 = new google.maps.Marker({
         position: latLng,
         map: map,
         title: 'Start Point!'
-      }));
+      });
       if(this.markerWithLabel){
         this.markerWithLabel.setMap(null);
         this.markerWithLabel = undefined;
       }
     }
-    else if(!this.getMarker2()){
-      this.setMarker2(new google.maps.Marker({
+    else if(!this.mark2){
+      this.mark2 = new google.maps.Marker({
         position: latLng,
         map: map,
         title: 'End Point!'
-      }));
+      });
       this.drawBlockSelection(map);
       this.showFormLink(map, mapComponent);
     }
@@ -163,11 +135,11 @@ export class FormMarkers
         this.clearMarkers();
         this.clearSelection();
         //select the first point
-        this.setMarker1(new google.maps.Marker({
+        this.mark1 = new google.maps.Marker({
           position: latLng,
           map: map,
           title: 'Start Point!'
-        }));
+        });
     }
   }
 

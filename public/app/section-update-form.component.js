@@ -1,4 +1,4 @@
-System.register(['@angular/core', './map-section', './app-settings', './map-section.service'], function(exports_1, context_1) {
+System.register(['@angular/core', './map-section', './app-settings', './map-section.service', './helpers/form-markers'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, map_section_1, app_settings_1, map_section_service_1;
+    var core_1, map_section_1, app_settings_1, map_section_service_1, form_markers_1;
     var SectionUpdateFormComponent;
     return {
         setters:[
@@ -25,12 +25,16 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
             },
             function (map_section_service_1_1) {
                 map_section_service_1 = map_section_service_1_1;
+            },
+            function (form_markers_1_1) {
+                form_markers_1 = form_markers_1_1;
             }],
         execute: function() {
             //import { NameForPtypeIdPipe } from './name-for-p-type-id.pipe'; // import pipe here
             let SectionUpdateFormComponent = class SectionUpdateFormComponent {
-                constructor(mapSectionService) {
+                constructor(mapSectionService, formMarkerService) {
                     this.mapSectionService = mapSectionService;
+                    this.formMarkerService = formMarkerService;
                     this.pTimes = [];
                     this.pTypes = [];
                     this.ssTypes = [];
@@ -89,10 +93,14 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
                 }
                 onSubmit() {
                     this.submitted = true;
+                    if (this.model.newPolyline == true) {
+                        // TODO:NW document or make code clear that using encoding/decoding to string version for db
+                        this.model.polyline = this.formMarkerService.getEncodedSection();
+                        this.model.startLat = this.formMarkerService.mark1.position.lat();
+                        this.model.startLng = this.formMarkerService.mark1.position.lng();
+                    }
                     this.mapSectionService.saveMapSection(this.model).then(function (response) {
-                        var test = response;
-                        debugger;
-                        // alert('hi');
+                        // for now we don't need the new id or anything from the response
                     });
                 }
                 showNewSection() {
@@ -109,9 +117,10 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
                 core_1.Component({
                     selector: 'section-update-form',
                     templateUrl: './app/templates/section-update-form.component.html',
+                    // TODO:NW figure out how you DO NOT 'inject' the FormMarkersService to share data
                     providers: [map_section_service_1.MapSectionService]
                 }), 
-                __metadata('design:paramtypes', [map_section_service_1.MapSectionService])
+                __metadata('design:paramtypes', [map_section_service_1.MapSectionService, form_markers_1.FormMarkers])
             ], SectionUpdateFormComponent);
             exports_1("SectionUpdateFormComponent", SectionUpdateFormComponent);
         }
