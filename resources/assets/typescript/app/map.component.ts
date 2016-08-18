@@ -6,7 +6,7 @@ import { SectionRendererService } from './section-renderer.service';
 import { AppSettings } from './app-settings';
 import { FormMarkers } from './helpers/form-markers';
 
-declare var google: any; // TODO:NW get types?? typings install google.maps --global
+declare var google: any;  // TODO:NW get types?? typings install google.maps --global
 
 @Component({
   selector: 'my-map',
