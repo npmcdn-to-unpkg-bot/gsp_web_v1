@@ -7,3 +7,4 @@ Homestead.json
 env.js
 npm-debug.log
 .DS_Store
+error_log
