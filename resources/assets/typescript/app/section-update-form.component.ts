@@ -9,7 +9,7 @@ import { FormMarkers } from './helpers/form-markers';
 
 @Component({
   selector: 'section-update-form',
-  templateUrl: './app/templates/section-update-form.component.html',
+  templateUrl:  AppSettings.APP_RELATIVE_URL + '/app/templates/section-update-form.component.html',
   // TODO:NW figure out how you DO NOT 'inject' the FormMarkersService to share data
   providers: [ MapSectionService] 
   //pipes : [ NameForPtypeIdPipe ]
@@ -37,7 +37,7 @@ export class SectionUpdateFormComponent implements OnInit {
   // then when this is rendered (after the data model has been set) the ngOnInit will overwrite
   // Use constructor instead of ngOnInit? Use event queue? 
   ngOnInit(){
-    let ptDef = AppSettings.PARKING_TYPES;
+    let ptDef = MapSection.PARKING_TYPES;
     for(var ptId in ptDef) {
       this.pTypes.push(ptDef[ptId]);
     }

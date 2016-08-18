@@ -1,12 +1,15 @@
-System.register(['../map-section'], function(exports_1, context_1) {
+System.register(['../map-section', '../app-settings'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var map_section_1;
+    var map_section_1, app_settings_1;
     var FormMarkers;
     return {
         setters:[
             function (map_section_1_1) {
                 map_section_1 = map_section_1_1;
+            },
+            function (app_settings_1_1) {
+                app_settings_1 = app_settings_1_1;
             }],
         execute: function() {
             class FormMarkers {
@@ -30,7 +33,7 @@ System.register(['../map-section'], function(exports_1, context_1) {
                         position: ll,
                         map: map,
                         title: 'edit',
-                        icon: '/images/add-icon.png',
+                        icon: app_settings_1.AppSettings.APP_RELATIVE_URL + '/images/add-icon.png',
                     });
                     google.maps.event.addListener(this.markerWithLabel, "click", function () {
                         mapComponent.modalComponent.myModalIsVisible = true;

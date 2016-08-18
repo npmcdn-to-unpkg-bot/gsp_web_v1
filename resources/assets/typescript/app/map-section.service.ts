@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { MapSection } from './map-section';
+import { AppSettings } from './app-settings'
 
 @Injectable()
 export class MapSectionService {
 
   // TODO:NW env this somehow
   //private gspApiUrl = 'http://n8williams.com/gmap_st_parking/mapSection/loadSectionsForMap';  // URL to web api
-  private gspApiUrl = 'http://gsplocalv2/mapSection';  // URL to web api
+  private gspApiUrl = AppSettings.APP_URL + '/mapSection';  // URL to web api
 
   constructor(private http: Http) { }
 

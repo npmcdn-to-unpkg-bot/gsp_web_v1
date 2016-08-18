@@ -1,4 +1,4 @@
-System.register(['@angular/core', './map-section'], function(exports_1, context_1) {
+System.register(['@angular/core', './map-section', './app-settings'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', './map-section'], function(exports_1, context_
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, map_section_1;
+    var core_1, map_section_1, app_settings_1;
     var ModalContainerComponent;
     return {
         setters:[
@@ -19,9 +19,11 @@ System.register(['@angular/core', './map-section'], function(exports_1, context_
             },
             function (map_section_1_1) {
                 map_section_1 = map_section_1_1;
+            },
+            function (app_settings_1_1) {
+                app_settings_1 = app_settings_1_1;
             }],
         execute: function() {
-            // import { SectionUpdateFormComponent } from './section-update-form.component';
             let ModalContainerComponent = class ModalContainerComponent {
                 showModalContainer(title) {
                     this.title = title;
@@ -50,7 +52,7 @@ System.register(['@angular/core', './map-section'], function(exports_1, context_
             ModalContainerComponent = __decorate([
                 core_1.Component({
                     selector: 'modal-container',
-                    templateUrl: './app/templates/modal-container.component.html',
+                    templateUrl: app_settings_1.AppSettings.APP_RELATIVE_URL + '/app/templates/modal-container.component.html',
                 }), 
                 __metadata('design:paramtypes', [])
             ], ModalContainerComponent);

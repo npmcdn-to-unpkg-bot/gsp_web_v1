@@ -115,7 +115,7 @@ export class SectionRendererService {
     var marker = new google.maps.Marker({
         position: pixelLatLng,
         map: map,
-        icon: '/images/i-icon.png',
+        icon: AppSettings.APP_RELATIVE_URL+'/images/i-icon.png',
         title: 'a title'
     });
     var self = this;

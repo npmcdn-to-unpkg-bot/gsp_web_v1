@@ -6,37 +6,14 @@ System.register([], function(exports_1, context_1) {
         setters:[],
         execute: function() {
             class AppSettings {
-                // TODO:NW get from server. Figure out why static properties cannot be referenced here
-                static get PARKING_TYPES() {
-                    let typeObj = {};
-                    typeObj[AppSettings.PARKING_TYPE_FREE] = { id: AppSettings.PARKING_TYPE_FREE, name: 'Free' };
-                    typeObj[AppSettings.PARKING_TYPE_PAID] = { id: AppSettings.PARKING_TYPE_PAID, name: 'Paid' };
-                    typeObj[AppSettings.PARKING_TYPE_NO_PARKING] = { id: AppSettings.PARKING_TYPE_NO_PARKING, name: 'No parking' };
-                    typeObj[AppSettings.PARKING_TYPE_PERMIT] = { id: AppSettings.PARKING_TYPE_PERMIT, name: 'Permit required' };
-                    return typeObj;
-                }
-                static getTypeColor(section) {
-                    if (section.mainParkingTypeId == AppSettings.PARKING_TYPE_FREE && section.isHoursRestricted == 0 && (!section.mainShortTermMin || section.mainShortTermMin == 0))
-                        return '#00ff00';
-                    if (section.mainParkingTypeId == AppSettings.PARKING_TYPE_NO_PARKING)
-                        return '#ff0000';
-                    if (section.mainParkingTypeId == AppSettings.PARKING_TYPE_PAID && section.isHoursRestricted == 0)
-                        return '#ffff00';
-                    if (section.mainParkingTypeId == AppSettings.PARKING_TYPE_PAID)
-                        return '#ffa500';
-                    if (section.mainParkingTypeId == AppSettings.PARKING_TYPE_PERMIT)
-                        return '#993366';
-                    if (section.mainParkingTypeId == AppSettings.PARKING_TYPE_FREE && section.isHoursRestricted == 1)
-                        return '#0000ff';
-                    else
-                        return '#000000';
-                }
             }
             //public static get API_ENDPOINT(): string { return 'http://127.0.0.1:6666/api/'; }
             AppSettings.PARKING_TYPE_FREE = 1;
             AppSettings.PARKING_TYPE_PAID = 2;
             AppSettings.PARKING_TYPE_NO_PARKING = 3;
             AppSettings.PARKING_TYPE_PERMIT = 4;
+            AppSettings.APP_URL = GSP_APP_URL;
+            AppSettings.APP_RELATIVE_URL = GSP_APP_RELATIVE_URL;
             exports_1("AppSettings", AppSettings);
         }
     }

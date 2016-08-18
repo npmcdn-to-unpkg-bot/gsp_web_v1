@@ -3,7 +3,7 @@ import { ModalContainerComponent } from './modal-container.component';
 import { MapSection } from './map-section';
 import { MapSectionService } from './map-section.service';
 import { SectionRendererService } from './section-renderer.service';
-import { AppSettings } from './app-settings';
+
 import { FormMarkers } from './helpers/form-markers';
 
 declare var google: any;  // TODO:NW get types?? typings install google.maps --global
@@ -73,7 +73,7 @@ export class MapComponent implements OnInit {
     let sectionsArray = this.loadedSections;
     for (let i=0; i < sectionsArray.length; i++) {
       let sectionPoints = google.maps.geometry.encoding.decodePath(sectionsArray[i].polyline);
-      let color = AppSettings.getTypeColor(sectionsArray[i]);
+      let color = MapSection.getTypeColor(sectionsArray[i]);
       let newSection = this.sectionRendererService.drawSection(sectionPoints, sectionsArray[i].streetSide, color, this.map);
       
       // onclick show modal with edit form (TODO:NW only if logged in as admin)

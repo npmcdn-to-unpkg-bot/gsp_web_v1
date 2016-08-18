@@ -1,4 +1,4 @@
-System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'], function(exports_1, context_1) {
+System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise', './app-settings'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1;
+    var core_1, http_1, app_settings_1;
     var MapSectionService;
     return {
         setters:[
@@ -20,14 +20,17 @@ System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'
             function (http_1_1) {
                 http_1 = http_1_1;
             },
-            function (_1) {}],
+            function (_1) {},
+            function (app_settings_1_1) {
+                app_settings_1 = app_settings_1_1;
+            }],
         execute: function() {
             let MapSectionService = class MapSectionService {
                 constructor(http) {
                     this.http = http;
                     // TODO:NW env this somehow
                     //private gspApiUrl = 'http://n8williams.com/gmap_st_parking/mapSection/loadSectionsForMap';  // URL to web api
-                    this.gspApiUrl = 'http://gsplocalv2/mapSection'; // URL to web api
+                    this.gspApiUrl = app_settings_1.AppSettings.APP_URL + '/mapSection'; // URL to web api
                 }
                 loadSectionsForMap(mapData) {
                     //let url = `${this.heroesUrl}/${hero.id}`;

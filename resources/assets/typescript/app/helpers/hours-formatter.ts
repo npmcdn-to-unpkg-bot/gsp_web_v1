@@ -12,7 +12,7 @@ export class HoursFormatter
   
 
   constructor(){
-    this.pTypeInfo = AppSettings.PARKING_TYPES;
+    this.pTypeInfo = MapSection.PARKING_TYPES;
     this.defaultDay = new SectionHours;
     this.defaultDay.start_time = '08:00';
     this.defaultDay.end_time = '20:00';

@@ -1,4 +1,7 @@
-import { MapSection } from './map-section';
+// TODO: Maybe figure out a diff env method for this, for now take from 
+// the env.js included in layouts/views that use it
+declare var GSP_APP_URL: any;
+declare var GSP_APP_RELATIVE_URL: any;
 
 export class AppSettings {
    //public static get API_ENDPOINT(): string { return 'http://127.0.0.1:6666/api/'; }
@@ -8,30 +11,6 @@ export class AppSettings {
    public static PARKING_TYPE_NO_PARKING:number = 3;
    public static PARKING_TYPE_PERMIT:number = 4;
 
-   // TODO:NW get from server. Figure out why static properties cannot be referenced here
-   public static get PARKING_TYPES(): Object { 
-     let typeObj={};
-     typeObj[AppSettings.PARKING_TYPE_FREE] = {id:AppSettings.PARKING_TYPE_FREE, name:'Free'};
-     typeObj[AppSettings.PARKING_TYPE_PAID] = {id:AppSettings.PARKING_TYPE_PAID, name:'Paid'};
-     typeObj[AppSettings.PARKING_TYPE_NO_PARKING] = {id:AppSettings.PARKING_TYPE_NO_PARKING, name:'No parking'};
-     typeObj[AppSettings.PARKING_TYPE_PERMIT] = {id:AppSettings.PARKING_TYPE_PERMIT, name:'Permit required'};
-     return typeObj;
-   }
-
-   public static getTypeColor(section:MapSection){
-      if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_FREE && section.isHoursRestricted == 0 && (!section.mainShortTermMin ||  section.mainShortTermMin == 0))
-          return '#00ff00';
-      if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_NO_PARKING)
-          return '#ff0000';
-      if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_PAID && section.isHoursRestricted == 0)
-          return '#ffff00';
-      if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_PAID)
-          return '#ffa500';
-      if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_PERMIT)
-          return '#993366';
-      if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_FREE && section.isHoursRestricted == 1)
-          return '#0000ff';
-      else
-          return '#000000';
-  }
+   public static APP_URL:string = GSP_APP_URL;
+   public static APP_RELATIVE_URL:string = GSP_APP_RELATIVE_URL;
 }

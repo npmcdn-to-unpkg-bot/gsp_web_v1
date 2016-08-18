@@ -1,10 +1,13 @@
-System.register(['../app-settings', '../section-hours'], function(exports_1, context_1) {
+System.register(['../map-section', '../app-settings', '../section-hours'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var app_settings_1, section_hours_1;
+    var map_section_1, app_settings_1, section_hours_1;
     var HoursFormatter;
     return {
         setters:[
+            function (map_section_1_1) {
+                map_section_1 = map_section_1_1;
+            },
             function (app_settings_1_1) {
                 app_settings_1 = app_settings_1_1;
             },
@@ -15,7 +18,7 @@ System.register(['../app-settings', '../section-hours'], function(exports_1, con
             class HoursFormatter {
                 constructor() {
                     this.daysOfWeek = ['m', 't', 'w', 'th', 'f', 's', 'su'];
-                    this.pTypeInfo = app_settings_1.AppSettings.PARKING_TYPES;
+                    this.pTypeInfo = map_section_1.MapSection.PARKING_TYPES;
                     this.defaultDay = new section_hours_1.SectionHours;
                     this.defaultDay.start_time = '08:00';
                     this.defaultDay.end_time = '20:00';

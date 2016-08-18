@@ -1,5 +1,6 @@
 import { MapComponent } from '../map.component';
 import { MapSection } from '../map-section';
+import { AppSettings } from '../app-settings';
 
 declare var google: any; // TODO:NW get types?? typings install google.maps --global
 
@@ -32,7 +33,7 @@ export class FormMarkers
       position: ll,
       map: map,
       title: 'edit',
-      icon: '/images/add-icon.png',
+      icon: AppSettings.APP_RELATIVE_URL+'/images/add-icon.png',
       // TODO:NW find or make a lib to do marker with label
       // labelClass: "marker-label-v1", // the CSS class for the label
       // labelContent : 'Click to edit section'

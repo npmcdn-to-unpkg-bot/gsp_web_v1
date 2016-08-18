@@ -52,7 +52,7 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
                 // then when this is rendered (after the data model has been set) the ngOnInit will overwrite
                 // Use constructor instead of ngOnInit? Use event queue? 
                 ngOnInit() {
-                    let ptDef = app_settings_1.AppSettings.PARKING_TYPES;
+                    let ptDef = map_section_1.MapSection.PARKING_TYPES;
                     for (var ptId in ptDef) {
                         this.pTypes.push(ptDef[ptId]);
                     }
@@ -118,7 +118,7 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
             SectionUpdateFormComponent = __decorate([
                 core_1.Component({
                     selector: 'section-update-form',
-                    templateUrl: './app/templates/section-update-form.component.html',
+                    templateUrl: app_settings_1.AppSettings.APP_RELATIVE_URL + '/app/templates/section-update-form.component.html',
                     // TODO:NW figure out how you DO NOT 'inject' the FormMarkersService to share data
                     providers: [map_section_service_1.MapSectionService]
                 }), 

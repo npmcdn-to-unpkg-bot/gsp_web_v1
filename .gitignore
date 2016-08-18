@@ -4,5 +4,6 @@
 Homestead.yaml
 Homestead.json
 .env
+env.js
 npm-debug.log
 .DS_Store
