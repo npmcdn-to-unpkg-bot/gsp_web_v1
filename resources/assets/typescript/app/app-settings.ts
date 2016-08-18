@@ -19,7 +19,7 @@ export class AppSettings {
    }
 
    public static getTypeColor(section:MapSection){
-      if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_FREE && section.isHoursRestricted == 0 && !section.mainShortTermMin)
+      if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_FREE && section.isHoursRestricted == 0 && (!section.mainShortTermMin ||  section.mainShortTermMin == 0))
           return '#00ff00';
       if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_NO_PARKING)
           return '#ff0000';
@@ -29,7 +29,7 @@ export class AppSettings {
           return '#ffa500';
       if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_PERMIT)
           return '#993366';
-      if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_FREE && section.isHoursRestricted)
+      if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_FREE && section.isHoursRestricted == 1)
           return '#0000ff';
       else
           return '#000000';

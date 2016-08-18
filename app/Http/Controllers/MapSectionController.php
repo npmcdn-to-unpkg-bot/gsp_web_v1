@@ -115,42 +115,6 @@ class MapSectionController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        /*
-        if($this->get_request_method() != "POST"){
-            $this->response('',406);
-        }
-
-        $customer = json_decode(file_get_contents("php://input"),true);
-        $column_names = array('customerName', 'email', 'city', 'address', 'country');
-        $keys = array_keys($customer);
-        $columns = '';
-        $values = '';
-        foreach($column_names as $desired_key){ // Check the customer received. If blank insert blank into the array.
-           if(!in_array($desired_key, $keys)) {
-                $$desired_key = '';
-            }else{
-                $$desired_key = $customer[$desired_key];
-            }
-            $columns = $columns.$desired_key.',';
-            $values = $values."'".$$desired_key."',";
-        }
-        $query = "INSERT INTO angularcode_customers(".trim($columns,',').") VALUES(".trim($values,',').")";
-        if(!empty($customer)){
-            $r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
-            $success = array('status' => "Success", "msg" => "Customer Created Successfully.", "data" => $customer);
-            $this->response($this->json($success),200);
-        }else
-            $this->response('',204);    //"No Content" status
-        */
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -176,6 +140,8 @@ class MapSectionController extends Controller
         } else{
             $ms = MapSection::find($id);
         }
+        // TODO:NW figure out snake case USE var_dump($ms->snakeAttributes);exit;
+        // var_dump($ms->toArray());exit;
         $section = json_decode(file_get_contents("php://input"),true);
        
         foreach ($section as $key => $value) {
@@ -189,29 +155,6 @@ class MapSectionController extends Controller
             'error' => false,
             'section' => $ms->toJson()
         ]);
-        /*
-        $customer = json_decode(file_get_contents("php://input"),true);
-        $id = (int)$customer['id'];
-        $column_names = array('customerName', 'email', 'city', 'address', 'country');
-        $keys = array_keys($customer['customer']);
-        $columns = '';
-        $values = '';
-        foreach($column_names as $desired_key){ // Check the customer received. If key does not exist, insert blank into the array.
-           if(!in_array($desired_key, $keys)) {
-                $$desired_key = '';
-            }else{
-                $$desired_key = $customer['customer'][$desired_key];
-            }
-            $columns = $columns.$desired_key."='".$$desired_key."',";
-        }
-        $query = "UPDATE angularcode_customers SET ".trim($columns,',')." WHERE customerNumber=$id";
-        if(!empty($customer)){
-            $r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
-            $success = array('status' => "Success", "msg" => "Customer ".$id." Updated Successfully.", "data" => $customer);
-            $this->response($this->json($success),200);
-        }else
-            $this->response('',204);    // "No Content" status
-        */
     }
 
     /**

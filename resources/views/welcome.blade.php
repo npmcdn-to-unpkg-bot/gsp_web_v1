@@ -9,10 +9,12 @@
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?php echo env('MAPS_API_KEY'); ?>&libraries=geometry"></script>
         <!-- 1. Load libraries -->
         <!-- Polyfill(s) for older browsers -->
+        <!-- use gulp elixir script task to put into a vendor.js
         <script src="core-js/client/shim.min.js"></script>
         <script src="zone.js/dist/zone.js"></script>
         <script src="reflect-metadata/Reflect.js"></script>
-        <script src="systemjs/dist/system.src.js"></script>
+        <script src="systemjs/dist/system.src.js"></script>-->
+        <script src="vendor.js"></script>
         <!-- 2. Configure SystemJS -->
         <script src="systemjs.config.js"></script>
         <script>
