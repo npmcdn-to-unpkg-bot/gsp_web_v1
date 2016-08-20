@@ -32,6 +32,10 @@ System.register(['@angular/core', './map-section', './app-settings'], function(e
                 hideModalContainer() {
                     this.myModalIsVisible = false;
                 }
+                hideModalContainerWithMessage(eventPayloadMessage) {
+                    //alert(eventPayloadMessage);
+                    this.myModalIsVisible = false;
+                }
             };
             __decorate([
                 core_1.Input(), 

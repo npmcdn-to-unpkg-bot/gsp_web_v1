@@ -41,16 +41,37 @@ System.register(['@angular/core', './modal-container.component', './map-section'
                     this.formMarkersService = formMarkersService;
                 }
                 ngOnInit() {
+                    var self = this;
+                    // Try HTML5 geolocation.
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            var pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+                            self.loadMap(pos);
+                        }, function (posError) {
+                            self.loadMap({ lat: 40.762, lng: -111.855 });
+                            console.log('Make sure your site is loaded over https');
+                        });
+                    }
+                    else {
+                        self.loadMap({ lat: 40.762, lng: -111.855 });
+                        console.log('Browser doesn\'t support Geolocation');
+                    }
+                }
+                loadMap(startPosition) {
                     var mapOptions = {
-                        center: new google.maps.LatLng(40.762, -111.855),
+                        // center: new google.maps.LatLng(40.762, -111.855),
+                        center: new google.maps.LatLng(startPosition.lat, startPosition.lng),
                         zoom: 16,
                         draggableCursor: "crosshair",
                         draggingCursor: "crosshair",
                         scaleControl: true,
                         disableDoubleClickZoom: true
                     };
-                    this.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
                     var self = this;
+                    self.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
                     google.maps.event.addListener(this.map, 'tilesloaded', function () {
                         var mapData = {
                             minLat: self.map.getBounds().getSouthWest().lat(),

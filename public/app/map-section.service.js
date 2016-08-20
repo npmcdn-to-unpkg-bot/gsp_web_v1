@@ -61,7 +61,10 @@ System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'
                         .catch(this.handleError);
                 }
                 deleteMapSection(sectionId) {
-                    return this.http.delete(this.gspApiUrl + '/destroy/' + sectionId);
+                    return this.http.delete(this.gspApiUrl + '/' + sectionId)
+                        .toPromise()
+                        .then(response => response)
+                        .catch(this.handleError);
                 }
                 handleError(error) {
                     console.error('An error occurred', error);

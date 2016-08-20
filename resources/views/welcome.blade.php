@@ -5,7 +5,7 @@
         <title>Gmaps Street Parking</title>
 
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" type="text/css" href="css/app.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo env('APP_RELATIVE_URL'); ?>/css/app.css" />
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?php echo env('MAPS_API_KEY'); ?>&libraries=geometry"></script>
         <script src="<?php echo env('APP_RELATIVE_URL'); ?>/env.js"></script>
         <!-- 1. Load libraries -->

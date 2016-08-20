@@ -43,7 +43,7 @@ System.register(['@angular/core', './map-section', './name-for-p-type-id.pipe', 
             SectionInfoComponent = __decorate([
                 core_1.Component({
                     selector: 'section-info',
-                    templateUrl: app_settings_1.AppSettings.APP_RELATIVE_URL + './app/templates/section-info.component.html',
+                    templateUrl: app_settings_1.AppSettings.APP_RELATIVE_URL + '/app/templates/section-info.component.html',
                     pipes: [name_for_p_type_id_pipe_1.NameForPtypeIdPipe]
                 }), 
                 __metadata('design:paramtypes', [])

@@ -8,7 +8,7 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "ignasbernotas/laravel-model-generator": "~1",
-        "barryvdh/laravel-cors":"~0.8.1"
+        "barryvdh/laravel-cors":"^0.8.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

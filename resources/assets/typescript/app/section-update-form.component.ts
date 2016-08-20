@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { MapSection } from './map-section';
 import { AppSettings } from './app-settings';
 import { MapSectionService } from './map-section.service';
@@ -23,6 +23,7 @@ export class SectionUpdateFormComponent implements OnInit {
   ){}
 
   @Input() model: MapSection;
+  @Output() onDeleteComplete = new EventEmitter();
 
   pTimes = [];
   pTypes = [];
@@ -78,7 +79,6 @@ export class SectionUpdateFormComponent implements OnInit {
   onSubmit() { 
     this.submitted = true; 
     if(this.model.newPolyline == true){
-      // TODO:NW document or make code clear that using encoding/decoding to string version for db
       this.model.polyline = this.formMarkerService.getEncodedSection();
       this.model.startLat = this.formMarkerService.mark1.position.lat();
       this.model.startLng = this.formMarkerService.mark1.position.lng();
@@ -88,10 +88,19 @@ export class SectionUpdateFormComponent implements OnInit {
     this.mapSectionService.saveMapSection(this.model).then(function(response){
        // for now we don't need the new id or anything from the response
     });
-
   }
 
-   // Reset the form with a new hero AND restore 'pristine' class state
+  deleteSection(){
+    this.submitted = true;
+    let self=this;
+    this.mapSectionService.deleteMapSection(this.model.id).then(function(response){
+      // for now we don't need the new id or anything from the response
+      let testMessage='hi'
+      self.onDeleteComplete.emit(testMessage);
+    });
+  }
+
+  // Reset the form with a new hero AND restore 'pristine' class state
   // by toggling 'active' flag which causes the form
   // to be removed/re-added in a tick via NgIf
   // TODO: Workaround until NgForm has a reset method (#6822)

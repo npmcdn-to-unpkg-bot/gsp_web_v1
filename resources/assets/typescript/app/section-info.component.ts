@@ -5,7 +5,7 @@ import { AppSettings } from './app-settings';
 
 @Component({
   selector: 'section-info',
-  templateUrl:  AppSettings.APP_RELATIVE_URL + './app/templates/section-info.component.html',
+  templateUrl:  AppSettings.APP_RELATIVE_URL + '/app/templates/section-info.component.html',
   pipes : [ NameForPtypeIdPipe ]
 })
 

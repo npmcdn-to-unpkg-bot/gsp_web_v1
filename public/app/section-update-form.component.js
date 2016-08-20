@@ -35,6 +35,7 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
                 constructor(mapSectionService, formMarkerService) {
                     this.mapSectionService = mapSectionService;
                     this.formMarkerService = formMarkerService;
+                    this.onDeleteComplete = new core_1.EventEmitter();
                     this.pTimes = [];
                     this.pTypes = [];
                     this.ssTypes = [];
@@ -94,7 +95,6 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
                 onSubmit() {
                     this.submitted = true;
                     if (this.model.newPolyline == true) {
-                        // TODO:NW document or make code clear that using encoding/decoding to string version for db
                         this.model.polyline = this.formMarkerService.getEncodedSection();
                         this.model.startLat = this.formMarkerService.mark1.position.lat();
                         this.model.startLng = this.formMarkerService.mark1.position.lng();
@@ -103,6 +103,15 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
                     }
                     this.mapSectionService.saveMapSection(this.model).then(function (response) {
                         // for now we don't need the new id or anything from the response
+                    });
+                }
+                deleteSection() {
+                    this.submitted = true;
+                    let self = this;
+                    this.mapSectionService.deleteMapSection(this.model.id).then(function (response) {
+                        // for now we don't need the new id or anything from the response
+                        let testMessage = 'hi';
+                        self.onDeleteComplete.emit(testMessage);
                     });
                 }
                 showNewSection() {
@@ -115,6 +124,10 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
                 core_1.Input(), 
                 __metadata('design:type', map_section_1.MapSection)
             ], SectionUpdateFormComponent.prototype, "model", void 0);
+            __decorate([
+                core_1.Output(), 
+                __metadata('design:type', Object)
+            ], SectionUpdateFormComponent.prototype, "onDeleteComplete", void 0);
             SectionUpdateFormComponent = __decorate([
                 core_1.Component({
                     selector: 'section-update-form',

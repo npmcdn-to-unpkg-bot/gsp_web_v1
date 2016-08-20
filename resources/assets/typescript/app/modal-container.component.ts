@@ -23,4 +23,9 @@ export class ModalContainerComponent
   {
     this.myModalIsVisible = false;
   }
+
+  hideModalContainerWithMessage(eventPayloadMessage){
+     //alert(eventPayloadMessage);
+     this.myModalIsVisible = false;
+  }
 }

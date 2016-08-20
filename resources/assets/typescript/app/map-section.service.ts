@@ -49,7 +49,11 @@ export class MapSectionService {
   }
 
   deleteMapSection(sectionId:number){
-    return this.http.delete(this.gspApiUrl + '/destroy/' + sectionId);
+    return this.http.delete(this.gspApiUrl + '/' + sectionId)
+     .toPromise()
+     .then(response => response)
+     //.then(function(response){ debugger; })
+     .catch(this.handleError);
   }
 
   private handleError(error: any) {

@@ -165,19 +165,11 @@ class MapSectionController extends Controller
      */
     public function destroy($id)
     {
-        /*
-        if($this->get_request_method() != "DELETE"){
-            $this->response('',406);
-        }
-        $id = (int)$this->_request['id'];
-        if($id > 0){                
-            $query="DELETE FROM angularcode_customers WHERE customerNumber = $id";
-            $r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
-            $success = array('status' => "Success", "msg" => "Successfully deleted one record.");
-            $this->response($this->json($success),200);
-        }else
-            $this->response('',204);    // If no records "No Content" status
-        */
+        $ms = MapSection::find($id);
+        $ms->delete();
+        return Response::json([
+            'error' => false
+        ]);
     }
 
     public function show($id){}
