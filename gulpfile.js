@@ -45,8 +45,8 @@ gulp.task('typescript', function(){
 
 elixir(function(mix) {
   if(!elixir.config.production){
-  mix.sass('app.scss'); // has watcher by default?
-  mix.task('typescript', 'resources/assets/typescript/**');
+    mix.sass('app.scss'); // has watcher by default?
+    mix.task('typescript', 'resources/assets/typescript/**');
     // minify individual files
     mix.scripts([
       'core-js/client/shim.min.js',
@@ -75,10 +75,5 @@ elixir(function(mix) {
         "removeComments": false,
         "noImplicitAny": false,
     });*/
-  }
-
-  if(elixir.config.production){
-    // On produciton, copy /public to ~/public_html/gsp
-    mix.copy('public/', '../gsp');
   }
 });

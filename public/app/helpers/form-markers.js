@@ -42,6 +42,7 @@ System.register(['../map-section', '../app-settings'], function(exports_1, conte
                         let selectedSection = new map_section_1.MapSection(-1);
                         selectedSection.newPolyline = true;
                         selectedSection.mainParkingTypeId = app_settings_1.AppSettings.PARKING_TYPE_FREE;
+                        selectedSection.streetSide = 0;
                         mapComponent.modalComponent.selectedSection = selectedSection;
                         mapComponent.ref.detectChanges();
                         /*

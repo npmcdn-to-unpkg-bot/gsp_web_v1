@@ -95,6 +95,47 @@ System.register(['@angular/core', './modal-container.component', './map-section'
                     google.maps.event.addListener(this.map, 'dblclick', function (event) {
                         self.formMarkersService.placeSectionMarker(event.latLng, self.map, self);
                     });
+                    self.addSearchBox();
+                }
+                addSearchBox() {
+                    let self = this;
+                    // Create the search box and link it to the UI element.
+                    let input = document.getElementById('search-input');
+                    let searchBox = new google.maps.places.SearchBox(input);
+                    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+                    input.style.display = 'block';
+                    // Bias the SearchBox results towards current map's viewport.
+                    this.map.addListener('bounds_changed', function () {
+                        searchBox.setBounds(self.map.getBounds());
+                    });
+                    // Listen for the event fired when the user selects a prediction and retrieve
+                    // more details for that place.
+                    searchBox.addListener('places_changed', function () {
+                        var places = searchBox.getPlaces();
+                        if (places.length == 0) {
+                            return;
+                        }
+                        // For each place, name and location.
+                        var bounds = new google.maps.LatLngBounds();
+                        places.forEach(function (place) {
+                            if (!place.geometry) {
+                                console.log("Returned place contains no geometry");
+                                return;
+                            }
+                            if (place.geometry.viewport) {
+                                // Only geocodes have viewport.
+                                bounds.union(place.geometry.viewport);
+                            }
+                            else {
+                                bounds.extend(place.geometry.location);
+                            }
+                        });
+                        self.map.fitBounds(bounds);
+                        let listener = google.maps.event.addListenerOnce(self.map, "idle", function () {
+                            self.map.setZoom(16);
+                            google.maps.event.removeListener(listener);
+                        });
+                    });
                 }
                 renderSectionsForView() {
                     let self = this;
@@ -111,12 +152,25 @@ System.register(['@angular/core', './modal-container.component', './map-section'
                             self.modalComponent.selectedSection = sectionsArray[i];
                             self.ref.detectChanges();
                         });
-                        //don't show info for things with no notes or hours
-                        if (sectionsArray[i].isHoursRestricted == 1 ||
-                            (sectionsArray[i].notes != undefined &&
-                                sectionsArray[i].notes != null &&
-                                sectionsArray[i].notes != "")) {
-                            let marker = this.sectionRendererService.drawSectionInfoMarker(sectionsArray[i], this.map);
+                        // If has hours, no notes, show clock icon
+                        // If has hours and notes, show clock/info icon, one image merged
+                        // If has notes, no hours, show i icon
+                        let showMarker = false;
+                        let iconName = '';
+                        let n = sectionsArray[i].notes;
+                        if (sectionsArray[i].isHoursRestricted == 1) {
+                            showMarker = true;
+                            iconName = 'hours-icon.png';
+                            if (n != undefined && n != null && n != "") {
+                                iconName = 'infohours-icon.png';
+                            }
+                        }
+                        else if (n != undefined && n != null && n != "") {
+                            showMarker = true;
+                            iconName = 'info-icon.png';
+                        }
+                        if (showMarker) {
+                            let marker = this.sectionRendererService.drawSectionInfoMarker(sectionsArray[i], this.map, iconName);
                             // TODO:NW watchout if no marker rendered b/c of something off
                             google.maps.event.addListener(marker, 'click', function () {
                                 /*
@@ -152,7 +206,8 @@ System.register(['@angular/core', './modal-container.component', './map-section'
                 // TODO:NW get types?? typings install google.maps --global
                 core_1.Component({
                     selector: 'my-map',
-                    template: '<div id="map-canvas"></div><modal-container></modal-container>',
+                    template: '<div id="map-canvas"></div><modal-container></modal-container>\
+    <input id="search-input" class="controls" type="text" placeholder="Search">',
                     providers: [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, form_markers_1.FormMarkers]
                 }), 
                 __metadata('design:paramtypes', [map_section_service_1.MapSectionService, section_renderer_service_1.SectionRendererService, core_1.ChangeDetectorRef, form_markers_1.FormMarkers])

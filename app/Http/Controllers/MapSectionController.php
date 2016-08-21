@@ -142,14 +142,19 @@ class MapSectionController extends Controller
         }
         // TODO:NW figure out snake case USE var_dump($ms->snakeAttributes);exit;
         // var_dump($ms->toArray());exit;
-        $section = json_decode(file_get_contents("php://input"),true);
+        $sectionAtts = json_decode(file_get_contents("php://input"),true);
        
-        foreach ($section as $key => $value) {
+        foreach ($sectionAtts as $key => $value) {
             // client side atts, ignore
             if($key != 'newPolyline' && $key != 'hoursHtml' && $key != 'id'){
                 $ms[snake_case($key)] = $value;
             }
         }
+        // for now, if permitted or paid, set has hours to T, set hours later
+        if($ms['main_parking_type_id'] == 2 || $ms['main_parking_type_id'] == 4){
+          $ms['is_hours_restricted']=1;
+        }
+
         $ms->save();
         return Response::json([
             'error' => false,

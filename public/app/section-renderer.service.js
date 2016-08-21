@@ -82,7 +82,7 @@ System.register(['@angular/core', './app-settings'], function(exports_1, context
                     formPoly.setMap(map);
                     return formPoly;
                 }
-                drawSectionInfoMarker(section, map) {
+                drawSectionInfoMarker(section, map, iconName) {
                     var sectionPoints = google.maps.geometry.encoding.decodePath(section.polyline);
                     if (!sectionPoints || sectionPoints.length == 0) {
                         console.log('Bogus polyline for sectio with id:' + section.id);
@@ -121,7 +121,7 @@ System.register(['@angular/core', './app-settings'], function(exports_1, context
                     var marker = new google.maps.Marker({
                         position: pixelLatLng,
                         map: map,
-                        icon: app_settings_1.AppSettings.APP_RELATIVE_URL + '/images/i-icon.png',
+                        icon: app_settings_1.AppSettings.APP_RELATIVE_URL + '/images/' + iconName,
                         title: 'a title'
                     });
                     var self = this;

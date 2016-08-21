@@ -48,6 +48,8 @@ export class MapSection {
         return '#993366';
     if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_FREE && section.isHoursRestricted == 1)
         return '#0000ff';
+    if(section.mainParkingTypeId == AppSettings.PARKING_TYPE_FREE && section.mainShortTermMin)
+        return '#0000ff';
     else
         return '#000000';
   }

@@ -71,7 +71,7 @@ export class SectionRendererService {
     return formPoly;
   }
 
-  drawSectionInfoMarker(section:MapSection, map:any){
+  drawSectionInfoMarker(section:MapSection, map:any, iconName){
     var sectionPoints = google.maps.geometry.encoding.decodePath(section.polyline);
     if(!sectionPoints || sectionPoints.length == 0){
       console.log('Bogus polyline for sectio with id:'+section.id);
@@ -115,7 +115,7 @@ export class SectionRendererService {
     var marker = new google.maps.Marker({
         position: pixelLatLng,
         map: map,
-        icon: AppSettings.APP_RELATIVE_URL+'/images/i-icon.png',
+        icon: AppSettings.APP_RELATIVE_URL+'/images/' + iconName,
         title: 'a title'
     });
     var self = this;
