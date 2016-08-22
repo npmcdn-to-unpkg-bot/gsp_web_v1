@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { MapSection } from './map-section';
+import { SectionHours } from './section-hours';
 import { AppSettings } from './app-settings';
 import { MapSectionService } from './map-section.service';
 // shared service with parent view for component interactions
@@ -28,6 +29,7 @@ export class SectionUpdateFormComponent implements OnInit {
   pTimes = [];
   pTypes = [];
   ssTypes = [];
+  hoursTypes=[];
 
   //model = new MapSection(1); // set from parent on selection
   submitted = false;
@@ -53,6 +55,7 @@ export class SectionUpdateFormComponent implements OnInit {
       {value:-1, label:'To the left from start pt'},
       {value:1, label:'To the right from start pt'}
     ];
+    this.hoursTypes = SectionHours.getTypes();
   }
 
   labelForTime(t: number):string{

@@ -1,4 +1,4 @@
-System.register(['@angular/core', './map-section', './app-settings', './map-section.service', './helpers/form-markers'], function(exports_1, context_1) {
+System.register(['@angular/core', './map-section', './section-hours', './app-settings', './map-section.service', './helpers/form-markers'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, map_section_1, app_settings_1, map_section_service_1, form_markers_1;
+    var core_1, map_section_1, section_hours_1, app_settings_1, map_section_service_1, form_markers_1;
     var SectionUpdateFormComponent;
     return {
         setters:[
@@ -19,6 +19,9 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
             },
             function (map_section_1_1) {
                 map_section_1 = map_section_1_1;
+            },
+            function (section_hours_1_1) {
+                section_hours_1 = section_hours_1_1;
             },
             function (app_settings_1_1) {
                 app_settings_1 = app_settings_1_1;
@@ -39,6 +42,7 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
                     this.pTimes = [];
                     this.pTypes = [];
                     this.ssTypes = [];
+                    this.hoursTypes = [];
                     //model = new MapSection(1); // set from parent on selection
                     this.submitted = false;
                     // Reset the form with a new hero AND restore 'pristine' class state
@@ -67,6 +71,7 @@ System.register(['@angular/core', './map-section', './app-settings', './map-sect
                         { value: -1, label: 'To the left from start pt' },
                         { value: 1, label: 'To the right from start pt' }
                     ];
+                    this.hoursTypes = section_hours_1.SectionHours.getTypes();
                 }
                 labelForTime(t) {
                     if (t == 0) {

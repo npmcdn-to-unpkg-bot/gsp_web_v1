@@ -7,7 +7,9 @@ export class MapSection {
     public id: number
   ) {  }
 
+  hoursType:string; // only client side for now
   hoursPph:number;
+  hoursData: string;
   polyline: string;
   startLat:number;
   endLat:number;
@@ -19,7 +21,6 @@ export class MapSection {
   mainShortTermMin: number;
   mainPph:number;
   notes: string;
-  hoursData: string;
 
   // client side generated variables
   hoursHtml:string;

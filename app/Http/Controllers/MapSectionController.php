@@ -115,17 +115,6 @@ class MapSectionController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -146,14 +135,23 @@ class MapSectionController extends Controller
        
         foreach ($sectionAtts as $key => $value) {
             // client side atts, ignore
-            if($key != 'newPolyline' && $key != 'hoursHtml' && $key != 'id'){
+            if($key != 'newPolyline' && $key != 'hoursHtml' && $key != 'id' && $key != 'hoursType'){
                 $ms[snake_case($key)] = $value;
             }
         }
-        // for now, if permitted or paid, set has hours to T, set hours later
+        $ms['is_hours_restricted']=0;
+        // for now, if permitted or paid, set has hours to T. CHANGE THIS IN FUTURE
+        // paid or permit might be on all hours
         if($ms['main_parking_type_id'] == 2 || $ms['main_parking_type_id'] == 4){
           $ms['is_hours_restricted']=1;
         }
+
+        // for now, hard code hours
+        if(isset($sectionAtts['hoursType']) && $sectionAtts['hoursType']){
+            $ms['hours_data'] = $this->getHoursTypeData($sectionAtts['hoursType']);
+            $ms['is_hours_restricted']=1;
+        }
+        
 
         $ms->save();
         return Response::json([
@@ -186,6 +184,57 @@ class MapSectionController extends Controller
         if(is_array($data)){
             return json_encode($data);
         }
+    }
+
+    private function getHoursTypeData($type){
+        $data='';
+        if($type == 'slcMeters'){
+            $data =  '[
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"2","on_short_term_min":"120","on_pph":"2.00","off_parking_type_id":"1","off_short_term_min":"","index":null},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"2","on_short_term_min":"120","on_pph":"2.00","off_parking_type_id":"1","off_short_term_min":"","index":1},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"2","on_short_term_min":"120","on_pph":"2.00","off_parking_type_id":"1","off_short_term_min":"","index":2},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"2","on_short_term_min":"120","on_pph":"2.00","off_parking_type_id":"1","off_short_term_min":"","index":3},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"2","on_short_term_min":"120","on_pph":"2.00","off_parking_type_id":"1","off_short_term_min":"","index":4},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":5},
+            {"selected":0,"start_time":"","end_time":"","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":6}
+            ]';
+        }
+        else if($type == 'slc2hr'){
+            $data =  '[
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":null},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":1},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":2},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":3},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":4},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":5},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":6}
+            ]';
+        }
+        else if($type == 'permit7t7'){
+            $data =  '[
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"3","on_short_term_min":"","off_parking_type_id":"1","off_short_term_min":"","index":null},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"3","on_short_term_min":"","off_parking_type_id":"1","off_short_term_min":"","index":1},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"3","on_short_term_min":"","off_parking_type_id":"1","off_short_term_min":"","index":2},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"3","on_short_term_min":"","off_parking_type_id":"1","off_short_term_min":"","index":3},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"3","on_short_term_min":"","off_parking_type_id":"1","off_short_term_min":"","index":4},
+            {"selected":0,"start_time":"","end_time":"","on_parking_type_id":"","on_short_term_min":"","off_parking_type_id":"","off_short_term_min":"","index":5},
+            {"selected":0,"start_time":"","end_time":"","on_parking_type_id":"","on_short_term_min":"","off_parking_type_id":"","off_short_term_min":"","index":6}
+            ]';
+        }
+        else if($type == 'permit8t3'){
+            $data =  '[
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"3","on_short_term_min":"","off_parking_type_id":"1","off_short_term_min":"","index":null},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"3","on_short_term_min":"","off_parking_type_id":"1","off_short_term_min":"","index":1},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"3","on_short_term_min":"","off_parking_type_id":"1","off_short_term_min":"","index":2},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"3","on_short_term_min":"","off_parking_type_id":"1","off_short_term_min":"","index":3},
+            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"3","on_short_term_min":"","off_parking_type_id":"1","off_short_term_min":"","index":4},
+            {"selected":0,"start_time":"","end_time":"","on_parking_type_id":"","on_short_term_min":"","off_parking_type_id":"","off_short_term_min":"","index":5},
+            {"selected":0,"start_time":"","end_time":"","on_parking_type_id":"","on_short_term_min":"","off_parking_type_id":"","off_short_term_min":"","index":6}
+            ]';
+        }
+        $data = str_replace(" ", "", $data);
+        $data = str_replace("\n", "", $data);
+        return $data;
     }
 
 }

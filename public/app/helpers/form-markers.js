@@ -43,6 +43,8 @@ System.register(['../map-section', '../app-settings'], function(exports_1, conte
                         selectedSection.newPolyline = true;
                         selectedSection.mainParkingTypeId = app_settings_1.AppSettings.PARKING_TYPE_FREE;
                         selectedSection.streetSide = 0;
+                        selectedSection.hoursType = '';
+                        selectedSection.notes = '';
                         mapComponent.modalComponent.selectedSection = selectedSection;
                         mapComponent.ref.detectChanges();
                         /*

@@ -46,6 +46,8 @@ export class FormMarkers
       selectedSection.newPolyline=true;
       selectedSection.mainParkingTypeId = AppSettings.PARKING_TYPE_FREE;
       selectedSection.streetSide = 0;
+      selectedSection.hoursType = '';
+      selectedSection.notes = '';
       mapComponent.modalComponent.selectedSection=selectedSection;
       mapComponent.ref.detectChanges();
       /*

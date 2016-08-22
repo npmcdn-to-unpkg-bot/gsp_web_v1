@@ -38,9 +38,6 @@ System.register(['./helpers/hours-formatter', './app-settings'], function(export
                         return '#993366';
                     if (section.mainParkingTypeId == app_settings_1.AppSettings.PARKING_TYPE_FREE && section.isHoursRestricted == 1)
                         return '#0000ff';
-                    if (section.id == 59) {
-                        debugger;
-                    }
                     if (section.mainParkingTypeId == app_settings_1.AppSettings.PARKING_TYPE_FREE && section.mainShortTermMin)
                         return '#0000ff';
                     else
