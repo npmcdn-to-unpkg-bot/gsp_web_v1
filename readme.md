@@ -1,3 +1,7 @@
+DEPLOYMENT
+
+1) git stash bootstrap/autoload.php 2) git pull 3) git stash apply 4) ??rm -r ../public_html/gsp cp -r public ../public_html/gsp 5) Edit gsp/index.php to have the right path
+
 # Laravel PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
