@@ -1,4 +1,4 @@
-System.register(['../map-section', '../app-settings', '../section-hours'], function(exports_1, context_1) {
+System.register(['../models/map-section', '../app-settings', '../models/section-hours'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var map_section_1, app_settings_1, section_hours_1;

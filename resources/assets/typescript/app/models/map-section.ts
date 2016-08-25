@@ -1,5 +1,5 @@
-import { HoursFormatter } from './helpers/hours-formatter';
-import { AppSettings } from './app-settings';
+import { HoursFormatter } from '../helpers/hours-formatter';
+import { AppSettings } from '../app-settings';
 
 export class MapSection {
   
@@ -8,7 +8,6 @@ export class MapSection {
   ) {  }
 
   hoursType:string; // only client side for now
-  hoursPph:number;
   hoursData: string;
   polyline: string;
   startLat:number;

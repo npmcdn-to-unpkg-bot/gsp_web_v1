@@ -1,6 +1,6 @@
-import { MapSection } from '../map-section';
+import { MapSection } from '../models/map-section';
 import { AppSettings } from '../app-settings';
-import { SectionHours } from '../section-hours';
+import { SectionHours } from '../models/section-hours';
 
 export class HoursFormatter
 {

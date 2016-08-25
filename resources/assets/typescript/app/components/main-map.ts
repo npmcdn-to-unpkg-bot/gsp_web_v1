@@ -1,10 +1,9 @@
 import { Component, ChangeDetectorRef, OnInit, ViewChild } from '@angular/core';
-import { ModalContainerComponent } from './modal-container.component';
-import { MapSection } from './map-section';
-import { MapSectionService } from './map-section.service';
-import { SectionRendererService } from './section-renderer.service';
-
-import { FormMarkers } from './helpers/form-markers';
+import { ModalContainerComponent } from '../components/modal-container';
+import { MapSection } from '../models/map-section';
+import { MapSectionService } from '../services/map-section';
+import { SectionRendererService } from '../helpers/section-renderer';
+import { FormMarkers } from '../services/form-markers';
 
 declare var google: any;  // TODO:NW get types?? typings install google.maps --global
 

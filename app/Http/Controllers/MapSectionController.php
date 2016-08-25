@@ -211,6 +211,7 @@ class MapSectionController extends Controller
             ]';
         }
         else if($type == 'permit7t7'){
+            // make sure the on_short_term_min is correct, and type. Sometimes NP, sometimes short term
             $data =  '[
             {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"3","on_short_term_min":"","off_parking_type_id":"1","off_short_term_min":"","index":null},
             {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"3","on_short_term_min":"","off_parking_type_id":"1","off_short_term_min":"","index":1},

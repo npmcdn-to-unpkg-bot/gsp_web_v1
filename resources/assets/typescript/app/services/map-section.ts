@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import { MapSection } from './map-section';
-import { AppSettings } from './app-settings'
+import { MapSection } from '../models/map-section';
+import { AppSettings } from '../app-settings'
 
 @Injectable()
 export class MapSectionService {
