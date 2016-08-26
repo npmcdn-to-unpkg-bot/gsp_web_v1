@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { MapSection } from './map-section';
-import { AppSettings } from './app-settings';
+import { MapSection } from '../models/map-section';
+import { AppSettings } from '../app-settings';
 
 declare var google: any; // TODO:NW get types?? typings install google.maps --global
 

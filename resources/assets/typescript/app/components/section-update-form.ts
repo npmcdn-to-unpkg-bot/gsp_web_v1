@@ -1,16 +1,16 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { MapSection } from './map-section';
-import { SectionHours } from './section-hours';
-import { AppSettings } from './app-settings';
-import { MapSectionService } from './map-section.service';
+import { MapSection } from '../models/map-section';
+import { SectionHours } from '../models/section-hours';
+import { AppSettings } from '../app-settings';
+import { MapSectionService } from '../services/map-section';
 // shared service with parent view for component interactions
-import { FormMarkers } from './helpers/form-markers';
+import { FormMarkers } from '../services/form-markers';
 
 //import { NameForPtypeIdPipe } from './name-for-p-type-id.pipe'; // import pipe here
 
 @Component({
   selector: 'section-update-form',
-  templateUrl:  AppSettings.APP_RELATIVE_URL + '/app/templates/section-update-form.component.html',
+  templateUrl:  AppSettings.APP_RELATIVE_URL + '/app/templates/section-update-form.html',
   // TODO:NW figure out how you DO NOT 'inject' the FormMarkersService to share data
   providers: [ MapSectionService] 
   //pipes : [ NameForPtypeIdPipe ]

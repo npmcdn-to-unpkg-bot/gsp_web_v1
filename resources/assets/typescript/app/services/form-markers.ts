@@ -1,5 +1,5 @@
-import { MapComponent } from '../map.component';
-import { MapSection } from '../map-section';
+import { MapComponent } from '../components/main-map';
+import { MapSection } from '../models/map-section';
 import { AppSettings } from '../app-settings';
 
 declare var google: any; // TODO:NW get types?? typings install google.maps --global

@@ -11,6 +11,15 @@ export class AppSettings {
    public static PARKING_TYPE_NO_PARKING:number = 3;
    public static PARKING_TYPE_PERMIT:number = 4;
 
+   public static POINT_TYPE_MC:number = 1;
+   public static POINT_TYPE_HC:number = 2;
+   public static POINT_TYPE_LOADING:number = 3;
+   public static POINT_TYPE_ELEC:number = 4;
+   public static POINT_TYPE_FREIGHT:number = 5;
+   public static POINT_TYPE_MISC:number = 6;
+
    public static APP_URL:string = GSP_APP_URL;
    public static APP_RELATIVE_URL:string = GSP_APP_RELATIVE_URL;
+
+
 }

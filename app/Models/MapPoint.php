@@ -7,30 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MapSection
  */
-class MapSection extends Model
+class MapPoint extends Model
 {
-    protected $table = 'map_section';
+    protected $table = 'map_pt';
 
     public $timestamps = true;
 
     protected $fillable = [
-        'streetSide',
-        'mainParkingTypeId',
-        'mainPph',
+        'pointTypeId',
+        'streetSide', // for now don't use, set the point using side of road
+        'mainParkingTypeId', // usually free
+        'mainPph', // ususally free
         'mainShortTermMin',
         'numSpots',
         'isHoursRestricted',
         'hoursData',
         'notes',
         'availabilityRating',
-        'startLat',
-        'startLng',
-        'endLat',
-        'endLng',
-        'polyline',
+        'lat',
+        'lng',
         'submittedBy',
         'approved',
-        'updatedAt'
+        'updatedAt',
+        'createdAt'
     ];
 
     protected $guarded = [];

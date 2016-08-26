@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { MapSection } from './map-section';
+import { MapSection } from './models/map-section';
 
 @Pipe({name: 'nameForPtypeId'})
 export class NameForPtypeIdPipe implements PipeTransform {
