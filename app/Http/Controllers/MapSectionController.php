@@ -201,13 +201,13 @@ class MapSectionController extends Controller
         }
         else if($type == 'slc2hr'){
             $data =  '[
-            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":null},
-            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":1},
-            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":2},
-            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":3},
-            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":4},
-            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":5},
-            {"selected":1,"start_time":"08:00","end_time":"20:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":6}
+            {"selected":1,"start_time":"08:00","end_time":"18:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":null},
+            {"selected":1,"start_time":"08:00","end_time":"18:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":1},
+            {"selected":1,"start_time":"08:00","end_time":"18:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":2},
+            {"selected":1,"start_time":"08:00","end_time":"18:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":3},
+            {"selected":1,"start_time":"08:00","end_time":"18:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":4},
+            {"selected":1,"start_time":"08:00","end_time":"18:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":5},
+            {"selected":1,"start_time":"08:00","end_time":"18:00","on_parking_type_id":"1","on_short_term_min":"120","off_parking_type_id":"1","off_short_term_min":"","index":6}
             ]';
         }
         else if($type == 'permit7t7'){

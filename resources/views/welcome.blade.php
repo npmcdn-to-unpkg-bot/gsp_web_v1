@@ -3,7 +3,7 @@
     <head>
         <base href="/">
         <title>Gmaps Street Parking</title>
-
+        <link rel="shortcut icon" href="<?php echo env('APP_RELATIVE_URL'); ?>/favicon.ico" />
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" type="text/css" href="<?php echo env('APP_RELATIVE_URL'); ?>/css/app.css" />
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?php echo env('MAPS_API_KEY'); ?>&libraries=geometry,places"></script>
