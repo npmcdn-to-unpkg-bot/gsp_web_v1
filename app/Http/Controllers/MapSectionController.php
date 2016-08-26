@@ -21,7 +21,7 @@ class MapSectionController extends Controller
         'numSpots',
         'isHoursRestricted',
         'hoursPph',
-        'hoursData',
+        'hoursData', // TODO:NW about half the data, do this async
         'notes',
         'availabilityRating',
         'startLat',

@@ -39,6 +39,7 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                     this.sectionRendererService = sectionRendererService;
                     this.ref = ref;
                     this.formMarkersService = formMarkersService;
+                    this.mapMarkers = [];
                 }
                 ngOnInit() {
                     var self = this;
@@ -72,31 +73,125 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                     };
                     var self = this;
                     self.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-                    google.maps.event.addListener(this.map, 'tilesloaded', function () {
-                        var mapData = {
-                            minLat: self.map.getBounds().getSouthWest().lat(),
-                            maxLat: self.map.getBounds().getNorthEast().lat(),
-                            minLng: self.map.getBounds().getSouthWest().lng(),
-                            maxLng: self.map.getBounds().getNorthEast().lng(),
-                        };
-                        self.mapSectionService.loadSectionsForMap(mapData).then(sections => {
-                            self.loadedSections = sections;
-                            // TODO:NW figure out a consistent way to get response arrays as typed arrays in js
-                            self.loadedSections = self.loadedSections.map(function (obj) {
-                                let ms = new map_section_1.MapSection(obj.id);
-                                for (var key in obj) {
-                                    ms[key] = obj[key];
-                                }
-                                return ms;
-                            });
-                            self.renderSectionsForView();
-                        });
-                    });
-                    google.maps.event.addListener(this.map, 'dblclick', function (event) {
-                        self.formMarkersService.placeSectionMarker(event.latLng, self.map, self);
-                    });
+                    self.addMapListener('tilesloaded', self.handleTilesLoaded);
+                    self.addMapListener('dblclick', self.handleDoubleClick);
+                    self.addMapListener('zoom_changed', self.handleZoomChange);
                     self.addSearchBox();
                 }
+                addMapListener(eventName, handler) {
+                    let self = this;
+                    this.map.addListener(eventName, function (event) {
+                        handler(self, event);
+                    });
+                }
+                handleTilesLoaded(self, e) {
+                    let mapData = {
+                        minLat: self.map.getBounds().getSouthWest().lat(),
+                        maxLat: self.map.getBounds().getNorthEast().lat(),
+                        minLng: self.map.getBounds().getSouthWest().lng(),
+                        maxLng: self.map.getBounds().getNorthEast().lng(),
+                    };
+                    self.mapSectionService.loadSectionsForMap(mapData).then(sections => {
+                        self.loadedSections = sections;
+                        // TODO:NW figure out a consistent way to get response arrays as typed arrays in js
+                        self.loadedSections = self.loadedSections.map(function (obj) {
+                            let ms = new map_section_1.MapSection(obj.id);
+                            for (var key in obj) {
+                                ms[key] = obj[key];
+                            }
+                            return ms;
+                        });
+                        self.renderSectionsForView();
+                    });
+                }
+                handleDoubleClick(self, event) {
+                    self.formMarkersService.placeSectionMarker(event.latLng, self.map, self);
+                }
+                // called before renderSectionsForView on zoom change
+                handleZoomChange(self, event) {
+                    // alert(self.map.zoom);
+                    for (let i = 0; i < self.mapMarkers.length; i++) {
+                        if (self.map.zoom < 16) {
+                            self.mapMarkers[i].setMap(null);
+                        }
+                        else {
+                            self.mapMarkers[i].setMap(self.map);
+                        }
+                    }
+                    /* renderSectionsForView takes care of setting up markers
+                    for (let i=0; i < self.loadedSections.length; i++) {
+                      let section = self.loadedSections[i];
+                      let n = section.notes;
+                      let iconName = self.getIconForSection(section);
+                      if(iconName!=''){
+                        let marker = self.sectionRendererService.drawSectionInfoMarker(section, self.map, iconName);
+                        // add click addListener
+                        self.mapMarkers.push(marker);
+                      }
+                    } */
+                }
+                // called from handleTilesLoaded
+                renderSectionsForView() {
+                    let self = this;
+                    let sectionsArray = this.loadedSections;
+                    for (let i = 0; i < sectionsArray.length; i++) {
+                        let sectionPoints = google.maps.geometry.encoding.decodePath(sectionsArray[i].polyline);
+                        let color = map_section_1.MapSection.getTypeColor(sectionsArray[i]);
+                        let section = sectionsArray[i];
+                        // TODO:NW check the array, if already there don't re-render (maybe google smartly handles this already?)
+                        // also preserve markers
+                        let newSection = this.sectionRendererService.drawSection(sectionPoints, section.streetSide, color, this.map);
+                        // onclick show modal with edit form (TODO:NW only if logged in as admin)
+                        google.maps.event.addListener(newSection, 'click', function () {
+                            self.showModal("section-update-form", "Update Section", section);
+                            self.ref.detectChanges();
+                        });
+                        if (self.map.zoom < 16) {
+                            continue;
+                        }
+                        let iconName = self.getIconForSection(section);
+                        if (iconName != '') {
+                            let marker = this.sectionRendererService.drawSectionInfoMarker(section, this.map, iconName);
+                            // TODO:NW watchout if no marker rendered b/c of something off
+                            google.maps.event.addListener(marker, 'click', function () {
+                                self.showModal("section-info", "Parking Info", section);
+                                // TODO:NW how to set a complex set of data or display on change
+                                self.modalComponent.selectedSection.updateHoursHtml();
+                                /*
+                                // TODO:NW figure out why the zone has to be run like this for google events to show changes
+                                // and only appears the first time either of the next two things worked
+                                self.zone.run(() => {
+                                  console.log('marker clicked');
+                                });
+                                OR: ... */
+                                self.ref.detectChanges();
+                            });
+                            self.mapMarkers.push(marker);
+                        }
+                    }
+                }
+                showModal(componentName, title, section) {
+                    this.modalComponent.myModalIsVisible = true;
+                    this.modalComponent.componentName = "section-info";
+                    this.modalComponent.title = "Parking Info";
+                    this.modalComponent.selectedSection = section;
+                }
+                //return blank string if no icon
+                getIconForSection(section) {
+                    let iconName = '';
+                    let n = section.notes;
+                    if (section.isHoursRestricted == 1) {
+                        iconName = 'hours-icon.png';
+                        if (n != undefined && n != null && n != "") {
+                            iconName = 'infohours-icon.png';
+                        }
+                    }
+                    else if (n != undefined && n != null && n != "") {
+                        iconName = 'info-icon.png';
+                    }
+                    return iconName;
+                }
+                // from online example by google
                 addSearchBox() {
                     let self = this;
                     // Create the search box and link it to the UI element.
@@ -136,66 +231,6 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                             google.maps.event.removeListener(listener);
                         });
                     });
-                }
-                renderSectionsForView() {
-                    let self = this;
-                    let sectionsArray = this.loadedSections;
-                    for (let i = 0; i < sectionsArray.length; i++) {
-                        let sectionPoints = google.maps.geometry.encoding.decodePath(sectionsArray[i].polyline);
-                        let color = map_section_1.MapSection.getTypeColor(sectionsArray[i]);
-                        let newSection = this.sectionRendererService.drawSection(sectionPoints, sectionsArray[i].streetSide, color, this.map);
-                        // onclick show modal with edit form (TODO:NW only if logged in as admin)
-                        google.maps.event.addListener(newSection, 'click', function () {
-                            self.modalComponent.myModalIsVisible = true;
-                            self.modalComponent.componentName = "section-update-form";
-                            self.modalComponent.title = "Update Section";
-                            self.modalComponent.selectedSection = sectionsArray[i];
-                            self.ref.detectChanges();
-                        });
-                        // If has hours, no notes, show clock icon
-                        // If has hours and notes, show clock/info icon, one image merged
-                        // If has notes, no hours, show i icon
-                        let showMarker = false;
-                        let iconName = '';
-                        let n = sectionsArray[i].notes;
-                        if (sectionsArray[i].isHoursRestricted == 1) {
-                            showMarker = true;
-                            iconName = 'hours-icon.png';
-                            if (n != undefined && n != null && n != "") {
-                                iconName = 'infohours-icon.png';
-                            }
-                        }
-                        else if (n != undefined && n != null && n != "") {
-                            showMarker = true;
-                            iconName = 'info-icon.png';
-                        }
-                        if (showMarker) {
-                            let marker = this.sectionRendererService.drawSectionInfoMarker(sectionsArray[i], this.map, iconName);
-                            // TODO:NW watchout if no marker rendered b/c of something off
-                            google.maps.event.addListener(marker, 'click', function () {
-                                /*
-                                self.showSectionInfo();
-                                self.myModalIsVisible = true;
-                                //debugger;
-                                */
-                                self.modalComponent.myModalIsVisible = true;
-                                self.modalComponent.componentName = "section-info";
-                                self.modalComponent.title = "Parking Info";
-                                self.modalComponent.selectedSection = sectionsArray[i];
-                                // TODO:NW how to set a complex set of data or display on change
-                                self.modalComponent.selectedSection.updateHoursHtml();
-                                /*
-                                // TODO:NW figure out why the zone has to be run like this for google events to show changes
-                                // and only appears the first time
-                                // either of the next two things worked
-                      
-                                self.zone.run(() => {
-                                  console.log('marker clicked');
-                                }); */
-                                self.ref.detectChanges();
-                            });
-                        }
-                    }
                 }
             };
             __decorate([
