@@ -226,16 +226,20 @@ export class MapComponent implements OnInit {
             icon: AppSettings.APP_RELATIVE_URL+'/images/' + iconName,
             title: ''
         });
+        google.maps.event.addListener(marker, 'click', function() {
+          self.showModal("point-info","Map Point Info", point);
+          self.ref.detectChanges();
+        });
         self.pointMarkers.push(marker);
       }
     }
   }
 
-  private showModal(componentName:string, title:string, section:MapSection){
+  private showModal(componentName:string, title:string, model:any){
     this.modalComponent.myModalIsVisible=true;
     this.modalComponent.componentName=componentName;
     this.modalComponent.title=title;
-    this.modalComponent.selectedModel=section;
+    this.modalComponent.selectedModel=model;
   }
 
   //return blank string if no icon

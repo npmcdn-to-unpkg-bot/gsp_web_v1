@@ -10,6 +10,7 @@ import { ModalContainerComponent } from './components/modal-container';
 import { SectionUpdateFormComponent } from './components/section-update-form';
 import { PointUpdateFormComponent } from './components/point-update-form';
 import { SectionInfoComponent } from './components/section-info';
+import { PointInfoComponent } from './components/point-info';
 
 @NgModule({
   imports:      [ BrowserModule, HttpModule, FormsModule ],
@@ -20,7 +21,8 @@ import { SectionInfoComponent } from './components/section-info';
     ModalContainerComponent,
     SectionUpdateFormComponent,
     PointUpdateFormComponent,
-    SectionInfoComponent
+    SectionInfoComponent,
+    PointInfoComponent
   ],
   bootstrap:    [ AppComponent ]
 })

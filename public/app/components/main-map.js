@@ -224,15 +224,19 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                                 icon: app_settings_1.AppSettings.APP_RELATIVE_URL + '/images/' + iconName,
                                 title: ''
                             });
+                            google.maps.event.addListener(marker, 'click', function () {
+                                self.showModal("point-info", "Map Point Info", point);
+                                self.ref.detectChanges();
+                            });
                             self.pointMarkers.push(marker);
                         }
                     }
                 }
-                showModal(componentName, title, section) {
+                showModal(componentName, title, model) {
                     this.modalComponent.myModalIsVisible = true;
                     this.modalComponent.componentName = componentName;
                     this.modalComponent.title = title;
-                    this.modalComponent.selectedModel = section;
+                    this.modalComponent.selectedModel = model;
                 }
                 //return blank string if no icon
                 getIconForSection(section) {

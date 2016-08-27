@@ -18,6 +18,7 @@
                     </point-update-form>
                 </template>
                 <template ngSwitchCase="section-info"><section-info [model]="selectedModel"></section-info></template>
+                <template ngSwitchCase="point-info"><point-info [model]="selectedModel"></point-info></template>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" (click)="hideModalContainer()">Close</button>
