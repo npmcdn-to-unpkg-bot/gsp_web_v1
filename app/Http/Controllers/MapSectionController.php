@@ -100,6 +100,9 @@ class MapSectionController extends Controller
         );
 
         // cache already retrieved sections
+        if(isset($_POST['clearApiSession']) && $_POST['clearApiSession'] == 'true'){
+          session(['sectionsRetrieved' => [] ]);
+        }
         $existingSectionIds = session('sectionsRetrieved', []);
         $newSectionsIds = [];
         $returnSections = [];
