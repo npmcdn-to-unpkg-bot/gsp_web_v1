@@ -15,6 +15,7 @@ System.register(['../helpers/hours-formatter', '../app-settings'], function(expo
             class MapSection {
                 constructor(id) {
                     this.id = id;
+                    this.approved = 1;
                 }
                 // TODO:NW get from server. Figure out why static properties cannot be referenced here
                 static get PARKING_TYPES() {

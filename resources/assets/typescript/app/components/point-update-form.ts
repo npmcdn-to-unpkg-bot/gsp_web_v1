@@ -74,10 +74,12 @@ export class PointUpdateFormComponent implements OnInit {
     }
   }
 
-  onSubmit() { 
+  onSubmit() {
     this.submitted = true; 
-    this.model.lat = this.formMarkerService.mark1.position.lat();
-    this.model.lng = this.formMarkerService.mark1.position.lng();
+    if(this.model.id == -1){
+      this.model.lat = this.formMarkerService.mark1.position.lat();
+      this.model.lng = this.formMarkerService.mark1.position.lng();
+    }
     
     this.mapPointService.saveMapPoint(this.model).then(function(response){
        // for now we don't need the new id or anything from the response

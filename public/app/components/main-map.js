@@ -225,7 +225,7 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                                 title: ''
                             });
                             google.maps.event.addListener(marker, 'click', function () {
-                                self.showModal("point-info", "Map Point Info", point);
+                                self.showModal("point-update-form", "Edit Map Point", point);
                                 self.ref.detectChanges();
                             });
                             self.pointMarkers.push(marker);

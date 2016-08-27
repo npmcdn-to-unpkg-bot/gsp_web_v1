@@ -3,9 +3,9 @@ import { AppSettings } from '../app-settings';
 
 export class MapSection {
   
-  constructor(
-    public id: number
-  ) {  }
+  constructor(public id: number) {  
+    this.approved=1;
+  }
 
   hoursData: string;
   polyline: string;
@@ -19,6 +19,7 @@ export class MapSection {
   mainShortTermMin: number;
   mainPph:number;
   notes: string;
+  approved:number;
 
   // client side generated variables
   hoursHtml:string;

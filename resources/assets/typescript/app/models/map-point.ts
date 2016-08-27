@@ -2,9 +2,9 @@ import { AppSettings } from '../app-settings';
 
 export class MapPoint {
   
-  constructor(
-    public id: number
-  ) {  }
+  constructor(public id: number) {  
+    this.approved=1;
+  }
 
   pointTypeId: number;
   //streetSide: number;
@@ -18,9 +18,9 @@ export class MapPoint {
   availabilityRating: number;
   lat:number;
   lng:number;
+  approved:number;
   
   // 'submittedBy',
-  // 'approved',
   // 'updatedAt',
   // 'createdAt'
 

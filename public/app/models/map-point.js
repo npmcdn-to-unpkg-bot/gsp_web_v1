@@ -12,6 +12,8 @@ System.register(['../app-settings'], function(exports_1, context_1) {
             class MapPoint {
                 constructor(id) {
                     this.id = id;
+                    this.approved = 1;
+                    this.approved = 1;
                 }
                 // TODO:NW get from server. Figure out why static properties cannot be referenced here
                 static get POINT_TYPES() {
