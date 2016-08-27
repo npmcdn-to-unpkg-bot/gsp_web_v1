@@ -11,7 +11,7 @@ System.register(['@angular/core', '../app-settings'], function(exports_1, contex
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1, app_settings_1;
-    var SectionRendererService;
+    var SectionRendererHelper;
     return {
         setters:[
             function (core_1_1) {
@@ -21,8 +21,8 @@ System.register(['@angular/core', '../app-settings'], function(exports_1, contex
                 app_settings_1 = app_settings_1_1;
             }],
         execute: function() {
-            let SectionRendererService = class SectionRendererService {
-                drawSection(sectionPoints, streetSide, color, map) {
+            let SectionRendererHelper = class SectionRendererHelper {
+                static drawSection(sectionPoints, streetSide, color, map) {
                     let formPoly;
                     let svgPath = "";
                     if (streetSide != 0) {
@@ -82,7 +82,7 @@ System.register(['@angular/core', '../app-settings'], function(exports_1, contex
                     formPoly.setMap(map);
                     return formPoly;
                 }
-                drawSectionInfoMarker(section, map, iconName) {
+                static drawSectionInfoMarker(section, map, iconName) {
                     var sectionPoints = google.maps.geometry.encoding.decodePath(section.polyline);
                     if (!sectionPoints || sectionPoints.length == 0) {
                         console.log('Bogus polyline for sectio with id:' + section.id);
@@ -128,12 +128,12 @@ System.register(['@angular/core', '../app-settings'], function(exports_1, contex
                     return marker;
                 }
             };
-            SectionRendererService = __decorate([
+            SectionRendererHelper = __decorate([
                 // TODO:NW get types?? typings install google.maps --global
                 core_1.Injectable(), 
                 __metadata('design:paramtypes', [])
-            ], SectionRendererService);
-            exports_1("SectionRendererService", SectionRendererService);
+            ], SectionRendererHelper);
+            exports_1("SectionRendererHelper", SectionRendererHelper);
         }
     }
 });

@@ -1,4 +1,4 @@
-System.register(['@angular/core', '../components/modal-container', '../models/map-section', '../models/map-point', '../services/map-section', '../services/map-point', '../helpers/section-renderer', '../services/form-markers'], function(exports_1, context_1) {
+System.register(['@angular/core', '../components/modal-container', '../models/map-section', '../models/map-point', '../services/map-section', '../services/map-point', '../helpers/section-renderer', '../services/form-markers', '../app-settings'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, modal_container_1, map_section_1, map_point_1, map_section_2, map_point_2, section_renderer_1, form_markers_1;
+    var core_1, modal_container_1, map_section_1, map_point_1, map_section_2, map_point_2, section_renderer_1, form_markers_1, app_settings_1;
     var MapComponent;
     return {
         setters:[
@@ -37,13 +37,15 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
             },
             function (form_markers_1_1) {
                 form_markers_1 = form_markers_1_1;
+            },
+            function (app_settings_1_1) {
+                app_settings_1 = app_settings_1_1;
             }],
         execute: function() {
             let MapComponent = class MapComponent {
-                constructor(mapSectionService, mapPointsService, sectionRendererService, ref, formMarkersService) {
+                constructor(mapSectionService, mapPointsService, ref, formMarkersService) {
                     this.mapSectionService = mapSectionService;
                     this.mapPointsService = mapPointsService;
-                    this.sectionRendererService = sectionRendererService;
                     this.ref = ref;
                     this.formMarkersService = formMarkersService;
                     this.Markers = [];
@@ -113,9 +115,9 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                         self.renderSectionsForView();
                     });
                     self.mapPointsService.loadPointsForMap(mapData).then(points => {
-                        self.pointMarkers = points;
+                        self.loadedPoints = points;
                         // TODO:NW figure out a consistent way to get response arrays as typed arrays in js
-                        self.pointMarkers = self.pointMarkers.map(function (obj) {
+                        self.loadedPoints = self.loadedPoints.map(function (obj) {
                             let mp = new map_point_1.MapPoint(obj.id);
                             for (var key in obj) {
                                 mp[key] = obj[key];
@@ -133,10 +135,24 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                     // alert(self.map.zoom);
                     for (let i = 0; i < self.infoMarkers.length; i++) {
                         if (self.map.zoom < 16) {
-                            self.infoMarkers[i].setMap(null);
+                            // TODO:NW figure out why array has weird other members
+                            if (self.infoMarkers[i].setMap)
+                                self.infoMarkers[i].setMap(null);
                         }
                         else {
-                            self.infoMarkers[i].setMap(self.map);
+                            if (self.infoMarkers[i].setMap)
+                                self.infoMarkers[i].setMap(self.map);
+                        }
+                    }
+                    for (let i = 0; i < self.pointMarkers.length; i++) {
+                        if (self.map.zoom < 16) {
+                            // TODO:NW figure out why array has weird other members
+                            if (self.pointMarkers[i].setMap)
+                                self.pointMarkers[i].setMap(null);
+                        }
+                        else {
+                            if (self.pointMarkers[i].setMap)
+                                self.pointMarkers[i].setMap(self.map);
                         }
                     }
                     /* renderSectionsForView takes care of setting up markers
@@ -161,7 +177,7 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                         let section = sectionsArray[i];
                         // TODO:NW check the array, if already there don't re-render (maybe google smartly handles this already?)
                         // also preserve markers
-                        let newSection = this.sectionRendererService.drawSection(sectionPoints, section.streetSide, color, this.map);
+                        let newSection = section_renderer_1.SectionRendererHelper.drawSection(sectionPoints, section.streetSide, color, this.map);
                         // onclick show modal with edit form (TODO:NW only if logged in as admin)
                         google.maps.event.addListener(newSection, 'click', function () {
                             self.showModal("section-update-form", "Update Section", section);
@@ -172,7 +188,7 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                         }
                         let iconName = self.getIconForSection(section);
                         if (iconName != '') {
-                            let marker = this.sectionRendererService.drawSectionInfoMarker(section, this.map, iconName);
+                            let marker = section_renderer_1.SectionRendererHelper.drawSectionInfoMarker(section, this.map, iconName);
                             // TODO:NW watchout if no marker rendered b/c of something off
                             google.maps.event.addListener(marker, 'click', function () {
                                 self.showModal("section-info", "Parking Info", section);
@@ -193,6 +209,24 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                 }
                 // called from handleTilesLoaded
                 renderPointsForView() {
+                    let self = this;
+                    for (let i = 0; i < this.loadedPoints.length; i++) {
+                        let point = this.loadedPoints[i];
+                        if (self.map.zoom < 16) {
+                            continue;
+                        }
+                        let iconName = map_point_1.MapPoint.getTypeIcon(point);
+                        if (iconName != '') {
+                            let latLng = new google.maps.LatLng(point.lat, point.lng);
+                            let marker = new google.maps.Marker({
+                                position: latLng,
+                                map: self.map,
+                                icon: app_settings_1.AppSettings.APP_RELATIVE_URL + '/images/' + iconName,
+                                title: ''
+                            });
+                            self.pointMarkers.push(marker);
+                        }
+                    }
                 }
                 showModal(componentName, title, section) {
                     this.modalComponent.myModalIsVisible = true;
@@ -267,9 +301,9 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                     selector: 'my-map',
                     template: '<div id="map-canvas"></div><modal-container></modal-container>\
     <input id="search-input" class="controls" type="text" placeholder="Search">',
-                    providers: [map_section_2.MapSectionService, map_point_2.MapPointService, section_renderer_1.SectionRendererService, form_markers_1.FormMarkers]
+                    providers: [map_section_2.MapSectionService, map_point_2.MapPointService, form_markers_1.FormMarkers]
                 }), 
-                __metadata('design:paramtypes', [map_section_2.MapSectionService, map_point_2.MapPointService, section_renderer_1.SectionRendererService, core_1.ChangeDetectorRef, form_markers_1.FormMarkers])
+                __metadata('design:paramtypes', [map_section_2.MapSectionService, map_point_2.MapPointService, core_1.ChangeDetectorRef, form_markers_1.FormMarkers])
             ], MapComponent);
             exports_1("MapComponent", MapComponent);
         }

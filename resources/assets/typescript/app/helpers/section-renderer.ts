@@ -6,11 +6,11 @@ declare var google: any; // TODO:NW get types?? typings install google.maps --gl
 
 @Injectable()
 
-export class SectionRendererService {
+export class SectionRendererHelper {
 
   infoMarkerClickHandler: Function;
 
-  drawSection(sectionPoints:string, streetSide:number, color:string, map:any){
+  static drawSection(sectionPoints:string, streetSide:number, color:string, map:any){
     let formPoly:any; 
     let svgPath:string = "";
     if(streetSide != 0){
@@ -71,7 +71,7 @@ export class SectionRendererService {
     return formPoly;
   }
 
-  drawSectionInfoMarker(section:MapSection, map:any, iconName){
+  static drawSectionInfoMarker(section:MapSection, map:any, iconName){
     var sectionPoints = google.maps.geometry.encoding.decodePath(section.polyline);
     if(!sectionPoints || sectionPoints.length == 0){
       console.log('Bogus polyline for sectio with id:'+section.id);

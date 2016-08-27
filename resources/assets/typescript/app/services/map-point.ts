@@ -32,7 +32,7 @@ export class MapPointService {
 
     return this.http.post(url, transformRequest(mapData), {headers: headers})
      .toPromise()
-     .then(response => response.json().sections)
+     .then(response => response.json().points)
      .catch(this.handleError);
   }
 

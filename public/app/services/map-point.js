@@ -47,7 +47,7 @@ System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'
                     // return this.http.post(url, JSON.stringify(mapData), {headers: headers})
                     return this.http.post(url, transformRequest(mapData), { headers: headers })
                         .toPromise()
-                        .then(response => response.json().sections)
+                        .then(response => response.json().points)
                         .catch(this.handleError);
                 }
                 saveMapPoint(point) {

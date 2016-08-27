@@ -4,8 +4,9 @@ import { MapSection } from '../models/map-section';
 import { MapPoint } from '../models/map-point';
 import { MapSectionService } from '../services/map-section';
 import { MapPointService } from '../services/map-point';
-import { SectionRendererService } from '../helpers/section-renderer';
+import { SectionRendererHelper } from '../helpers/section-renderer';
 import { FormMarkers } from '../services/form-markers';
+import { AppSettings } from '../app-settings';
 
 declare var google: any;  // TODO:NW get types?? typings install google.maps --global
 
@@ -13,12 +14,13 @@ declare var google: any;  // TODO:NW get types?? typings install google.maps --g
   selector: 'my-map',
   template: '<div id="map-canvas"></div><modal-container></modal-container>\
     <input id="search-input" class="controls" type="text" placeholder="Search">',
-  providers: [ MapSectionService, MapPointService, SectionRendererService, FormMarkers ]
+  providers: [ MapSectionService, MapPointService, FormMarkers ]
 })
 
 export class MapComponent implements OnInit {
 
   loadedSections:MapSection[];
+  loadedPoints:MapPoint[];
   myModalIsVisible:boolean;
   map:any;
   @ViewChild(ModalContainerComponent)
@@ -29,7 +31,6 @@ export class MapComponent implements OnInit {
 
   constructor(private mapSectionService: MapSectionService, 
     private mapPointsService:MapPointService,
-    private sectionRendererService:SectionRendererService,
     private ref:ChangeDetectorRef,
     private formMarkersService: FormMarkers
   ) { }
@@ -102,9 +103,9 @@ export class MapComponent implements OnInit {
     });
 
     self.mapPointsService.loadPointsForMap(mapData).then(points => {
-      self.pointMarkers = points;
+      self.loadedPoints = points;
       // TODO:NW figure out a consistent way to get response arrays as typed arrays in js
-      self.pointMarkers=self.pointMarkers.map(function(obj){
+      self.loadedPoints=self.loadedPoints.map(function(obj){
         let mp:MapPoint = new MapPoint(obj.id);
         for (var key in obj) {
           mp[key] = obj[key];
@@ -125,9 +126,23 @@ export class MapComponent implements OnInit {
     
     for (let i=0; i < self.infoMarkers.length; i++) {
       if(self.map.zoom < 16){
-        self.infoMarkers[i].setMap(null);
+        // TODO:NW figure out why array has weird other members
+        if(self.infoMarkers[i].setMap)
+          self.infoMarkers[i].setMap(null);
       } else{
-        self.infoMarkers[i].setMap(self.map);
+        if(self.infoMarkers[i].setMap)
+          self.infoMarkers[i].setMap(self.map);
+      } 
+    }
+
+    for (let i=0; i < self.pointMarkers.length; i++) {
+      if(self.map.zoom < 16){
+        // TODO:NW figure out why array has weird other members
+        if(self.pointMarkers[i].setMap)
+          self.pointMarkers[i].setMap(null);
+      } else{
+        if(self.pointMarkers[i].setMap)
+          self.pointMarkers[i].setMap(self.map);
       } 
     }
 
@@ -155,7 +170,7 @@ export class MapComponent implements OnInit {
       
       // TODO:NW check the array, if already there don't re-render (maybe google smartly handles this already?)
       // also preserve markers
-      let newSection = this.sectionRendererService.drawSection(sectionPoints, section.streetSide, color, this.map);
+      let newSection = SectionRendererHelper.drawSection(sectionPoints, section.streetSide, color, this.map);
       
       // onclick show modal with edit form (TODO:NW only if logged in as admin)
       google.maps.event.addListener(newSection, 'click', function() {
@@ -169,7 +184,7 @@ export class MapComponent implements OnInit {
 
       let iconName = self.getIconForSection(section);
       if(iconName!=''){
-        let marker = this.sectionRendererService.drawSectionInfoMarker(section, this.map, iconName);
+        let marker = SectionRendererHelper.drawSectionInfoMarker(section, this.map, iconName);
         // TODO:NW watchout if no marker rendered b/c of something off
         google.maps.event.addListener(marker, 'click', function() {
           self.showModal("section-info","Parking Info", section);
@@ -193,7 +208,27 @@ export class MapComponent implements OnInit {
 
   // called from handleTilesLoaded
   private renderPointsForView(){
+    let self = this;
+    for (let i=0; i < this.loadedPoints.length; i++) {
+      let point = this.loadedPoints[i];
+      
+      if(self.map.zoom < 16){
+        continue;
+      }
 
+
+      let iconName = MapPoint.getTypeIcon(point);
+      if(iconName!=''){
+        let latLng = new google.maps.LatLng(point.lat, point.lng);
+        let marker = new google.maps.Marker({
+            position: latLng,
+            map: self.map,
+            icon: AppSettings.APP_RELATIVE_URL+'/images/' + iconName,
+            title: ''
+        });
+        self.pointMarkers.push(marker);
+      }
+    }
   }
 
   private showModal(componentName:string, title:string, section:MapSection){
