@@ -12,6 +12,8 @@
 */
 
 Route::get('/', function () {
+    // TODO:NW move into a controller and don't use welcome view
+    session(['sectionsRetrieved' => []]); // reset map section cache on page reload
     return view('welcome');
 });
 

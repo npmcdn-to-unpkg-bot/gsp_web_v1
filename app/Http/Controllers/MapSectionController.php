@@ -99,9 +99,23 @@ class MapSectionController extends Controller
             ['minLat'=>$minLat,'minLng'=>$minLng,'maxLat'=>$maxLat,'maxLng'=>$maxLng]
         );
 
+        // cache already retrieved sections
+        $existingSectionIds = session('sectionsRetrieved', []);
+        $newSectionsIds = [];
+        $returnSections = [];
+        //session(['sectionsRetrieved' => []]);
+        //var_dump($existingSectionIds);
+        foreach($sections as $s){
+            if(!in_array($s->id, $existingSectionIds)){
+                $returnSections[] = $s;
+                $existingSectionIds[] = $s->id;
+            }
+            
+            session(['sectionsRetrieved' => $existingSectionIds]);
+        }
         return Response::json([
             'error' => false,
-            'sections' => $sections
+            'sections' => $returnSections
         ]);
         /*
         if(count($results) > 0)
