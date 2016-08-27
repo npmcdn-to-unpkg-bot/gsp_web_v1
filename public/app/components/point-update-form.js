@@ -101,7 +101,6 @@ System.register(['@angular/core', '../models/map-point', '../models/map-section'
                         this.model.lat = this.formMarkerService.mark1.position.lat();
                         this.model.lng = this.formMarkerService.mark1.position.lng();
                     }
-                    debugger;
                     this.mapPointService.saveMapPoint(this.model).then(function (response) {
                         // for now we don't need the new id or anything from the response
                     });

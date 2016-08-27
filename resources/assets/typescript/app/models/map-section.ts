@@ -23,7 +23,8 @@ export class MapSection {
 
   // client side generated variables
   hoursHtml:string;
-  hoursType:string; // only client side for now
+  hoursType:string;
+  hoursCustom:string;
   newPolyline:boolean;
 
   // TODO:NW get from server. Figure out why static properties cannot be referenced here

@@ -134,7 +134,7 @@ class MapSectionController extends Controller
        
         foreach ($sectionAtts as $key => $value) {
             // client side atts, ignore
-            if($key != 'newPolyline' && $key != 'hoursHtml' && $key != 'id' && $key != 'hoursType'){
+            if($key != 'newPolyline' && $key != 'hoursHtml' && $key != 'hoursCustom' && $key != 'id' && $key != 'hoursType'){
                 $ms[snake_case($key)] = $value;
             }
         }
@@ -148,6 +148,9 @@ class MapSectionController extends Controller
         // for now, hard code hours
         if(isset($sectionAtts['hoursType']) && $sectionAtts['hoursType']){
             $ms['hours_data'] = $this->getHoursTypeData($sectionAtts['hoursType']);
+            $ms['is_hours_restricted']=1;
+        } else if(isset($sectionAtts['hoursCustom']) && $sectionAtts['hoursCustom']){
+            $ms['hours_data'] = $sectionAtts['hoursCustom'];
             $ms['is_hours_restricted']=1;
         }
         
