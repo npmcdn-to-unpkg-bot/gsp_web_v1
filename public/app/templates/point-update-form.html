@@ -11,18 +11,6 @@
   <div [hidden]="submitted">
     <form *ngIf="active" (ngSubmit)="onSubmit()" #pointForm="ngForm">
       <div>
-        <label for="mainParkingTypeId">Parking</label>
-        <select id="mainParkingTypeId"
-                required
-                [(ngModel)]="model.mainParkingTypeId" name="mainParkingTypeId" 
-                #mainParkingTypeId="ngModel" >
-          <option *ngFor="let type of pkTypes" [value]="type.id">{{type.name}}</option>
-        </select>
-        <div [hidden]="mainParkingTypeId.valid || mainParkingTypeId.pristine" 
-             class="alert alert-danger">
-          Parking Type is required
-        </div>
-
         <label for="pointTypeId">Point</label>
         <select id="pointTypeId"
                 required

@@ -56,7 +56,7 @@ export class MapSection {
         return '#000000';
   }
 
-  updateHoursHtml():void{
+  public updateHoursHtml():void{
      let hf = new HoursFormatter();
      this.hoursHtml = hf.hoursTable(this);
   }

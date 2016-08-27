@@ -19,8 +19,8 @@ declare var google: any;  // TODO:NW get types?? typings install google.maps --g
 
 export class MapComponent implements OnInit {
 
-  loadedSections:MapSection[];
-  loadedPoints:MapPoint[];
+  loadedSections:MapSection[] = [];
+  loadedPoints:MapPoint[] = [];
   myModalIsVisible:boolean;
   map:any;
   @ViewChild(ModalContainerComponent)
@@ -90,16 +90,16 @@ export class MapComponent implements OnInit {
     };
     
     self.mapSectionService.loadSectionsForMap(mapData).then(sections => {
-      self.loadedSections = sections;
       // TODO:NW figure out a consistent way to get response arrays as typed arrays in js
-      self.loadedSections=self.loadedSections.map(function(obj){
+      sections=sections.map(function(obj){
         let ms:MapSection = new MapSection(obj.id);
         for (var key in obj) {
           ms[key] = obj[key];
         }
         return ms;
       });
-      self.renderSectionsForView();
+      self.loadedSections = self.loadedSections.concat(sections); // append don't overwrite
+      self.renderSectionsForView(sections);
     });
 
     self.mapPointsService.loadPointsForMap(mapData).then(points => {
@@ -145,28 +145,15 @@ export class MapComponent implements OnInit {
           self.pointMarkers[i].setMap(self.map);
       } 
     }
-
-    /* renderSectionsForView takes care of setting up markers
-    for (let i=0; i < self.loadedSections.length; i++) {
-      let section = self.loadedSections[i];
-      let n = section.notes;
-      let iconName = self.getIconForSection(section);
-      if(iconName!=''){
-        let marker = self.sectionRendererService.drawSectionInfoMarker(section, self.map, iconName);
-        // add click addListener
-        self.infoMarkers.push(marker);
-      }
-    } */
   }
 
   // called from handleTilesLoaded
-  private renderSectionsForView(){
+  private renderSectionsForView(sections:MapSection[]){
     let self = this;
-    let sectionsArray = this.loadedSections;
-    for (let i=0; i < sectionsArray.length; i++) {
-      let sectionPoints = google.maps.geometry.encoding.decodePath(sectionsArray[i].polyline);
-      let color = MapSection.getTypeColor(sectionsArray[i]);
-      let section = sectionsArray[i];
+    for (let i=0; i < sections.length; i++) {
+      let sectionPoints = google.maps.geometry.encoding.decodePath(sections[i].polyline);
+      let color = MapSection.getTypeColor(sections[i]);
+      let section = sections[i];
       
       // TODO:NW check the array, if already there don't re-render (maybe google smartly handles this already?)
       // also preserve markers
@@ -178,18 +165,13 @@ export class MapComponent implements OnInit {
         self.ref.detectChanges();
       });
 
-      if(self.map.zoom < 16){
-        continue;
-      }
-
       let iconName = self.getIconForSection(section);
       if(iconName!=''){
         let marker = SectionRendererHelper.drawSectionInfoMarker(section, this.map, iconName);
         // TODO:NW watchout if no marker rendered b/c of something off
         google.maps.event.addListener(marker, 'click', function() {
+          section.updateHoursHtml();
           self.showModal("section-info","Parking Info", section);
-          // TODO:NW how to set a complex set of data or display on change
-          self.modalComponent.selectedModel.updateHoursHtml();
           
           /*
           // TODO:NW figure out why the zone has to be run like this for google events to show changes
@@ -200,7 +182,9 @@ export class MapComponent implements OnInit {
           OR: ... */
           self.ref.detectChanges();
         });
-
+        if(self.map.zoom < 16){
+          marker.setMap(null); // hide if zoomed out too far
+        }
         self.infoMarkers.push(marker);
       }
     }
