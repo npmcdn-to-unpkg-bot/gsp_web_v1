@@ -11,7 +11,7 @@ System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1, http_1, app_settings_1;
-    var MapSectionService;
+    var MapPointService;
     return {
         setters:[
             function (core_1_1) {
@@ -25,14 +25,14 @@ System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'
                 app_settings_1 = app_settings_1_1;
             }],
         execute: function() {
-            let MapSectionService = class MapSectionService {
+            let MapPointService = class MapPointService {
                 constructor(http) {
                     this.http = http;
-                    this.gspApiUrl = app_settings_1.AppSettings.APP_URL + '/mapSection'; // URL to web api
+                    this.gspApiUrl = app_settings_1.AppSettings.APP_URL + '/mapPoint'; // URL to web api
                 }
-                loadSectionsForMap(mapData) {
+                loadPointsForMap(mapData) {
                     //let url = `${this.heroesUrl}/${hero.id}`;
-                    let url = this.gspApiUrl + '/loadSectionsForMap';
+                    let url = this.gspApiUrl + '/loadPointsForMap';
                     // TODO:NW make api  in laravel with support for json packaged data
                     //let headers = new Headers({'Content-Type': 'application/json'});
                     // temporary 
@@ -50,16 +50,16 @@ System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'
                         .then(response => response.json().sections)
                         .catch(this.handleError);
                 }
-                saveMapSection(section) {
+                saveMapPoint(point) {
                     let headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-                    let body = JSON.stringify(section);
-                    return this.http.put(this.gspApiUrl + '/' + section.id, body, headers)
+                    let body = JSON.stringify(point);
+                    return this.http.put(this.gspApiUrl + '/' + point.id, body, headers)
                         .toPromise()
                         .then(response => response.json().section)
                         .catch(this.handleError);
                 }
-                deleteMapSection(sectionId) {
-                    return this.http.delete(this.gspApiUrl + '/' + sectionId)
+                deleteMapPoint(pointId) {
+                    return this.http.delete(this.gspApiUrl + '/' + pointId)
                         .toPromise()
                         .then(response => response)
                         .catch(this.handleError);
@@ -70,11 +70,11 @@ System.register(['@angular/core', '@angular/http', 'rxjs/add/operator/toPromise'
                     return Promise.reject(error.message || error);
                 }
             };
-            MapSectionService = __decorate([
+            MapPointService = __decorate([
                 core_1.Injectable(), 
                 __metadata('design:paramtypes', [http_1.Http])
-            ], MapSectionService);
-            exports_1("MapSectionService", MapSectionService);
+            ], MapPointService);
+            exports_1("MapPointService", MapPointService);
         }
     }
 });

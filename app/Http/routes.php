@@ -16,8 +16,10 @@ Route::get('/', function () {
 });
 
 Route::resource('mapSection', 'MapSectionController');
-
 Route::post('mapSection/loadSectionsForMap', 'MapSectionController@loadSectionsForMap');
+
+Route::resource('mapPoint', 'MapPointController');
+Route::post('mapPoint/loadPointsForMap', 'MapPointController@loadPointsForMap');
 
 Route::group(['middleware' => 'cors'], function(){
     Route::get('mapSection', 'MapSectionController@loadSectionsIndex');

@@ -86,7 +86,6 @@ CREATE TABLE map_section (
     main_short_term_min int DEFAULT NULL,
     num_spots int DEFAULT NULL,
     is_hours_restricted TINYINT(1) NOT NULL DEFAULT 0,
-    hours_pph DECIMAL(5,2) UNSIGNED DEFAULT NULL,
     hours_data VARCHAR(2500) DEFAULT NULL,
     notes VARCHAR(255) DEFAULT NULL,
     availability_rating TINYINT(1) DEFAULT NULL,

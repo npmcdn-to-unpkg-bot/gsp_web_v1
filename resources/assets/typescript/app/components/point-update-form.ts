@@ -3,7 +3,7 @@ import { MapPoint } from '../models/map-point';
 import { MapSection } from '../models/map-section';
 import { SectionHours } from '../models/section-hours';
 import { AppSettings } from '../app-settings';
-import { MapSectionService } from '../services/map-section';
+import { MapPointService } from '../services/map-point';
 // shared service with parent view for component interactions
 import { FormMarkers } from '../services/form-markers';
 
@@ -12,15 +12,14 @@ import { FormMarkers } from '../services/form-markers';
 @Component({
   selector: 'point-update-form',
   templateUrl:  AppSettings.APP_RELATIVE_URL + '/app/templates/point-update-form.html',
-  // TODO:NW figure out how you DO NOT 'inject' the FormMarkersService to share data
-  providers: [ MapSectionService] 
+  providers: [ MapPointService] 
   //pipes : [ NameForPtypeIdPipe ]
 })
 
 export class PointUpdateFormComponent implements OnInit { 
 
   constructor(
-    private mapSectionService:MapSectionService,
+    private mapPointService:MapPointService,
     private formMarkerService:FormMarkers
   ){}
 
@@ -28,7 +27,8 @@ export class PointUpdateFormComponent implements OnInit {
   @Output() onDeleteComplete = new EventEmitter();
 
   pTimes = [];
-  pTypes = [];
+  pkTypes = [];
+  ptTypes = [];
   hoursTypes=[];
 
   //model = new MapSection(1); // set from parent on selection
@@ -40,9 +40,14 @@ export class PointUpdateFormComponent implements OnInit {
   // then when this is rendered (after the data model has been set) the ngOnInit will overwrite
   // Use constructor instead of ngOnInit? Use event queue? 
   ngOnInit(){
-    let ptDef = MapSection.PARKING_TYPES;
+    let pkDef = MapSection.PARKING_TYPES;
+    for(var ptId in pkDef) {
+      this.pkTypes.push(pkDef[ptId]);
+    }
+
+    let ptDef = MapPoint.POINT_TYPES;
     for(var ptId in ptDef) {
-      this.pTypes.push(ptDef[ptId]);
+      this.ptTypes.push(ptDef[ptId]);
     }
 
     let times = [0,5,10,15,30,60,90,120,150,180,210,240,270,300,330,360,390,420,450,480];
@@ -74,15 +79,15 @@ export class PointUpdateFormComponent implements OnInit {
     this.model.lat = this.formMarkerService.mark1.position.lat();
     this.model.lng = this.formMarkerService.mark1.position.lng();
     
-    //this.mapSectionService.saveMapSection(this.model).then(function(response){
+    this.mapPointService.saveMapPoint(this.model).then(function(response){
        // for now we don't need the new id or anything from the response
-    //});
+    });
   }
 
   deletePoint(){
     this.submitted = true;
     let self=this;
-    this.mapSectionService.deleteMapSection(this.model.id).then(function(response){
+    this.mapPointService.deleteMapPoint(this.model.id).then(function(response){
       // for now we don't need the new id or anything from the response
       let testMessage='hi'
       self.onDeleteComplete.emit(testMessage);

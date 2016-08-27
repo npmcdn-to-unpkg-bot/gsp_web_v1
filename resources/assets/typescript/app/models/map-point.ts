@@ -6,7 +6,8 @@ export class MapPoint {
     public id: number
   ) {  }
 
-  streetSide: number;
+  pointTypeId: number;
+  //streetSide: number;
   mainParkingTypeId: number;
   numSpots: number;
   mainPph:number;
@@ -40,24 +41,14 @@ export class MapPoint {
  }
 
  public static getTypeIcon(point:MapPoint){
-   /*
-    if(section.mainParkingTypeId == AppSettings.POINT_TYPE_FREE && section.isHoursRestricted == 0 && (!section.mainShortTermMin ||  section.mainShortTermMin == 0))
-        return '#00ff00';
-    if(section.mainParkingTypeId == AppSettings.POINT_TYPE_NO_PARKING)
-        return '#ff0000';
-    if(section.mainParkingTypeId == AppSettings.POINT_TYPE_PAID && section.isHoursRestricted == 0)
-        return '#ffff00';
-    if(section.mainParkingTypeId == AppSettings.POINT_TYPE_PAID)
-        return '#ffa500';
-    if(section.mainParkingTypeId == AppSettings.POINT_TYPE_PERMIT)
-        return '#993366';
-    if(section.mainParkingTypeId == AppSettings.POINT_TYPE_FREE && section.isHoursRestricted == 1)
-        return '#0000ff';
-    if(section.mainParkingTypeId == AppSettings.POINT_TYPE_FREE && section.mainShortTermMin)
-        return '#0000ff';
-    else
-        return '#000000';
-      */
+   
+    if(point.pointTypeId == AppSettings.POINT_TYPE_MC) return 'mc-icon.png';
+    if(point.pointTypeId == AppSettings.POINT_TYPE_HC) return 'hc-icon.png';
+    if(point.pointTypeId == AppSettings.POINT_TYPE_LOADING) return 'loading-icon.png';
+    if(point.pointTypeId == AppSettings.POINT_TYPE_ELEC) return 'elec-icon.png';
+    if(point.pointTypeId == AppSettings.POINT_TYPE_FREIGHT) return 'freight-icon.png';
+    if(point.pointTypeId == AppSettings.POINT_TYPE_MISC) return 'misc-icon.png';
+    return '';
   }
 
 }

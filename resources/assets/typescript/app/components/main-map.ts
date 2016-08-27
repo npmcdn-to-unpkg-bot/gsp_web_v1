@@ -1,7 +1,9 @@
 import { Component, ChangeDetectorRef, OnInit, ViewChild } from '@angular/core';
 import { ModalContainerComponent } from '../components/modal-container';
 import { MapSection } from '../models/map-section';
+import { MapPoint } from '../models/map-point';
 import { MapSectionService } from '../services/map-section';
+import { MapPointService } from '../services/map-point';
 import { SectionRendererService } from '../helpers/section-renderer';
 import { FormMarkers } from '../services/form-markers';
 
@@ -11,7 +13,7 @@ declare var google: any;  // TODO:NW get types?? typings install google.maps --g
   selector: 'my-map',
   template: '<div id="map-canvas"></div><modal-container></modal-container>\
     <input id="search-input" class="controls" type="text" placeholder="Search">',
-  providers: [ MapSectionService, SectionRendererService, FormMarkers ]
+  providers: [ MapSectionService, MapPointService, SectionRendererService, FormMarkers ]
 })
 
 export class MapComponent implements OnInit {
@@ -21,9 +23,12 @@ export class MapComponent implements OnInit {
   map:any;
   @ViewChild(ModalContainerComponent)
   modalComponent: ModalContainerComponent;
-  mapMarkers:any[] = [];
+  Markers:any[] = [];
+  infoMarkers:any[] = [];
+  pointMarkers:any[] = [];
 
   constructor(private mapSectionService: MapSectionService, 
+    private mapPointsService:MapPointService,
     private sectionRendererService:SectionRendererService,
     private ref:ChangeDetectorRef,
     private formMarkersService: FormMarkers
@@ -95,6 +100,19 @@ export class MapComponent implements OnInit {
       });
       self.renderSectionsForView();
     });
+
+    self.mapPointsService.loadPointsForMap(mapData).then(points => {
+      self.pointMarkers = points;
+      // TODO:NW figure out a consistent way to get response arrays as typed arrays in js
+      self.pointMarkers=self.pointMarkers.map(function(obj){
+        let mp:MapPoint = new MapPoint(obj.id);
+        for (var key in obj) {
+          mp[key] = obj[key];
+        }
+        return mp;
+      });
+      self.renderPointsForView();
+    });
   }
 
   handleDoubleClick(self,event){
@@ -105,11 +123,11 @@ export class MapComponent implements OnInit {
   handleZoomChange(self, event){
     // alert(self.map.zoom);
     
-    for (let i=0; i < self.mapMarkers.length; i++) {
+    for (let i=0; i < self.infoMarkers.length; i++) {
       if(self.map.zoom < 16){
-        self.mapMarkers[i].setMap(null);
+        self.infoMarkers[i].setMap(null);
       } else{
-        self.mapMarkers[i].setMap(self.map);
+        self.infoMarkers[i].setMap(self.map);
       } 
     }
 
@@ -121,7 +139,7 @@ export class MapComponent implements OnInit {
       if(iconName!=''){
         let marker = self.sectionRendererService.drawSectionInfoMarker(section, self.map, iconName);
         // add click addListener
-        self.mapMarkers.push(marker);
+        self.infoMarkers.push(marker);
       }
     } */
   }
@@ -168,9 +186,14 @@ export class MapComponent implements OnInit {
           self.ref.detectChanges();
         });
 
-        self.mapMarkers.push(marker);
+        self.infoMarkers.push(marker);
       }
     }
+  }
+
+  // called from handleTilesLoaded
+  private renderPointsForView(){
+
   }
 
   private showModal(componentName:string, title:string, section:MapSection){

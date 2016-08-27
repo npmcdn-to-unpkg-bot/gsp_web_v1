@@ -1,4 +1,4 @@
-System.register(['@angular/core', '../models/map-point', '../models/map-section', '../models/section-hours', '../app-settings', '../services/map-section', '../services/form-markers'], function(exports_1, context_1) {
+System.register(['@angular/core', '../models/map-point', '../models/map-section', '../models/section-hours', '../app-settings', '../services/map-point', '../services/form-markers'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', '../models/map-point', '../models/map-section'
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, map_point_1, map_section_1, section_hours_1, app_settings_1, map_section_2, form_markers_1;
+    var core_1, map_point_1, map_section_1, section_hours_1, app_settings_1, map_point_2, form_markers_1;
     var PointUpdateFormComponent;
     return {
         setters:[
@@ -29,8 +29,8 @@ System.register(['@angular/core', '../models/map-point', '../models/map-section'
             function (app_settings_1_1) {
                 app_settings_1 = app_settings_1_1;
             },
-            function (map_section_2_1) {
-                map_section_2 = map_section_2_1;
+            function (map_point_2_1) {
+                map_point_2 = map_point_2_1;
             },
             function (form_markers_1_1) {
                 form_markers_1 = form_markers_1_1;
@@ -38,12 +38,13 @@ System.register(['@angular/core', '../models/map-point', '../models/map-section'
         execute: function() {
             //import { NameForPtypeIdPipe } from './name-for-p-type-id.pipe'; // import pipe here
             let PointUpdateFormComponent = class PointUpdateFormComponent {
-                constructor(mapSectionService, formMarkerService) {
-                    this.mapSectionService = mapSectionService;
+                constructor(mapPointService, formMarkerService) {
+                    this.mapPointService = mapPointService;
                     this.formMarkerService = formMarkerService;
                     this.onDeleteComplete = new core_1.EventEmitter();
                     this.pTimes = [];
-                    this.pTypes = [];
+                    this.pkTypes = [];
+                    this.ptTypes = [];
                     this.hoursTypes = [];
                     //model = new MapSection(1); // set from parent on selection
                     this.submitted = false;
@@ -59,9 +60,13 @@ System.register(['@angular/core', '../models/map-point', '../models/map-section'
                 // then when this is rendered (after the data model has been set) the ngOnInit will overwrite
                 // Use constructor instead of ngOnInit? Use event queue? 
                 ngOnInit() {
-                    let ptDef = map_section_1.MapSection.PARKING_TYPES;
+                    let pkDef = map_section_1.MapSection.PARKING_TYPES;
+                    for (var ptId in pkDef) {
+                        this.pkTypes.push(pkDef[ptId]);
+                    }
+                    let ptDef = map_point_1.MapPoint.POINT_TYPES;
                     for (var ptId in ptDef) {
-                        this.pTypes.push(ptDef[ptId]);
+                        this.ptTypes.push(ptDef[ptId]);
                     }
                     let times = [0, 5, 10, 15, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360, 390, 420, 450, 480];
                     for (let t of times) {
@@ -94,14 +99,14 @@ System.register(['@angular/core', '../models/map-point', '../models/map-section'
                     this.submitted = true;
                     this.model.lat = this.formMarkerService.mark1.position.lat();
                     this.model.lng = this.formMarkerService.mark1.position.lng();
-                    //this.mapSectionService.saveMapSection(this.model).then(function(response){
-                    // for now we don't need the new id or anything from the response
-                    //});
+                    this.mapPointService.saveMapPoint(this.model).then(function (response) {
+                        // for now we don't need the new id or anything from the response
+                    });
                 }
                 deletePoint() {
                     this.submitted = true;
                     let self = this;
-                    this.mapSectionService.deleteMapSection(this.model.id).then(function (response) {
+                    this.mapPointService.deleteMapPoint(this.model.id).then(function (response) {
                         // for now we don't need the new id or anything from the response
                         let testMessage = 'hi';
                         self.onDeleteComplete.emit(testMessage);
@@ -125,10 +130,9 @@ System.register(['@angular/core', '../models/map-point', '../models/map-section'
                 core_1.Component({
                     selector: 'point-update-form',
                     templateUrl: app_settings_1.AppSettings.APP_RELATIVE_URL + '/app/templates/point-update-form.html',
-                    // TODO:NW figure out how you DO NOT 'inject' the FormMarkersService to share data
-                    providers: [map_section_2.MapSectionService]
+                    providers: [map_point_2.MapPointService]
                 }), 
-                __metadata('design:paramtypes', [map_section_2.MapSectionService, form_markers_1.FormMarkers])
+                __metadata('design:paramtypes', [map_point_2.MapPointService, form_markers_1.FormMarkers])
             ], PointUpdateFormComponent);
             exports_1("PointUpdateFormComponent", PointUpdateFormComponent);
         }

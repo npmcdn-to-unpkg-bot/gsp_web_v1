@@ -1,4 +1,4 @@
-System.register(['@angular/core', '../components/modal-container', '../models/map-section', '../services/map-section', '../helpers/section-renderer', '../services/form-markers'], function(exports_1, context_1) {
+System.register(['@angular/core', '../components/modal-container', '../models/map-section', '../models/map-point', '../services/map-section', '../services/map-point', '../helpers/section-renderer', '../services/form-markers'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, modal_container_1, map_section_1, map_section_2, section_renderer_1, form_markers_1;
+    var core_1, modal_container_1, map_section_1, map_point_1, map_section_2, map_point_2, section_renderer_1, form_markers_1;
     var MapComponent;
     return {
         setters:[
@@ -23,8 +23,14 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
             function (map_section_1_1) {
                 map_section_1 = map_section_1_1;
             },
+            function (map_point_1_1) {
+                map_point_1 = map_point_1_1;
+            },
             function (map_section_2_1) {
                 map_section_2 = map_section_2_1;
+            },
+            function (map_point_2_1) {
+                map_point_2 = map_point_2_1;
             },
             function (section_renderer_1_1) {
                 section_renderer_1 = section_renderer_1_1;
@@ -34,12 +40,15 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
             }],
         execute: function() {
             let MapComponent = class MapComponent {
-                constructor(mapSectionService, sectionRendererService, ref, formMarkersService) {
+                constructor(mapSectionService, mapPointsService, sectionRendererService, ref, formMarkersService) {
                     this.mapSectionService = mapSectionService;
+                    this.mapPointsService = mapPointsService;
                     this.sectionRendererService = sectionRendererService;
                     this.ref = ref;
                     this.formMarkersService = formMarkersService;
-                    this.mapMarkers = [];
+                    this.Markers = [];
+                    this.infoMarkers = [];
+                    this.pointMarkers = [];
                 }
                 ngOnInit() {
                     var self = this;
@@ -103,6 +112,18 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                         });
                         self.renderSectionsForView();
                     });
+                    self.mapPointsService.loadPointsForMap(mapData).then(points => {
+                        self.pointMarkers = points;
+                        // TODO:NW figure out a consistent way to get response arrays as typed arrays in js
+                        self.pointMarkers = self.pointMarkers.map(function (obj) {
+                            let mp = new map_point_1.MapPoint(obj.id);
+                            for (var key in obj) {
+                                mp[key] = obj[key];
+                            }
+                            return mp;
+                        });
+                        self.renderPointsForView();
+                    });
                 }
                 handleDoubleClick(self, event) {
                     self.formMarkersService.placeSectionMarker(event.latLng, self.map, self);
@@ -110,12 +131,12 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                 // called before renderSectionsForView on zoom change
                 handleZoomChange(self, event) {
                     // alert(self.map.zoom);
-                    for (let i = 0; i < self.mapMarkers.length; i++) {
+                    for (let i = 0; i < self.infoMarkers.length; i++) {
                         if (self.map.zoom < 16) {
-                            self.mapMarkers[i].setMap(null);
+                            self.infoMarkers[i].setMap(null);
                         }
                         else {
-                            self.mapMarkers[i].setMap(self.map);
+                            self.infoMarkers[i].setMap(self.map);
                         }
                     }
                     /* renderSectionsForView takes care of setting up markers
@@ -126,7 +147,7 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                       if(iconName!=''){
                         let marker = self.sectionRendererService.drawSectionInfoMarker(section, self.map, iconName);
                         // add click addListener
-                        self.mapMarkers.push(marker);
+                        self.infoMarkers.push(marker);
                       }
                     } */
                 }
@@ -166,9 +187,12 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                                 OR: ... */
                                 self.ref.detectChanges();
                             });
-                            self.mapMarkers.push(marker);
+                            self.infoMarkers.push(marker);
                         }
                     }
+                }
+                // called from handleTilesLoaded
+                renderPointsForView() {
                 }
                 showModal(componentName, title, section) {
                     this.modalComponent.myModalIsVisible = true;
@@ -243,9 +267,9 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                     selector: 'my-map',
                     template: '<div id="map-canvas"></div><modal-container></modal-container>\
     <input id="search-input" class="controls" type="text" placeholder="Search">',
-                    providers: [map_section_2.MapSectionService, section_renderer_1.SectionRendererService, form_markers_1.FormMarkers]
+                    providers: [map_section_2.MapSectionService, map_point_2.MapPointService, section_renderer_1.SectionRendererService, form_markers_1.FormMarkers]
                 }), 
-                __metadata('design:paramtypes', [map_section_2.MapSectionService, section_renderer_1.SectionRendererService, core_1.ChangeDetectorRef, form_markers_1.FormMarkers])
+                __metadata('design:paramtypes', [map_section_2.MapSectionService, map_point_2.MapPointService, section_renderer_1.SectionRendererService, core_1.ChangeDetectorRef, form_markers_1.FormMarkers])
             ], MapComponent);
             exports_1("MapComponent", MapComponent);
         }

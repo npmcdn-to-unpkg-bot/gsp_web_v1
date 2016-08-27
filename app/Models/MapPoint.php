@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MapPoint extends Model
 {
-    protected $table = 'map_pt';
+    protected $table = 'map_point';
 
     public $timestamps = true;
 

@@ -13,9 +13,9 @@
                     </section-update-form>
                 </template>
                 <template ngSwitchCase="point-update-form">
-                    <section-update-form [model]="selectedModel"
+                    <point-update-form [model]="selectedModel"
                         (onDeleteComplete)="hideModalContainerWithMessage($event)">
-                    </section-update-form>
+                    </point-update-form>
                 </template>
                 <template ngSwitchCase="section-info"><section-info [model]="selectedModel"></section-info></template>
             </div>
