@@ -1,4 +1,5 @@
 import { MapComponent } from '../components/main-map';
+import { MapPoint } from '../models/map-point';
 import { MapSection } from '../models/map-section';
 import { AppSettings } from '../app-settings';
 
@@ -10,7 +11,7 @@ export class FormMarkers
   mark1;
   mark2;
   sectionPoints;
-  markerWithLabel;
+  formMarkerLabel;
   selectionPolyline;
   streetSide:number = 0;
 
@@ -22,14 +23,14 @@ export class FormMarkers
       return this.selectionPolyline;
   }
 
-  showFormLink(map, mapComponent){
+  showSectionFormLink(map, mapComponent){
     var ll = new google.maps.LatLng(this.mark2.position.lat(), this.mark2.position.lng());
     var fm = this;
-    if(this.markerWithLabel != undefined){
+    if(this.formMarkerLabel != undefined){
       //if already exists, clear it
-      this.markerWithLabel.setMap(null);
+      this.formMarkerLabel.setMap(null);
     }
-    this.markerWithLabel = new google.maps.Marker({
+    this.formMarkerLabel = new google.maps.Marker({
       position: ll,
       map: map,
       title: 'edit',
@@ -38,7 +39,7 @@ export class FormMarkers
       // labelClass: "marker-label-v1", // the CSS class for the label
       // labelContent : 'Click to edit section'
     });
-    google.maps.event.addListener(this.markerWithLabel, "click", function(){
+    google.maps.event.addListener(this.formMarkerLabel, "click", function(){
       mapComponent.modalComponent.myModalIsVisible=true;
       mapComponent.modalComponent.componentName="section-update-form";
       mapComponent.modalComponent.title="New Section";
@@ -48,7 +49,7 @@ export class FormMarkers
       selectedSection.streetSide = 0;
       selectedSection.hoursType = '';
       selectedSection.notes = '';
-      mapComponent.modalComponent.selectedSection=selectedSection;
+      mapComponent.modalComponent.selectedModel=selectedSection;
       mapComponent.ref.detectChanges();
       /*
       fm.streetSide = fm.streetSide + 1;
@@ -59,9 +60,39 @@ export class FormMarkers
           lblText = 'Click to toggle street direction: Covering one side of the selected section';
       fm.drawStreetSide();
       */
-      //document.getElementById('.marker-label-v1').innerHTML(this.markerWithLabel.labelContent);
+      //document.getElementById('.marker-label-v1').innerHTML(this.formMarkerLabel.labelContent);
     });
     this.mark2.setMap(null);//replace second marker with link
+  }
+
+  showPointFormLink(map, mapComponent){
+    var ll = new google.maps.LatLng(this.mark1.position.lat(), this.mark1.position.lng());
+    var fm = this;
+    if(this.formMarkerLabel != undefined){
+      //if already exists, clear it
+      this.formMarkerLabel.setMap(null);
+      this.formMarkerLabel = undefined;
+    }
+    this.formMarkerLabel = new google.maps.Marker({
+      position: ll,
+      map: map,
+      title: 'edit',
+      icon: AppSettings.APP_RELATIVE_URL+'/images/add-icon.png',
+    });
+    google.maps.event.addListener(this.formMarkerLabel, "click", function(){
+      mapComponent.modalComponent.myModalIsVisible=true;
+      mapComponent.modalComponent.componentName="point-update-form";
+      mapComponent.modalComponent.title="New Point";
+      let selectedModel = new MapPoint(-1);
+      //selectedSection.newPolyline=true;
+      //selectedSection.mainParkingTypeId = AppSettings.PARKING_TYPE_FREE;
+      //selectedSection.streetSide = 0;
+      //selectedSection.hoursType = '';
+      selectedModel.notes = '';
+      mapComponent.modalComponent.selectedModel=selectedModel;
+      mapComponent.ref.detectChanges();
+    });
+    //this.mark1.setMap(null);//replace second marker with link
   }
 
   drawSelection(pathPoints, map){
@@ -90,6 +121,10 @@ export class FormMarkers
     this.mark2.setMap(null);
     this.mark1 = undefined;
     this.mark2 = undefined;
+    if(this.formMarkerLabel){
+      this.formMarkerLabel.setMap(null);
+      this.formMarkerLabel = undefined;
+    }
   }
 
   drawBlockSelection(map){
@@ -122,10 +157,7 @@ export class FormMarkers
         map: map,
         title: 'Start Point!'
       });
-      if(this.markerWithLabel){
-        this.markerWithLabel.setMap(null);
-        this.markerWithLabel = undefined;
-      }
+      this.showPointFormLink(map, mapComponent);
     }
     else if(!this.mark2){
       this.mark2 = new google.maps.Marker({
@@ -134,7 +166,7 @@ export class FormMarkers
         title: 'End Point!'
       });
       this.drawBlockSelection(map);
-      this.showFormLink(map, mapComponent);
+      this.showSectionFormLink(map, mapComponent);
     }
     else{
         this.clearMarkers();
@@ -145,6 +177,7 @@ export class FormMarkers
           map: map,
           title: 'Start Point!'
         });
+        this.showPointFormLink(map, mapComponent);
     }
   }
 

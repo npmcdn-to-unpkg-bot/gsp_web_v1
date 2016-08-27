@@ -11,8 +11,7 @@ export class MapPoint {
   numSpots: number;
   mainPph:number;
   mainShortTermMin: number;
-  isHoursRestricted: number;  
-  hoursType:string; // only client side for now
+  isHoursRestricted: number;
   hoursData: string;
   notes: string;
   availabilityRating: number;
@@ -26,6 +25,7 @@ export class MapPoint {
 
   // client side generated variables
   // hoursHtml:string;
+  hoursType:string; // only client side for now
 
   // TODO:NW get from server. Figure out why static properties cannot be referenced here
  public static get POINT_TYPES(): Object { 

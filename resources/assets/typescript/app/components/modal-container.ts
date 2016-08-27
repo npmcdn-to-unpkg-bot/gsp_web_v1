@@ -11,7 +11,7 @@ export class ModalContainerComponent
   @Input() title: string;
   @Input() myModalIsVisible: boolean;
   @Input() componentName: string;
-  @Input() selectedSection: MapSection;
+  @Input() selectedModel: any;
 
   showModalContainer(title: string)
   {

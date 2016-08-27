@@ -8,11 +8,16 @@
             <!-- using non sugar syntax with tempaltes. TODO:NW figure out how to just use dynamic component name -->
             <div class="modal-body" [ngSwitch]="componentName">
                 <template ngSwitchCase="section-update-form">
-                    <section-update-form [model]="selectedSection"
+                    <section-update-form [model]="selectedModel"
                         (onDeleteComplete)="hideModalContainerWithMessage($event)">
                     </section-update-form>
                 </template>
-                <template ngSwitchCase="section-info"><section-info [model]="selectedSection"></section-info></template>
+                <template ngSwitchCase="point-update-form">
+                    <section-update-form [model]="selectedModel"
+                        (onDeleteComplete)="hideModalContainerWithMessage($event)">
+                    </section-update-form>
+                </template>
+                <template ngSwitchCase="section-info"><section-info [model]="selectedModel"></section-info></template>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" (click)="hideModalContainer()">Close</button>

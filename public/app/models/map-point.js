@@ -13,12 +13,6 @@ System.register(['../app-settings'], function(exports_1, context_1) {
                 constructor(id) {
                     this.id = id;
                 }
-                // 'submittedBy',
-                // 'approved',
-                // 'updatedAt',
-                // 'createdAt'
-                // client side generated variables
-                // hoursHtml:string;
                 // TODO:NW get from server. Figure out why static properties cannot be referenced here
                 static get POINT_TYPES() {
                     let typeObj = {};

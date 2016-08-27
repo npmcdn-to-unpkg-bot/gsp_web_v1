@@ -156,7 +156,7 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                             google.maps.event.addListener(marker, 'click', function () {
                                 self.showModal("section-info", "Parking Info", section);
                                 // TODO:NW how to set a complex set of data or display on change
-                                self.modalComponent.selectedSection.updateHoursHtml();
+                                self.modalComponent.selectedModel.updateHoursHtml();
                                 /*
                                 // TODO:NW figure out why the zone has to be run like this for google events to show changes
                                 // and only appears the first time either of the next two things worked
@@ -172,9 +172,9 @@ System.register(['@angular/core', '../components/modal-container', '../models/ma
                 }
                 showModal(componentName, title, section) {
                     this.modalComponent.myModalIsVisible = true;
-                    this.modalComponent.componentName = "section-info";
-                    this.modalComponent.title = "Parking Info";
-                    this.modalComponent.selectedSection = section;
+                    this.modalComponent.componentName = componentName;
+                    this.modalComponent.title = title;
+                    this.modalComponent.selectedModel = section;
                 }
                 //return blank string if no icon
                 getIconForSection(section) {
